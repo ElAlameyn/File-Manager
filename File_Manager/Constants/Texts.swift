@@ -12,6 +12,8 @@ struct Texts {
   static var baseTitleLabelText = "File Manager"
   static var baseDescriptionLabelText = "Let’s manage and clean your file’s"
   
+  static var baseCategoryLabelText = "Category"
+  
   // Meet Controller
   static var meetTitleLabelText = "Manage your files with best way"
   static var meetDescriptionLabelText = "Keep your files organized more easily"

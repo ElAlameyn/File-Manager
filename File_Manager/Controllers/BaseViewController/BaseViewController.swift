@@ -29,15 +29,28 @@ class BaseViewController: UIViewController {
     dataSource = UICollectionViewDiffableDataSource<Section, Int>(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
       
-      guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(TitleBaseViewCell.self)" ,
-                                                          for: indexPath) as? TitleBaseViewCell else { fatalError("Can't find a cell") }
-      return cell
+      switch self.sections[indexPath.section] {
+      case .title:
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(TitleBaseViewCell.self)" ,
+                                                            for: indexPath) as? TitleBaseViewCell else { fatalError("Can't find a cell") }
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = UIColor.blue.cgColor
+        return cell
+      case .category:
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryBaseViewCell.self)" ,
+                                                            for: indexPath) as? CategoryBaseViewCell else { fatalError("Can't find a cell") }
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = UIColor.blue.cgColor
+        return cell
+      case .recentFiles:
+        return nil
+      }
     }
     
-    // Define how many section and row need
     var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-    snapshot.appendSections([.title])
-    snapshot.appendItems(Array(0...0))
+    snapshot.appendSections([.title, .category])
+    snapshot.appendItems([0], toSection: .title)
+    snapshot.appendItems([1, 2, 3, 4, 5, 6, 7], toSection: .category)
     dataSource.apply(snapshot, animatingDifferences: false)
   }
   
@@ -49,14 +62,14 @@ class BaseViewController: UIViewController {
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
+    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
     view.addSubview(collectionView)
   }
   
   private func createLayout() -> UICollectionViewLayout {
-    let sectionProvider = { [weak self]
-      (sectionIndex: Int,
-       layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-      switch self?.sections[sectionIndex] {
+    let sectionProvider = {
+      (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+      switch self.sections[sectionIndex] {
       case .title:
         let item = NSCollectionLayoutItem(
           layoutSize: NSCollectionLayoutSize(
@@ -66,19 +79,33 @@ class BaseViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(200)),
+            heightDimension: .estimated(150)),
           subitems: [item])
         
         return NSCollectionLayoutSection(group: group)
       case .category:
-        return nil
+        let item = NSCollectionLayoutItem(
+          layoutSize: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+          layoutSize: NSCollectionLayoutSize(
+            widthDimension: .estimated(120),
+            heightDimension: .estimated(130)),
+          subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        
+        return section
       case .recentFiles:
         return nil
-      case .none:
-        fatalError("PIzdec nahui blyat")
       }
     }
-    
     return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
   }
   
