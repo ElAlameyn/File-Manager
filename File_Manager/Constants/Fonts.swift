@@ -8,12 +8,18 @@
 import UIKit
 
 struct Fonts {
+  static var robotoLight: UIFont {
+    UIFont(name: "Roboto-Light", size: 12) ?? .preferredFont(forTextStyle: .body)
+  }
+  
   static var robotoMedium: UIFont {
-    UIFont(name: "Roboto-Medium", size: 17) ?? .preferredFont(forTextStyle: .body)
+    UIFont(name: "Roboto-Medium", size: 24) ?? .preferredFont(forTextStyle: .body)
   }
+  
   static var robotoRegular: UIFont {
-    UIFont(name: "Roboto-Regular", size: 12) ?? .preferredFont(forTextStyle: .body)
+    UIFont(name: "Roboto-Regular", size: 18) ?? .preferredFont(forTextStyle: .body)
   }
+  
   static var robotoBold: UIFont {
     UIFont(name: "Roboto-Bold", size: 30) ?? .preferredFont(forTextStyle: .body)
   }

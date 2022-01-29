@@ -19,7 +19,7 @@ class MeetView: UIView {
     setUpUI()
   }
   
-  lazy var titleLabel: UILabel = {
+  lazy private var titleLabel: UILabel = {
     let label = UILabel()
     label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMedium)
     label.lineBreakMode = .byWordWrapping
@@ -31,7 +31,7 @@ class MeetView: UIView {
     return label
   }()
   
-  lazy var descriptionLabel: UILabel = {
+  lazy private var descriptionLabel: UILabel = {
     let label = UILabel()
     label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoRegular)
     label.lineBreakMode = .byWordWrapping
@@ -43,7 +43,7 @@ class MeetView: UIView {
     return label
   }()
   
-  lazy var submitButton: UIButton = {
+  lazy private var submitButton: UIButton = {
     let button = UIButton()
     button.layer.cornerRadius = 20
     button.backgroundColor = Colors.buttonBlueColor

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */; };
 		B5DFB8C827A286A900196251 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C727A286A900196251 /* AppDelegate.swift */; };
 		B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C927A286A900196251 /* SceneDelegate.swift */; };
 		B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8CB27A286A900196251 /* MeetViewController.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBaseViewCell.swift; sourceTree = "<group>"; };
 		B5DFB8C427A286A900196251 /* File_Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = File_Manager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5DFB8C727A286A900196251 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5DFB8C927A286A900196251 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -194,9 +196,18 @@
 		B5DFB90D27A2C60400196251 /* BaseViewController */ = {
 			isa = PBXGroup;
 			children = (
+				B5DFB93527A54AE500196251 /* Cells */,
 				B5DFB90E27A2C61B00196251 /* BaseViewController.swift */,
 			);
 			path = BaseViewController;
+			sourceTree = "<group>";
+		};
+		B5DFB93527A54AE500196251 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -288,6 +299,7 @@
 				B5DFB8DF27A2A76E00196251 /* Colors.swift in Sources */,
 				B5DFB8E127A2A8C600196251 /* Images.swift in Sources */,
 				B5DFB8EA27A2AE1F00196251 /* MeetView.swift in Sources */,
+				B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */,
 				B5DFB90827A2B8BC00196251 /* UILabel+Extension.swift in Sources */,
 				B5DFB8C827A286A900196251 /* AppDelegate.swift in Sources */,
 				B5DFB90A27A2B97C00196251 /* Fonts.swift in Sources */,
