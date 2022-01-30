@@ -13,8 +13,8 @@ class BaseViewController: UIViewController {
     case title, category, recentFiles
   }
   
-  typealias DataSource = UICollectionViewDiffableDataSource<Section, Int>
-  typealias TitleSnapshot = NSDiffableDataSourceSnapshot<Section, Int>
+  typealias DataSource = UICollectionViewDiffableDataSource<Section, BaseItem>
+  typealias Snapshot = NSDiffableDataSourceSnapshot<Section, BaseItem>
   
   private let sections: [Section] = [.title, .category, .recentFiles]
   private lazy var dataSource = configureDataSource()
@@ -29,7 +29,18 @@ class BaseViewController: UIViewController {
   
   private func configureDataSource() -> DataSource {
     return DataSource(collectionView: collectionView) {
-      (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
+      (collectionView: UICollectionView, indexPath: IndexPath, item: BaseItem) -> UICollectionViewCell? in
+      
+      var category: Category?
+      
+      switch item {
+      case .title:
+        break
+      case .category(let itemCategory):
+        category = itemCategory
+      case .recents(_):
+        break
+      }
       
       switch self.sections[indexPath.section] {
       case .title:
@@ -41,8 +52,7 @@ class BaseViewController: UIViewController {
       case .category:
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryBaseViewCell.self)" ,
                                                             for: indexPath) as? CategoryBaseViewCell else { fatalError("Can't find a cell") }
-        cell.layer.borderWidth = 1
-        cell.layer.borderColor = UIColor.blue.cgColor
+        cell.titleLabel.text = category?.title
         return cell
       case .recentFiles:
         return nil
@@ -51,10 +61,10 @@ class BaseViewController: UIViewController {
   }
   
   private func applySnapshot() {
-    var snapshot = TitleSnapshot()
+    var snapshot = Snapshot()
     snapshot.appendSections([.title, .category])
-    snapshot.appendItems([0], toSection: .title)
-    snapshot.appendItems([1, 2, 3, 4, 5, 6, 7], toSection: .category)
+    snapshot.appendItems( [.title] , toSection: .title)
+    snapshot.appendItems(BaseItem.allCategories, toSection: .category)
     dataSource.apply(snapshot, animatingDifferences: false)
   }
   
@@ -100,13 +110,14 @@ class BaseViewController: UIViewController {
         
         let group = NSCollectionLayoutGroup.horizontal(
           layoutSize: NSCollectionLayoutSize(
-            widthDimension: .absolute(110),
-            heightDimension: .absolute(130)),
+            widthDimension: .absolute(130),
+            heightDimension: .absolute(150)),
           subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        section.interGroupSpacing = 15
         
         return section
         

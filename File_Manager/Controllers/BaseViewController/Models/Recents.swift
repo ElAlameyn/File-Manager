@@ -1,5 +1,5 @@
 //
-//  Category.swift
+//  Recents.swift
 //  File_Manager
 //
 //  Created by Артем Калинкин on 30.01.2022.
@@ -7,16 +7,17 @@
 
 import UIKit
 
-struct Category: Hashable {
+struct RecentFile: Hashable {
   var id = UUID()
-  var title: String
   var image: UIImage?
+  var files: String
+  var videos: String
   
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
   
-  static func == (lhs: Category, rhs: Category) -> Bool {
+  static func == (lhs: RecentFile, rhs: RecentFile) -> Bool {
     lhs.id == rhs.id
   }
 }
