@@ -10,8 +10,8 @@ import UIKit
 struct RecentFile: Hashable {
   var id = UUID()
   var image: UIImage?
-  var files: String
-  var videos: String
+  var files: String?
+  var videos: String?
   
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)

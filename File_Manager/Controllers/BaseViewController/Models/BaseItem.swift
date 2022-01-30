@@ -15,9 +15,16 @@ enum BaseItem: Hashable {
 
 extension BaseItem {
   static var allCategories: [BaseItem] = [
-    .category(Category(title: "Images")),
-    .category(Category(title: "Videos")),
-    .category(Category(title: "Files"))
+    .category(Category(title: "Images", image: Images.categoryImages)),
+    .category(Category(title: "Videos", image: Images.categoryVideos)),
+    .category(Category(title: "Files", image: Images.categoryFiles)),
+  ]
+  
+  static var allRecents: [BaseItem] = [
+    .recents(RecentFile(image: Images.recentImage1)),
+    .recents(RecentFile(image: Images.recentImage2)),
+    .recents(RecentFile(image: Images.recentImage3)),
+    .recents(RecentFile(image: Images.recentImage4))
   ]
 }
 

@@ -8,40 +8,51 @@
 import UIKit
 
 class CategoryBaseViewCell: UICollectionViewCell {
+
+  lazy var imageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .scaleAspectFit
+    return imageView
+  }()
+  
+  lazy var titleLabel: UILabel = {
+    let label = UILabel()
+    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMediumForCategories)
+    label.lineBreakMode = .byWordWrapping
+    label.numberOfLines = 0
+    label.textAlignment = .center
+    label.textColor = .darkGray
+    label.text = Texts.baseCategoryLabelText
+    label.addCharacterSpacing(kernValue: -0.33)
+    return label
+  }()
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    backgroundColor = .white
-    layer.cornerRadius = 20
-    layer.shadowOffset = CGSize(width: 0, height: 5)
-    layer.shadowRadius = 2
-    layer.shadowOpacity = 0.3
-//    self.layer.borderWidth = 1
-//    self.layer.borderColor = UIColor.blue.cgColor
     configure()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  lazy var titleLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMedium)
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 0
-    label.textAlignment = .left
-    label.textColor = .darkGray
-    label.text = Texts.baseCategoryLabelText
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
-    
 }
 
 extension CategoryBaseViewCell {
   func configure() {
+    backgroundColor = .white
+    layer.cornerRadius = 20
+    layer.shadowOffset = CGSize(width: 0, height: 5)
+    layer.shadowRadius = 2
+    layer.shadowOpacity = 0.3
+    
+    // MARK: - Layout
+    
+    contentView.addSubview(imageView)
+    imageView.addHeightWeightConstraints(offset: CGPoint(x: 70, y: 70))
+    imageView.addCenterConstraints(offset: CGPoint(x: 0, y: -10))
+    
     contentView.addSubview(titleLabel)
-    titleLabel.addEdgeContstraints(exclude: .bottom, offset: UIEdgeInsets(top: 5, left: 16, bottom: 0, right: -16))
+    titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 1).isActive = true
+    titleLabel.addEdgeContstraints(exclude: .bottom, .top, offset: UIEdgeInsets(top: 5, left: 16, bottom: 0, right: -16))
   }
 }

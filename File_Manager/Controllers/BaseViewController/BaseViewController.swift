@@ -27,46 +27,61 @@ class BaseViewController: UIViewController {
     applySnapshot()
   }
   
+  // MARK: - Data Source
+  
   private func configureDataSource() -> DataSource {
     return DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: BaseItem) -> UICollectionViewCell? in
       
       var category: Category?
+      var recents: RecentFile?
       
       switch item {
       case .title:
         break
       case .category(let itemCategory):
         category = itemCategory
-      case .recents(_):
-        break
+      case .recents(let itemRecents):
+        recents = itemRecents
       }
       
       switch self.sections[indexPath.section] {
       case .title:
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(TitleBaseViewCell.self)" ,
-                                                            for: indexPath) as? TitleBaseViewCell else { fatalError("Can't find a cell") }
-        cell.layer.borderWidth = 1
-        cell.layer.borderColor = UIColor.blue.cgColor
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: "\(TitleBaseViewCell.self)" ,
+          for: indexPath) as? TitleBaseViewCell
+        else { fatalError("Can't find a cell") }
         return cell
       case .category:
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategoryBaseViewCell.self)" ,
-                                                            for: indexPath) as? CategoryBaseViewCell else { fatalError("Can't find a cell") }
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: "\(CategoryBaseViewCell.self)" ,
+          for: indexPath) as? CategoryBaseViewCell
+        else { fatalError("Can't find a cell") }
+        
         cell.titleLabel.text = category?.title
+        cell.imageView.image = category?.image
         return cell
       case .recentFiles:
-        return nil
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: "\(RecentBaseViewCell.self)" ,
+          for: indexPath) as? RecentBaseViewCell
+        else { fatalError("Can't find a cell") }
+        cell.mainImageView.image = recents?.image
+        return cell
       }
     }
   }
   
   private func applySnapshot() {
     var snapshot = Snapshot()
-    snapshot.appendSections([.title, .category])
+    snapshot.appendSections([.title, .category, .recentFiles])
     snapshot.appendItems( [.title] , toSection: .title)
     snapshot.appendItems(BaseItem.allCategories, toSection: .category)
+    snapshot.appendItems(BaseItem.allRecents, toSection: .recentFiles)
     dataSource.apply(snapshot, animatingDifferences: false)
   }
+  
+  // MARK: - Collection View SetUP
   
   private func configureUI() {
     addLeftBarButtonItem()
@@ -77,8 +92,11 @@ class BaseViewController: UIViewController {
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
     collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
+    collectionView.register(RecentBaseViewCell.self, forCellWithReuseIdentifier: "\(RecentBaseViewCell.self)")
     view.addSubview(collectionView)
   }
+  
+  // MARK: - Layout
   
   private func createLayout() -> UICollectionViewLayout {
     let sectionProvider = {
@@ -106,8 +124,7 @@ class BaseViewController: UIViewController {
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)))
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-        
-        
+
         let group = NSCollectionLayoutGroup.horizontal(
           layoutSize: NSCollectionLayoutSize(
             widthDimension: .absolute(130),
@@ -123,12 +140,31 @@ class BaseViewController: UIViewController {
         
         // MARK: - Recent Files Layout
       case .recentFiles:
-        return nil
+        let item = NSCollectionLayoutItem(
+          layoutSize: NSCollectionLayoutSize(
+            widthDimension: .estimated(155),
+            heightDimension: .estimated(220)))
+        
+
+        let group = NSCollectionLayoutGroup.horizontal(
+          layoutSize: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(220)),
+          subitems: [item])
+        group.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: nil, trailing: nil, bottom: NSCollectionLayoutSpacing.fixed(20))
+        group.interItemSpacing = NSCollectionLayoutSpacing.flexible(10)
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .none
+        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 30, bottom: 5, trailing: 30)
+
+        return section
       }
     }
     return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
   }
   
+  // MARK: - Navigation Buttons
 
   private func addLeftBarButtonItem() {
     let button = UIButton(type: .custom)

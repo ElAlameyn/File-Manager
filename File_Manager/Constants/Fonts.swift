@@ -16,6 +16,10 @@ struct Fonts {
     UIFont(name: "Roboto-Medium", size: 24) ?? .preferredFont(forTextStyle: .body)
   }
   
+  static var robotoMediumForCategories: UIFont {
+    UIFont(name: "Roboto-Medium", size: 12) ?? .preferredFont(forTextStyle: .body)
+  }
+  
   static var robotoRegular: UIFont {
     UIFont(name: "Roboto-Regular", size: 18) ?? .preferredFont(forTextStyle: .body)
   }
