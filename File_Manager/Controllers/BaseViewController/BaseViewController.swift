@@ -13,20 +13,22 @@ class BaseViewController: UIViewController {
     case title, category, recentFiles
   }
   
+  typealias DataSource = UICollectionViewDiffableDataSource<Section, Int>
+  typealias TitleSnapshot = NSDiffableDataSourceSnapshot<Section, Int>
+  
   private let sections: [Section] = [.title, .category, .recentFiles]
-  var dataSource: UICollectionViewDiffableDataSource<Section, Int>! = nil
+  private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
 
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
-    
-    configureHierarchy()
-    configureDataSource()
+    configureUI()
+    applySnapshot()
   }
   
-  private func configureDataSource() {
-    dataSource = UICollectionViewDiffableDataSource<Section, Int>(collectionView: collectionView) {
+  private func configureDataSource() -> DataSource {
+    return DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
       
       switch self.sections[indexPath.section] {
@@ -46,15 +48,17 @@ class BaseViewController: UIViewController {
         return nil
       }
     }
-    
-    var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
+  }
+  
+  private func applySnapshot() {
+    var snapshot = TitleSnapshot()
     snapshot.appendSections([.title, .category])
     snapshot.appendItems([0], toSection: .title)
     snapshot.appendItems([1, 2, 3, 4, 5, 6, 7], toSection: .category)
     dataSource.apply(snapshot, animatingDifferences: false)
   }
   
-  private func configureHierarchy() {
+  private func configureUI() {
     addLeftBarButtonItem()
     addRightBarButtonItem()
     
@@ -70,6 +74,7 @@ class BaseViewController: UIViewController {
     let sectionProvider = {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
       switch self.sections[sectionIndex] {
+        // MARK: - Title Layout
       case .title:
         let item = NSCollectionLayoutItem(
           layoutSize: NSCollectionLayoutSize(
@@ -83,6 +88,8 @@ class BaseViewController: UIViewController {
           subitems: [item])
         
         return NSCollectionLayoutSection(group: group)
+        
+        // MARK: - Category Layout
       case .category:
         let item = NSCollectionLayoutItem(
           layoutSize: NSCollectionLayoutSize(
@@ -93,15 +100,17 @@ class BaseViewController: UIViewController {
         
         let group = NSCollectionLayoutGroup.horizontal(
           layoutSize: NSCollectionLayoutSize(
-            widthDimension: .estimated(120),
-            heightDimension: .estimated(130)),
+            widthDimension: .absolute(110),
+            heightDimension: .absolute(130)),
           subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
+        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         
         return section
+        
+        // MARK: - Recent Files Layout
       case .recentFiles:
         return nil
       }
