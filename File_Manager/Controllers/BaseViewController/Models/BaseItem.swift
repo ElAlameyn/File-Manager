@@ -5,26 +5,32 @@
 //  Created by Артем Калинкин on 30.01.2022.
 //
 
-import Foundation
+import UIKit
 
-enum BaseItem: Hashable {
+enum BaseItem: Hashable
+{
   case title
   case category(Category?)
   case recents(RecentFile?)
 }
 
-extension BaseItem {
+extension BaseItem
+{
+  static var recentsCount = 6
+  
   static var allCategories: [BaseItem] = [
     .category(Category(title: "Images", image: Images.categoryImages)),
     .category(Category(title: "Videos", image: Images.categoryVideos)),
     .category(Category(title: "Files", image: Images.categoryFiles)),
   ]
   
-  static var allRecents: [BaseItem] = [
-    .recents(RecentFile(image: Images.recentImage1)),
-    .recents(RecentFile(image: Images.recentImage2)),
-    .recents(RecentFile(image: Images.recentImage3)),
-    .recents(RecentFile(image: Images.recentImage4))
-  ]
+  static var allRecents: [BaseItem]? {
+    var names = [String]()
+    for number in 1...recentsCount { names.append("recent_image\(number)")}
+    return names.compactMap({
+      BaseItem.recents(RecentFile(image: UIImage(named: $0)))
+    })
+  }
+
 }
 

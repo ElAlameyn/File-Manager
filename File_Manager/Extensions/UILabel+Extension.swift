@@ -7,7 +7,8 @@
 
 import UIKit
 
-extension UILabel {
+extension UILabel
+{
   func addCharacterSpacing(kernValue: Double = 1.15) {
     guard let text = text, !text.isEmpty else { return }
     let string = NSMutableAttributedString(string: text)

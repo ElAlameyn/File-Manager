@@ -7,7 +7,8 @@
 
 import UIKit
 
-struct Colors {
+struct Colors
+{
   static var meetBlueBackground: UIColor {
     UIColor(red: 94 / 255, green: 188 / 255, blue: 241 / 255, alpha: 1)
   }

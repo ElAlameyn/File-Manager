@@ -9,7 +9,7 @@ import UIKit
 
 class BaseViewController: UIViewController {
   
-  enum Section {
+  enum Section: Int {
     case title, category, recentFiles
   }
   
@@ -30,7 +30,7 @@ class BaseViewController: UIViewController {
   // MARK: - Data Source
   
   private func configureDataSource() -> DataSource {
-    return DataSource(collectionView: collectionView) {
+    let dataSource =  DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: BaseItem) -> UICollectionViewCell? in
       
       var category: Category?
@@ -47,29 +47,39 @@ class BaseViewController: UIViewController {
       
       switch self.sections[indexPath.section] {
       case .title:
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: "\(TitleBaseViewCell.self)" ,
-          for: indexPath) as? TitleBaseViewCell
-        else { fatalError("Can't find a cell") }
+        let cell: TitleBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         return cell
       case .category:
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: "\(CategoryBaseViewCell.self)" ,
-          for: indexPath) as? CategoryBaseViewCell
-        else { fatalError("Can't find a cell") }
-        
+        let cell: CategoryBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.titleLabel.text = category?.title
         cell.imageView.image = category?.image
         return cell
       case .recentFiles:
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: "\(RecentBaseViewCell.self)" ,
-          for: indexPath) as? RecentBaseViewCell
-        else { fatalError("Can't find a cell") }
+        let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.mainImageView.image = recents?.image
         return cell
       }
     }
+    
+    dataSource.supplementaryViewProvider = {
+      collectionView, kind, indexPath in
+      guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+      let view: SectionHeaderBaseViewCollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
+
+      switch Section(rawValue: indexPath.section) {
+      case .category:
+        view.titleLabel.text = "Category"
+      case .title:
+        break
+      case .recentFiles:
+        view.titleLabel.text = "Recent Files"
+      case .none:
+        break
+      }
+      return view
+    }
+    
+    return dataSource
   }
   
   private func applySnapshot() {
@@ -77,8 +87,12 @@ class BaseViewController: UIViewController {
     snapshot.appendSections([.title, .category, .recentFiles])
     snapshot.appendItems( [.title] , toSection: .title)
     snapshot.appendItems(BaseItem.allCategories, toSection: .category)
-    snapshot.appendItems(BaseItem.allRecents, toSection: .recentFiles)
-    dataSource.apply(snapshot, animatingDifferences: false)
+    self.dataSource.apply(snapshot, animatingDifferences: false)
+    
+    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+      snapshot.appendItems(BaseItem.allRecents ?? [], toSection: .recentFiles)
+      self?.dataSource.apply(snapshot, animatingDifferences: false)
+    }
   }
   
   // MARK: - Collection View SetUP
@@ -93,71 +107,88 @@ class BaseViewController: UIViewController {
     collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
     collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
     collectionView.register(RecentBaseViewCell.self, forCellWithReuseIdentifier: "\(RecentBaseViewCell.self)")
+    
+    collectionView.register(
+      SectionHeaderBaseViewCollectionReusableView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(SectionHeaderBaseViewCollectionReusableView.self)")
+    
     view.addSubview(collectionView)
   }
   
   // MARK: - Layout
   
   private func createLayout() -> UICollectionViewLayout {
+    
     let sectionProvider = {
-      (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+      (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
+      -> NSCollectionLayoutSection? in
       switch self.sections[sectionIndex] {
         // MARK: - Title Layout
-      case .title:
-        let item = NSCollectionLayoutItem(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)))
         
-        let group = NSCollectionLayoutGroup.horizontal(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(150)),
-          subitems: [item])
+      case .title:
+        let item = LayoutManager.createItem(
+          wD: .fractionalWidth(1.0),
+          hD: .fractionalHeight(1.0))
+        
+        let group = LayoutManager.createHorizontalGroup(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(150),
+          item: item)
         
         return NSCollectionLayoutSection(group: group)
         
         // MARK: - Category Layout
+        
       case .category:
-        let item = NSCollectionLayoutItem(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)))
+        let item = LayoutManager.createItem(
+          wD: .fractionalWidth(1.0),
+          hD: .fractionalHeight(1.0))
+        
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 
-        let group = NSCollectionLayoutGroup.horizontal(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .absolute(130),
-            heightDimension: .absolute(150)),
-          subitems: [item])
-        
+        let group = LayoutManager.createHorizontalGroup(
+          wD: .estimated(130),
+          hD: .estimated(150),
+          item: item)
+
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 10)
         section.interGroupSpacing = 15
+        
+        // Supplementary header view setup
+        let sectionHeader = LayoutManager.createSectionHeader(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(30))
+        
+        section.boundarySupplementaryItems = [sectionHeader]
         
         return section
         
         // MARK: - Recent Files Layout
       case .recentFiles:
-        let item = NSCollectionLayoutItem(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .estimated(155),
-            heightDimension: .estimated(220)))
-        
+        let item = LayoutManager.createItem(
+          wD: .estimated(155),
+          hD: .estimated(220))
 
-        let group = NSCollectionLayoutGroup.horizontal(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(220)),
-          subitems: [item])
+        let group = LayoutManager.createHorizontalGroup(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(220),
+          item: item)
+        
         group.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: nil, trailing: nil, bottom: NSCollectionLayoutSpacing.fixed(20))
         group.interItemSpacing = NSCollectionLayoutSpacing.flexible(10)
 
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 30, bottom: 5, trailing: 30)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 5, trailing: 20)
 
+        let sectionHeader = LayoutManager.createSectionHeader(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(30))
+        section.boundarySupplementaryItems = [sectionHeader]
+        
         return section
       }
     }

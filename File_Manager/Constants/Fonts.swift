@@ -7,7 +7,9 @@
 
 import UIKit
 
-struct Fonts {
+struct Fonts
+{
+  
   static var robotoLight: UIFont {
     UIFont(name: "Roboto-Light", size: 18) ?? .preferredFont(forTextStyle: .body)
   }

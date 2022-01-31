@@ -7,7 +7,8 @@
 
 import UIKit
 
-struct Category: Hashable {
+struct Category: Hashable
+{
   var id = UUID()
   var title: String
   var image: UIImage?

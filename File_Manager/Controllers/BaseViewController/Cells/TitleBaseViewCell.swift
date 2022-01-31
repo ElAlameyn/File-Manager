@@ -47,10 +47,10 @@ class TitleBaseViewCell: UICollectionViewCell {
 extension TitleBaseViewCell {
   func configure() {
     contentView.addSubview(titleLabel)
-    titleLabel.addEdgeContstraints(exclude: .bottom, offset: UIEdgeInsets(top: 20, left: 16, bottom: 0, right: -30))
+    titleLabel.addEdgeContstraints(exclude: .bottom, offset: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: -30))
     
     contentView.addSubview(descriptionLabel)
-    descriptionLabel.addEdgeContstraints(exclude: .bottom, .top, offset: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: -16))
+    descriptionLabel.addEdgeContstraints(exclude: .bottom, .top, offset: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -16))
     descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
   }
 }

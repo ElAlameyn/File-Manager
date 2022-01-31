@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Texts {
+struct Texts
+{
   // Base Controller
   static var baseTitleLabelText = "File Manager"
   static var baseDescriptionLabelText = "Let’s manage and clean your file’s"

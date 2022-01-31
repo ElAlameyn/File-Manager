@@ -11,7 +11,6 @@ class MeetViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     setUpUI()
   }
   

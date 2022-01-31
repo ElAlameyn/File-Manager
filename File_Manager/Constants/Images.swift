@@ -8,24 +8,17 @@
 import Foundation
 import UIKit
 
-struct Images {
+struct Images
+{
   
   // MARK: - Recent Images
   
-  static var recentImage1: UIImage? {
-    UIImage(named: "recent_image1")
+  static var rightBottomImage: UIImage? {
+    UIImage(named: "right_bottom_image")
   }
   
-  static var recentImage2: UIImage? {
-    UIImage(named: "recent_image2")
-  }
-  
-  static var recentImage3: UIImage? {
-    UIImage(named: "recent_image3")
-  }
-  
-  static var recentImage4: UIImage? {
-    UIImage(named: "recent_image4")
+  static var leftUpperImage: UIImage? {
+    UIImage(named: "left_upper_image")
   }
   
   // MARK: - Category Images

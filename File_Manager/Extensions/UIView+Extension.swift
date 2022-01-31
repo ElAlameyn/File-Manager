@@ -7,7 +7,8 @@
 
 import UIKit
 
-extension UIView {
+extension UIView
+{
   
   enum AnchorType {
     case top, bottom, left, right

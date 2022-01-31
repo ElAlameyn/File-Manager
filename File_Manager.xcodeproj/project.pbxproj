@@ -39,6 +39,9 @@
 		B5DFB90A27A2B97C00196251 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB90927A2B97C00196251 /* Fonts.swift */; };
 		B5DFB90C27A2B9C200196251 /* Texts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB90B27A2B9C200196251 /* Texts.swift */; };
 		B5DFB90F27A2C61B00196251 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB90E27A2C61B00196251 /* BaseViewController.swift */; };
+		B5FB3F7027A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */; };
+		B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */; };
+		B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7427A8313E007A0495 /* LayoutManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +79,9 @@
 		B5DFB90927A2B97C00196251 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		B5DFB90B27A2B9C200196251 /* Texts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Texts.swift; sourceTree = "<group>"; };
 		B5DFB90E27A2C61B00196251 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderBaseViewCollectionReusableView.swift; sourceTree = "<group>"; };
+		B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift.swift"; sourceTree = "<group>"; };
+		B5FB3F7427A8313E007A0495 /* LayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +124,7 @@
 		B5DFB8C627A286A900196251 /* File_Manager */ = {
 			isa = PBXGroup;
 			children = (
+				B5FB3F7327A83124007A0495 /* Helpers */,
 				B5DFB8E327A2AD6900196251 /* Extensions */,
 				B5DFB8DD27A2A76200196251 /* Constants */,
 				B5DFB8DB27A2946300196251 /* Supporting Files */,
@@ -173,6 +180,7 @@
 			children = (
 				B5DFB8E427A2AD7200196251 /* UIView+Extension.swift */,
 				B5DFB90727A2B8BC00196251 /* UILabel+Extension.swift */,
+				B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -216,6 +224,7 @@
 		B5DFB90D27A2C60400196251 /* BaseViewController */ = {
 			isa = PBXGroup;
 			children = (
+				B5FB3F6E27A819C9007A0495 /* Views */,
 				B54B1BC527A6A03100AF1D84 /* Models */,
 				B5DFB93527A54AE500196251 /* Cells */,
 				B5DFB90E27A2C61B00196251 /* BaseViewController.swift */,
@@ -231,6 +240,22 @@
 				B54B1BCC27A6B51400AF1D84 /* RecentBaseViewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		B5FB3F6E27A819C9007A0495 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		B5FB3F7327A83124007A0495 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B5FB3F7427A8313E007A0495 /* LayoutManager.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -318,8 +343,10 @@
 			files = (
 				B5DFB8E527A2AD7200196251 /* UIView+Extension.swift in Sources */,
 				B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */,
+				B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */,
 				B5DFB90F27A2C61B00196251 /* BaseViewController.swift in Sources */,
 				B5DFB8DF27A2A76E00196251 /* Colors.swift in Sources */,
+				B5FB3F7027A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift in Sources */,
 				B5DFB8E127A2A8C600196251 /* Images.swift in Sources */,
 				B5DFB8EA27A2AE1F00196251 /* MeetView.swift in Sources */,
 				B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */,
@@ -329,6 +356,7 @@
 				B5DFB90A27A2B97C00196251 /* Fonts.swift in Sources */,
 				B54B1BCD27A6B51400AF1D84 /* RecentBaseViewCell.swift in Sources */,
 				B54B1BC927A6A60F00AF1D84 /* BaseItem.swift in Sources */,
+				B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */,
 				B54B1BCB27A6A6A100AF1D84 /* Recents.swift in Sources */,
 				B5DFB90C27A2B9C200196251 /* Texts.swift in Sources */,
 				B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */,

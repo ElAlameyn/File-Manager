@@ -7,7 +7,8 @@
 
 import UIKit
 
-struct RecentFile: Hashable {
+struct RecentFile: Hashable
+{
   var id = UUID()
   var image: UIImage?
   var files: String?

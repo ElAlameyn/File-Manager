@@ -8,8 +8,10 @@
 import UIKit
 
 class RecentBaseViewCell: UICollectionViewCell {
-  var leftUpperImageView = UIImageView()
-  var bottomRightView = UIImageView()
+  private var leftUpperImageView = UIImageView(image: UIImage(systemName: "heart"))
+  private var bottomRightView = UIImageView(image: UIImage(systemName: "photo.fill"))
+
+  private var isLiked = false
   
   var mainImageView: UIImageView = {
     let imageView = UIImageView()
@@ -30,21 +32,36 @@ class RecentBaseViewCell: UICollectionViewCell {
 
 extension RecentBaseViewCell {
   private func configure() {
-    layer.masksToBounds = true
-    layer.cornerRadius = 20
-    layer.shadowOffset = CGSize(width: 0, height: 5)
-    layer.shadowRadius = 4
-    layer.shadowOpacity = 0.3
     
-    layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
-
     // MARK: - Layout
-//    contentView.addSubview(leftUpperImageView)
-//    contentView.addSubview(bottomRightView)
     
-    contentView.addSubview(mainImageView)
-//    mainImageView.addEdgeContstraints(offset: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-    mainImageView.addHeightWeightConstraints(offset: CGPoint(x: 150, y: 220))
-    mainImageView.addCenterConstraints()
+    layer.shadowOffset = CGSize(width: 0, height: 5)
+    layer.shadowRadius = 1
+    layer.shadowOpacity = 0.2
+    
+    let borderView = UIView()
+    borderView.frame = self.bounds
+    borderView.layer.cornerRadius = 20
+    borderView.layer.masksToBounds = true
+    contentView.addSubview(borderView)
+    
+    mainImageView.frame = borderView.bounds
+    borderView.addSubview(mainImageView)
+    
+    leftUpperImageView.tintColor = .white
+    mainImageView.addSubview(leftUpperImageView)
+    leftUpperImageView.addEdgeContstraints(exclude: .bottom, .right, offset: UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0))
+    leftUpperImageView.addHeightWeightConstraints(offset: CGPoint(x: 25, y: 25))
+
+    bottomRightView.tintColor = .lightGray
+    mainImageView.addSubview(bottomRightView)
+    bottomRightView.addEdgeContstraints(exclude: .top, .left, offset: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: -10))
   }
+  
+  @objc func likedTapped(_ sender: UITapGestureRecognizer) {
+    print("tapped")
+    isLiked.toggle()
+    leftUpperImageView.image = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
+  }
+
 }
