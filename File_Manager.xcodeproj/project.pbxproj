@@ -42,6 +42,10 @@
 		B5FB3F7027A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */; };
 		B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */; };
 		B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7427A8313E007A0495 /* LayoutManager.swift */; };
+		B5FB3F7827A84699007A0495 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7727A84699007A0495 /* StorageViewController.swift */; };
+		B5FB3F7B27A84729007A0495 /* StorageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7A27A84729007A0495 /* StorageItem.swift */; };
+		B5FB3F7E27A84D97007A0495 /* StatisticCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7D27A84D97007A0495 /* StatisticCollectionViewCell.swift */; };
+		B5FB3F8027A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7F27A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +86,10 @@
 		B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderBaseViewCollectionReusableView.swift; sourceTree = "<group>"; };
 		B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift.swift"; sourceTree = "<group>"; };
 		B5FB3F7427A8313E007A0495 /* LayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
+		B5FB3F7727A84699007A0495 /* StorageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewController.swift; sourceTree = "<group>"; };
+		B5FB3F7A27A84729007A0495 /* StorageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageItem.swift; sourceTree = "<group>"; };
+		B5FB3F7D27A84D97007A0495 /* StatisticCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCollectionViewCell.swift; sourceTree = "<group>"; };
+		B5FB3F7F27A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifiedItemCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +157,7 @@
 		B5DFB8DC27A2947A00196251 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B5FB3F7627A84686007A0495 /* StorageViewController */,
 				B5DFB90D27A2C60400196251 /* BaseViewController */,
 				B5DFB8E227A2A91B00196251 /* MeetViewController */,
 			);
@@ -258,6 +267,33 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		B5FB3F7627A84686007A0495 /* StorageViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B5FB3F7C27A84D6F007A0495 /* Cells */,
+				B5FB3F7927A84715007A0495 /* Models */,
+				B5FB3F7727A84699007A0495 /* StorageViewController.swift */,
+			);
+			path = StorageViewController;
+			sourceTree = "<group>";
+		};
+		B5FB3F7927A84715007A0495 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B5FB3F7A27A84729007A0495 /* StorageItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B5FB3F7C27A84D6F007A0495 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				B5FB3F7D27A84D97007A0495 /* StatisticCollectionViewCell.swift */,
+				B5FB3F7F27A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -347,6 +383,7 @@
 				B5DFB90F27A2C61B00196251 /* BaseViewController.swift in Sources */,
 				B5DFB8DF27A2A76E00196251 /* Colors.swift in Sources */,
 				B5FB3F7027A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift in Sources */,
+				B5FB3F8027A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift in Sources */,
 				B5DFB8E127A2A8C600196251 /* Images.swift in Sources */,
 				B5DFB8EA27A2AE1F00196251 /* MeetView.swift in Sources */,
 				B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */,
@@ -357,7 +394,10 @@
 				B54B1BCD27A6B51400AF1D84 /* RecentBaseViewCell.swift in Sources */,
 				B54B1BC927A6A60F00AF1D84 /* BaseItem.swift in Sources */,
 				B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */,
+				B5FB3F7E27A84D97007A0495 /* StatisticCollectionViewCell.swift in Sources */,
 				B54B1BCB27A6A6A100AF1D84 /* Recents.swift in Sources */,
+				B5FB3F7827A84699007A0495 /* StorageViewController.swift in Sources */,
+				B5FB3F7B27A84729007A0495 /* StorageItem.swift in Sources */,
 				B5DFB90C27A2B9C200196251 /* Texts.swift in Sources */,
 				B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */,
 				B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */,

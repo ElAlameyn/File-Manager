@@ -24,6 +24,14 @@ final class LayoutManager
     NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: wD, heightDimension: hD), subitems: [item])
   }
   
+  static func createVerticalGroup(
+    wD: NSCollectionLayoutDimension,
+    hD: NSCollectionLayoutDimension,
+    item: NSCollectionLayoutItem
+  ) -> NSCollectionLayoutGroup {
+    NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: wD, heightDimension: hD), subitems: [item])
+  }
+  
   static func createSectionHeader(
     wD: NSCollectionLayoutDimension,
     hD: NSCollectionLayoutDimension
