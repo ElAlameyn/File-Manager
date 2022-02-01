@@ -11,6 +11,10 @@ struct Statistic: Hashable {
   var id = UUID()
   var usedMemory: Int
   var totalMemory: Int
+  
+  var emptyMemory: Int {
+    totalMemory - usedMemory
+  }
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
