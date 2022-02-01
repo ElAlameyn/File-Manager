@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     window = UIWindow(frame: windowScene.coordinateSpace.bounds)
     window?.windowScene = windowScene
     
-    let navVC = UINavigationController(rootViewController: BaseViewController())
+    let navVC = UINavigationController(rootViewController: StorageViewController())
     navVC.navigationBar.prefersLargeTitles = false
 //    navVC.setNavigationBarHidden(true, animated: true)
     

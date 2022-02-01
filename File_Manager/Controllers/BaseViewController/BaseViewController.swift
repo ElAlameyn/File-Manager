@@ -19,7 +19,7 @@ class BaseViewController: UIViewController {
   private let sections: [Section] = [.title, .category, .recentFiles]
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
@@ -56,7 +56,12 @@ class BaseViewController: UIViewController {
         return cell
       case .recentFiles:
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.mainImageView.image = recents?.image
+        
+        if let image = recents?.image {
+          cell.mainImageView.image = ImageTransformator.scaled(image: image)
+        } else { cell.mainImageView.image = nil }
+        
+        
         return cell
       }
     }
@@ -65,7 +70,7 @@ class BaseViewController: UIViewController {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseViewCollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-
+      
       switch Section(rawValue: indexPath.section) {
       case .category:
         view.titleLabel.text = "Category"
@@ -95,7 +100,7 @@ class BaseViewController: UIViewController {
     }
   }
   
-  // MARK: - Collection View SetUP
+  // MARK: - Collection View Setup
   
   private func configureUI() {
     addLeftBarButtonItem()
@@ -116,16 +121,12 @@ class BaseViewController: UIViewController {
     view.addSubview(collectionView)
   }
   
-  // MARK: - Layout
-  
   private func createLayout() -> UICollectionViewLayout {
     
     let sectionProvider = {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
       -> NSCollectionLayoutSection? in
       switch self.sections[sectionIndex] {
-        // MARK: - Title Layout
-        
       case .title:
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),
@@ -133,29 +134,25 @@ class BaseViewController: UIViewController {
         
         let group = LayoutManager.createHorizontalGroup(
           wD: .fractionalWidth(1.0),
-          hD: .estimated(150),
+          hD: .estimated(120),
           item: item)
         
         return NSCollectionLayoutSection(group: group)
-        
-        // MARK: - Category Layout
         
       case .category:
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),
           hD: .fractionalHeight(1.0))
         
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-
         let group = LayoutManager.createHorizontalGroup(
           wD: .estimated(130),
           hD: .estimated(150),
           item: item)
-
+        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 10)
-        section.interGroupSpacing = 15
+        section.interGroupSpacing = 20
         
         // Supplementary header view setup
         let sectionHeader = LayoutManager.createSectionHeader(
@@ -163,15 +160,13 @@ class BaseViewController: UIViewController {
           hD: .estimated(30))
         
         section.boundarySupplementaryItems = [sectionHeader]
-        
         return section
         
-        // MARK: - Recent Files Layout
       case .recentFiles:
         let item = LayoutManager.createItem(
           wD: .estimated(155),
           hD: .estimated(220))
-
+        
         let group = LayoutManager.createHorizontalGroup(
           wD: .fractionalWidth(1.0),
           hD: .estimated(220),
@@ -179,11 +174,11 @@ class BaseViewController: UIViewController {
         
         group.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: nil, trailing: nil, bottom: NSCollectionLayoutSpacing.fixed(20))
         group.interItemSpacing = NSCollectionLayoutSpacing.flexible(10)
-
+        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
         section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 5, trailing: 20)
-
+        
         let sectionHeader = LayoutManager.createSectionHeader(
           wD: .fractionalWidth(1.0),
           hD: .estimated(30))
@@ -196,21 +191,25 @@ class BaseViewController: UIViewController {
   }
   
   // MARK: - Navigation Buttons
-
+  
   private func addLeftBarButtonItem() {
     let button = UIButton(type: .custom)
     button.setImage(Images.baseLeftItem, for: .normal)
+    button.setImage(UIImage(systemName: "circle.grid.2x2.fill",
+                            withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
+                      .withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
     button.sizeToFit()
-
+    
     button.addTarget(self, action: #selector(leftBarButtonItemTapped), for: .touchUpInside)
     navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
   }
-
+  
   private func addRightBarButtonItem() {
     let button = UIButton(type: .custom)
-    button.setImage(Images.baseRightItem, for: .normal)
-    button.sizeToFit()
 
+    button.setImage(UIImage(systemName: "magnifyingglass",
+                            withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
+                      .withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
     button.addTarget(self, action: #selector(rightBarButtonItemTapped), for: .touchUpInside)
     navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
   }

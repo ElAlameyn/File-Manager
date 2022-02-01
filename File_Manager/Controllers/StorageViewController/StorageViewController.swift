@@ -23,6 +23,8 @@ class StorageViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    title = "Storage"
+
     // Do any additional setup after loading the view.
     view.backgroundColor = Colors.baseBackground
     configureUI()
@@ -49,6 +51,11 @@ class StorageViewController: UIViewController {
         return cell
       case .lastModified:
         let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.titleLabel.text = lastModifiedItem?.title
+        if let image = lastModifiedItem?.image {
+//          cell.imageView.image = ImageTransformator.scaled(image: image)
+          cell.imageView.image = image
+        }
         return cell
       }
     }
@@ -98,19 +105,12 @@ class StorageViewController: UIViewController {
         return section
         
       case .lastModified:
-        let item = LayoutManager.createItem(
-          wD: .fractionalWidth(1.0),
-          hD: .fractionalHeight(1.0))
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(60))
+        let item = NSCollectionLayoutItem(layoutSize: size)
         
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-
-        let group = LayoutManager.createVerticalGroup(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(60),
-          item: item)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-//        section.orthogonalScrollingBehavior = .continuous
         section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 30, bottom: 20, trailing: 30)
         section.interGroupSpacing = 15
         

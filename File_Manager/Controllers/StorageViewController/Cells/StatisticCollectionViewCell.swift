@@ -14,6 +14,9 @@ class StatisticCollectionViewCell: UICollectionViewCell {
     
     backgroundColor = .white
     layer.cornerRadius = 26
+    layer.shadowOffset = CGSize(width: 0, height: 5)
+    layer.shadowRadius = 4
+    layer.shadowOpacity = 0.2
   }
   
   required init?(coder: NSCoder) {

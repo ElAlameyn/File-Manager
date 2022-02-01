@@ -24,4 +24,10 @@ struct Colors
   static var baseBackground: UIColor {
     UIColor(red: 247 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1)
   }
+  
+  static var labelGrayColor: UIColor {
+    UIColor(red: 101 / 255, green: 94 / 255, blue: 94 / 255, alpha: 1)
+  }
+  
+  //rgba(101, 94, 94, 1)
 }

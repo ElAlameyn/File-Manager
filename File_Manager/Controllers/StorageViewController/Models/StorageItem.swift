@@ -13,44 +13,19 @@ enum StorageItem: Hashable {
 }
 
 extension StorageItem {
+  
   static let allModifiedItems: [StorageItem] = [
-    .lastModified(LastModifiedItem(title: "item1")),
-    .lastModified(LastModifiedItem(title: "item2")),
-    .lastModified(LastModifiedItem(title: "item3")),
+    .lastModified(LastModifiedItem(title: "image.png", image: Images.categoryImages)),
+    .lastModified(LastModifiedItem(title: "Just super big image name to show how cell fit content (okey or not).txt", image: Images.categoryFiles)),
+    .lastModified(LastModifiedItem(title: "video.mkv", image: Images.categoryVideos)),
   ]
   
   static let statistic: StorageItem = .statistics(Statistic(usedMemory: 25, totalMemory: 150))
   
 }
 
-struct LastModifiedItem: Hashable {
-  var id = UUID()
-  var title: String
-  var image: UIImage?
-  
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
-  }
-  
-  static func == (lhs: LastModifiedItem, rhs: LastModifiedItem) -> Bool {
-    lhs.id == rhs.id
-  }
-}
 
 
-struct Statistic: Hashable {
-  var id = UUID()
-  var usedMemory: Int
-  var totalMemory: Int
-
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
-  }
-  
-  static func == (lhs: Statistic, rhs: Statistic) -> Bool {
-    lhs.id == rhs.id
-  }
-}
 
 
 

@@ -29,8 +29,7 @@ class SectionHeaderBaseViewCollectionReusableView: UICollectionReusableView
     backgroundColor = Colors.baseBackground
 
     self.addSubview(titleLabel)
-    titleLabel.addEdgeContstraints(exclude: .right, offset: UIEdgeInsets(top: 10, left: 10, bottom: -10, right: 0))
-
+    titleLabel.addEdgeContstraints(exclude: .right, offset: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: 0))
   }
   
   required init?(coder: NSCoder) {
