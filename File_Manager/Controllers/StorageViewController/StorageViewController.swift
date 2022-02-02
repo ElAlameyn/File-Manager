@@ -53,11 +53,26 @@ class StorageViewController: UIViewController {
         let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.titleLabel.text = lastModifiedItem?.title
         if let image = lastModifiedItem?.image {
-//          cell.imageView.image = ImageTransformator.scaled(image: image)
           cell.imageView.image = image
         }
         return cell
       }
+    }
+    
+    dataSource.supplementaryViewProvider = {
+      collectionView, kind, indexPath in
+      guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+      let view: SectionHeaderBaseViewCollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
+      
+      switch Section(rawValue: indexPath.section) {
+      case .statistics:
+        break
+      case .lastModified:
+        view.titleLabel.text = "Last Modified"
+      case .none:
+        break
+      }
+      return view
     }
     return dataSource
   }
@@ -77,8 +92,11 @@ class StorageViewController: UIViewController {
     collectionView.register(StatisticCollectionViewCell.self, forCellWithReuseIdentifier: "\(StatisticCollectionViewCell.self)")
     collectionView.register(ModifiedItemCollectionViewCell.self, forCellWithReuseIdentifier: "\(ModifiedItemCollectionViewCell.self)")
 
-    // TO-DO add supplementary view
-    
+    collectionView.register(
+      SectionHeaderBaseViewCollectionReusableView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(SectionHeaderBaseViewCollectionReusableView.self)")
+
     view.addSubview(collectionView)
   }
   
@@ -100,7 +118,7 @@ class StorageViewController: UIViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 30, bottom: 5, trailing: 30)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 40, leading: 30, bottom: 25, trailing: 30)
         
         return section
         
@@ -111,10 +129,13 @@ class StorageViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 30, bottom: 20, trailing: 30)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 20, trailing: 30)
         section.interGroupSpacing = 15
         
-        // TO-DO add supplementary view
+        let sectionHeader = LayoutManager.createSectionHeader(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(30))
+        section.boundarySupplementaryItems = [sectionHeader]
 
         return section
       }
