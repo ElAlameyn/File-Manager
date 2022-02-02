@@ -30,4 +30,12 @@ struct Colors
   }
   
   //rgba(101, 94, 94, 1)
+  
+  // background: rgba(20, 81, 154, 1);
+  
+  static var labelStatisticColor: UIColor {
+    UIColor(red: 20 / 255, green: 81 / 255, blue: 154 / 255, alpha: 1)
+  }
+
+  
 }
