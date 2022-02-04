@@ -19,8 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     let navVC = UINavigationController(rootViewController: TabBarViewController())
     navVC.navigationBar.prefersLargeTitles = false
-//    navVC.setNavigationBarHidden(true, animated: true)
-    
+
     window?.rootViewController = navVC
     window?.makeKeyAndVisible()
     

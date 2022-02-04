@@ -39,7 +39,7 @@ class CustomTabBar: UIStackView
     distribution = .fillEqually
     alignment = .center
 
-    backgroundColor = Colors.meetBlueBackground
+    backgroundColor = Colors.tabBarBackground
     layer.cornerRadius = 40
     
     customViews.forEach({

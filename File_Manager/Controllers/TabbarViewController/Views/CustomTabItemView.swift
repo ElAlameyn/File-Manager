@@ -12,7 +12,7 @@ class CustomTabItemView: UIView {
   
   private let item: CustomTabItem
   let index: Int
-  
+
   private let containerView = UIView()
   
   var isSelected = false {
@@ -49,11 +49,6 @@ class CustomTabItemView: UIView {
   private func setUpUI() {
     imageView.image = item.icon
     
-//    containerView.frame = self.bounds
-    
-    layer.borderWidth = 1
-    layer.borderColor = UIColor.black.cgColor
-    
     self.addSubview(containerView)
     containerView.addEdgeContstraints()
     containerView.addCenterConstraints()
@@ -65,19 +60,25 @@ class CustomTabItemView: UIView {
       titleLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
       titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -5),
     ])
-    
 
     containerView.addSubview(imageView)
-      imageView.addHeightWeightConstraints(offset: CGPoint(x: 35, y: 35))
+    imageView.addHeightWeightConstraints(offset: CGPoint(x: 30, y: 30))
     
     NSLayoutConstraint.activate([
-      imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-      imageView.topAnchor.constraint(equalTo: self.topAnchor),
+      imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+      imageView.topAnchor.constraint(equalTo: topAnchor),
       imageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
     ])
+    
+      imageView.center.y += 10
   }
   
   private func animateItems() {
+    if isSelected {
+      titleLabel.alpha = 1.0
+    } else {
+      titleLabel.alpha = 0.0
+    }
   }
   
   required init?(coder: NSCoder) {

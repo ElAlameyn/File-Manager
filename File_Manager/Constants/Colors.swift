@@ -37,5 +37,8 @@ struct Colors
     UIColor(red: 20 / 255, green: 81 / 255, blue: 154 / 255, alpha: 1)
   }
 
-  
+  static var tabBarBackground: UIColor {
+    UIColor(red: 16 / 255, green: 166 / 255, blue: 250 / 255, alpha: 1)
+  }
+
 }
