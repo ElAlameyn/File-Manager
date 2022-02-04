@@ -37,11 +37,28 @@ class ModifiedItemCollectionViewCell: UICollectionViewCell {
     return button
   }()
   
+  func configure(title: String? = nil, image: UIImage? = nil) {
+    titleLabel.text = title
+    imageView.image = image
+  }
+  
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
-    // MARK: - Layout
-    
+      setUpUI()
+  }
+  
+  @objc func descrButtonTapped() {
+    print("Tapped")
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+}
+
+extension ModifiedItemCollectionViewCell {
+  private func setUpUI() {
     backgroundColor = .white
     layer.cornerRadius = 10
     layer.shadowOffset = CGSize(width: 1, height: 5)
@@ -51,7 +68,6 @@ class ModifiedItemCollectionViewCell: UICollectionViewCell {
     contentView.addSubview(imageView)
     imageView.addCenterConstraints(exclude: .axisX)
     imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
-//    imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
     imageView.addHeightWeightConstraints(offset: CGPoint(x: 40, y: 40))
     
     contentView.addSubview(descrButton)
@@ -64,15 +80,6 @@ class ModifiedItemCollectionViewCell: UICollectionViewCell {
     contentView.addSubview(titleLabel)
     titleLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 10).isActive = true
     titleLabel.rightAnchor.constraint(equalTo: descrButton.leftAnchor,constant: -10).isActive = true
-//    titleLabel.addCenterConstraints(exclude: .axisX)
     titleLabel.addEdgeContstraints(exclude: .left, .right, offset: UIEdgeInsets(top: 20, left: 0, bottom: -20, right: 0))
-  }
-  
-  @objc func descrButtonTapped() {
-    print("Tapped")
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 }

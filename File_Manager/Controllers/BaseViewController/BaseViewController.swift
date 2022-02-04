@@ -51,17 +51,11 @@ class BaseViewController: UIViewController {
         return cell
       case .category:
         let cell: CategoryBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.titleLabel.text = category?.title
-        cell.imageView.image = category?.image
+        cell.configure(title: category?.title, image: category?.image)
         return cell
       case .recentFiles:
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        
-        if let image = recents?.image {
-          cell.mainImageView.image = ImageTransformator.scaled(image: image)
-        } else { cell.mainImageView.image = nil }
-        
-        
+        cell.configure(image: recents?.image)
         return cell
       }
     }

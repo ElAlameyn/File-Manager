@@ -9,6 +9,7 @@ import UIKit
 
 extension UIView
 {
+  // MARK: - Layout
   
   enum AnchorType {
     case top, bottom, left, right
@@ -71,4 +72,17 @@ extension UIView
     }
     
   }
+  
+  // MARK: - Animations
+  
+  func animateClick(completion: @escaping () -> Void) {
+      UIView.animate(withDuration: 0.15) {
+          self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+      } completion: { _ in
+          UIView.animate(withDuration: 0.15) {
+              self.transform = CGAffineTransform.identity
+          } completion: { _ in completion() }
+      }
+  }
+
 }

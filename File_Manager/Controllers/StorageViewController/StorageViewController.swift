@@ -35,6 +35,8 @@ class StorageViewController: UIViewController {
     let dataSource = DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: StorageItem) -> UICollectionViewCell? in
       
+      // TO-DO: add Statistic and configure
+      
       var statistic: Statistic?
       var lastModifiedItem: LastModifiedItem?
       
@@ -51,10 +53,7 @@ class StorageViewController: UIViewController {
         return cell
       case .lastModified:
         let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.titleLabel.text = lastModifiedItem?.title
-        if let image = lastModifiedItem?.image {
-          cell.imageView.image = image
-        }
+        cell.configure(title: lastModifiedItem?.title, image: lastModifiedItem?.image)
         return cell
       }
     }
