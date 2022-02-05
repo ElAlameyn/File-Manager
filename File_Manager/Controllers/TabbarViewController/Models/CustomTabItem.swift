@@ -15,11 +15,11 @@ extension CustomTabItem {
   var viewController: UIViewController {
     switch self {
     case .home:
-      return BaseViewController()
+      return UINavigationController(rootViewController: BaseViewController())
     case .statistic:
       return UIViewController()
     case .storage:
-      return StorageViewController()
+      return UINavigationController(rootViewController: StorageViewController())
     case .options:
       return UIViewController()
     }

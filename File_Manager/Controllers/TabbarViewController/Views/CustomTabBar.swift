@@ -44,7 +44,7 @@ class CustomTabBar: UIStackView
     
     customViews.forEach({
       $0.translatesAutoresizingMaskIntoConstraints = false
-      $0.clipsToBounds = true
+//      $0.clipsToBounds = true
     })
   }
   
@@ -52,7 +52,7 @@ class CustomTabBar: UIStackView
     customViews.forEach({
       let index = $0.index
       $0.rx.tapGesture().when(.recognized).bind { [weak self] _ in
-      self?.selectItem(at: index)
+        self?.selectItem(at: index)
       }
       .disposed(by: disposeBag)
     })

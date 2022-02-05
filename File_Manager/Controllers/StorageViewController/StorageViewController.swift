@@ -24,8 +24,6 @@ class StorageViewController: UIViewController {
     super.viewDidLoad()
     
     title = "Storage"
-
-    // Do any additional setup after loading the view.
     view.backgroundColor = Colors.baseBackground
     configureUI()
     applySnapshot()
@@ -50,6 +48,7 @@ class StorageViewController: UIViewController {
       switch self.sections[indexPath.section] {
       case .statistics:
         let cell: StatisticCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.configure(statistic: statistic)
         return cell
       case .lastModified:
         let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)

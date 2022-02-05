@@ -139,6 +139,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B51A715E27AEAD1A0026040E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		B524895327AD4CA10064C08C /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -197,10 +205,11 @@
 		B5DFB8C627A286A900196251 /* File_Manager */ = {
 			isa = PBXGroup;
 			children = (
+				B5DFB8DB27A2946300196251 /* Supporting Files */,
 				B5FB3F7327A83124007A0495 /* Helpers */,
 				B5DFB8E327A2AD6900196251 /* Extensions */,
 				B5DFB8DD27A2A76200196251 /* Constants */,
-				B5DFB8DB27A2946300196251 /* Supporting Files */,
+				B51A715E27AEAD1A0026040E /* Views */,
 				B5DFB8DC27A2947A00196251 /* Controllers */,
 				B5DFB8D027A286AC00196251 /* Assets.xcassets */,
 				B5DFB8D527A286AC00196251 /* Info.plist */,
@@ -299,7 +308,6 @@
 		B5DFB90D27A2C60400196251 /* BaseViewController */ = {
 			isa = PBXGroup;
 			children = (
-				B5FB3F6E27A819C9007A0495 /* Views */,
 				B54B1BC527A6A03100AF1D84 /* Models */,
 				B5DFB93527A54AE500196251 /* Cells */,
 				B5DFB90E27A2C61B00196251 /* BaseViewController.swift */,
@@ -315,14 +323,6 @@
 				B54B1BCC27A6B51400AF1D84 /* RecentBaseViewCell.swift */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		B5FB3F6E27A819C9007A0495 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		B5FB3F7327A83124007A0495 /* Helpers */ = {

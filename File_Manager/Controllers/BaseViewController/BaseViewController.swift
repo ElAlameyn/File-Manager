@@ -200,7 +200,7 @@ class BaseViewController: UIViewController {
   
   private func addRightBarButtonItem() {
     let button = UIButton(type: .custom)
-
+    
     button.setImage(UIImage(systemName: "magnifyingglass",
                             withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
                       .withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)

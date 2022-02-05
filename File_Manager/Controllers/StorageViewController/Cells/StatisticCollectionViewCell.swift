@@ -52,6 +52,24 @@ class StatisticCollectionViewCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
+  func configure(statistic: Statistic? = nil) {
+    if let statistic = statistic {
+      usedLabel.text = "\(statistic.usedMemory) GB"
+      availableLabel.text = "\(statistic.emptyMemory) GB"
+      totalLabel.text = "\(statistic.totalMemory) GB"
+      
+      let shapePath = UIBezierPath(
+        arcCenter: circleCenter,
+        radius: circleRadius,
+        startAngle: 3 * .pi / 2,
+        endAngle: getValueOf(percent: statistic.usedMemory * 100 / statistic.totalMemory),
+        clockwise: true)
+      
+      shape.path = shapePath.cgPath
+    }
+    
+  }
+  
   private func addShapes() {
     let circlePath = UIBezierPath(
       arcCenter: circleCenter,
