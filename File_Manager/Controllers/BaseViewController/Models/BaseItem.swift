@@ -16,7 +16,7 @@ enum BaseItem: Hashable
 
 extension BaseItem
 {
-  static var recentsCount = 6
+  static var recentsCount = 4
   
   static var allCategories: [BaseItem] = [
     .category(Category(title: "Images", image: Images.categoryImages)),

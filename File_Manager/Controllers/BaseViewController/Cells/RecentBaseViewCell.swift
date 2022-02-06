@@ -22,7 +22,13 @@ class RecentBaseViewCell: UICollectionViewCell {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    configure()
+    setUpUI()
+  }
+  
+  func configure(image: UIImage? = nil) {
+    if let image = image {
+      mainImageView.image = ImageTransformator.scaled(image: image)
+    }
   }
   
   required init?(coder: NSCoder) {
@@ -31,7 +37,7 @@ class RecentBaseViewCell: UICollectionViewCell {
 }
 
 extension RecentBaseViewCell {
-  private func configure() {
+  private func setUpUI() {
     
     // MARK: - Layout
     

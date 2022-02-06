@@ -8,7 +8,6 @@
 import UIKit
 
 class StorageViewController: UIViewController {
-  
   enum Section: Int {
     case statistics, lastModified
   }
@@ -23,7 +22,8 @@ class StorageViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // Do any additional setup after loading the view.
+    title = "Storage"
+
     view.backgroundColor = Colors.baseBackground
     configureUI()
     applySnapshot()
@@ -32,6 +32,8 @@ class StorageViewController: UIViewController {
   private func configureDataSource() -> DataSource {
     let dataSource = DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: StorageItem) -> UICollectionViewCell? in
+      
+      // TO-DO: add Statistic and configure
       
       var statistic: Statistic?
       var lastModifiedItem: LastModifiedItem?
@@ -46,11 +48,31 @@ class StorageViewController: UIViewController {
       switch self.sections[indexPath.section] {
       case .statistics:
         let cell: StatisticCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.configure(statistic: statistic)
         return cell
       case .lastModified:
         let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.configure(title: lastModifiedItem?.title, image: lastModifiedItem?.image)
         return cell
       }
+    }
+    
+    dataSource.supplementaryViewProvider = {
+      collectionView, kind, indexPath in
+      guard kind == UICollectionView.elementKindSectionHeader else { return nil }
+      let view: SectionHeaderBaseViewCollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
+      view.descrButton.isHidden = false
+      view.delegate = self
+      
+      switch Section(rawValue: indexPath.section) {
+      case .statistics:
+        break
+      case .lastModified:
+        view.titleLabel.text = "Last Modified"
+      case .none:
+        break
+      }
+      return view
     }
     return dataSource
   }
@@ -60,7 +82,7 @@ class StorageViewController: UIViewController {
     snapshot.appendSections([.statistics, .lastModified])
     snapshot.appendItems( [StorageItem.statistic] , toSection: .statistics)
     snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
-    self.dataSource.apply(snapshot, animatingDifferences: false)
+    self.dataSource.apply(snapshot, animatingDifferences: true)
   }
   
   private func configureUI() {
@@ -70,8 +92,11 @@ class StorageViewController: UIViewController {
     collectionView.register(StatisticCollectionViewCell.self, forCellWithReuseIdentifier: "\(StatisticCollectionViewCell.self)")
     collectionView.register(ModifiedItemCollectionViewCell.self, forCellWithReuseIdentifier: "\(ModifiedItemCollectionViewCell.self)")
 
-    // TO-DO add supplementary view
-    
+    collectionView.register(
+      SectionHeaderBaseViewCollectionReusableView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(SectionHeaderBaseViewCollectionReusableView.self)")
+
     view.addSubview(collectionView)
   }
   
@@ -93,32 +118,38 @@ class StorageViewController: UIViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 30, bottom: 5, trailing: 30)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 40, leading: 30, bottom: 40, trailing: 30)
         
         return section
         
       case .lastModified:
-        let item = LayoutManager.createItem(
-          wD: .fractionalWidth(1.0),
-          hD: .fractionalHeight(1.0))
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(60))
+        let item = NSCollectionLayoutItem(layoutSize: size)
         
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-
-        let group = LayoutManager.createVerticalGroup(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(60),
-          item: item)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-//        section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 30, bottom: 20, trailing: 30)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
         section.interGroupSpacing = 15
         
-        // TO-DO add supplementary view
+        let sectionHeader = LayoutManager.createSectionHeader(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(30))
+        section.boundarySupplementaryItems = [sectionHeader]
 
         return section
       }
     }
     return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
   }
+}
+
+extension StorageViewController: SortButtonDelegate {
+  
+  func sortButtonTapped() {
+    StorageItem.allModifiedItems.sort()
+    applySnapshot()
+  }
+  
+  
 }

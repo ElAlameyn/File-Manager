@@ -30,7 +30,7 @@ class MeetViewController: UIViewController {
     meetView.addHeightWeightConstraints(offset: CGPoint(x: 300, y: 300))
     
     meetView.buttonHandler = {
-      let baseVC = BaseViewController()
+      let baseVC = TabBarViewController()
       self.navigationController?.pushViewController(baseVC, animated: true)
     }
   }

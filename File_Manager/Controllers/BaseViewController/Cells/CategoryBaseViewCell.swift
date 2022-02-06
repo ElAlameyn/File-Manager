@@ -9,13 +9,13 @@ import UIKit
 
 class CategoryBaseViewCell: UICollectionViewCell {
 
-  lazy var imageView: UIImageView = {
+  lazy private var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFit
     return imageView
   }()
   
-  lazy var titleLabel: UILabel = {
+  lazy private var titleLabel: UILabel = {
     let label = UILabel()
     label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMediumForCategories)
     label.lineBreakMode = .byWordWrapping
@@ -27,9 +27,14 @@ class CategoryBaseViewCell: UICollectionViewCell {
     return label
   }()
   
+  func configure(title: String? = nil, image: UIImage? = nil) {
+    titleLabel.text = title
+    imageView.image = image
+  }
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
-    configure()
+    setUpUI()
   }
   
   required init?(coder: NSCoder) {
@@ -38,7 +43,7 @@ class CategoryBaseViewCell: UICollectionViewCell {
 }
 
 extension CategoryBaseViewCell {
-  func configure() {
+  func setUpUI() {
     backgroundColor = .white
     layer.cornerRadius = 20
     layer.shadowOffset = CGSize(width: 0, height: 5)
