@@ -19,9 +19,25 @@ class TitleBaseViewCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
   
-  private var titleLabel = UILabel.withStyle(f: Style.titleBaseViewCell)
+  private var titleLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMedium,
+      color: .darkGray,
+      text: Texts.baseTitleLabelText)
+    <> {
+      $0.textAlignment = .left
+    })
   
-  private var descriptionLabel = UILabel.withStyle(f: Style.descriptionBaseViewCell)
+  private var descriptionLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoRegular,
+      color: .systemGray,
+      text: Texts.baseDescriptionLabelText)
+    <> {
+      $0.textAlignment = .left
+    })
 
 }
 

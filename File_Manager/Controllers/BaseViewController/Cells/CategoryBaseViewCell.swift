@@ -14,8 +14,13 @@ class CategoryBaseViewCell: UICollectionViewCell {
     imageView.contentMode = .scaleAspectFit
     return imageView
   }()
-  
-  private var titleLabel = UILabel.withStyle(f: Style.titleCategoryViewCell)
+
+  private var titleLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMediumForCategories,
+      color: .darkGray,
+      text: Texts.baseCategoryLabelText))
   
   func configure(title: String? = nil, image: UIImage? = nil) {
     titleLabel.text = title

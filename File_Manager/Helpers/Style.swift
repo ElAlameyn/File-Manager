@@ -9,6 +9,7 @@ import UIKit
 class Style
 
 {
+  
  static let baseLabelStyle: (UILabel) -> Void = {
     $0.addCharacterSpacing(kernValue: -33)
     $0.lineBreakMode = .byWordWrapping
@@ -24,6 +25,10 @@ class Style
       $0.textColor = color
       $0.text = text
     }
+  }
+  
+  static let mask: (UILabel) -> Void = {
+    $0.translatesAutoresizingMaskIntoConstraints = false
   }
   
   static func rounded<V: UIView>(radius: CGFloat) -> (V) -> Void {
@@ -53,61 +58,10 @@ class Style
       $0.setTitleColor(color, for: .normal)
     }
   }
-  
-  // MARK: - Meet View
-  
-  static let titleLabelForMeet = baseLabelStyle <>
-  appearanceLabelStyle(withFont: Fonts.robotoMedium,
-                       color: Colors.labelBlueColor,
-                       text: Texts.meetTitleLabelText)
-  
-  static let descriptionLabelForMeet = baseLabelStyle <>
-  appearanceLabelStyle(withFont: Fonts.robotoRegular,
-                       color: .systemGray,
-                       text: Texts.meetDescriptionLabelText)
-  
-  static let buttonForMeet = rounded(radius: 20) <>
-  configureButtonTitle(withTitle: Texts.meetButtonTitle, color: .white)
-  <> {
-    $0.backgroundColor = Colors.buttonBlueColor
-    $0.titleLabel?.font = Fonts.robotoBold
-  }
-  
-  // MARK: - Title Base View Cell
-  
-  static let titleBaseViewCell = baseLabelStyle <>
-  appearanceLabelStyle(withFont: Fonts.robotoMedium,
-                       color: .darkGray,
-                       text: Texts.baseTitleLabelText)
-  <> {
-    $0.textAlignment = .left
-  }
-  
-  static let descriptionBaseViewCell = baseLabelStyle <>
-  appearanceLabelStyle(withFont: Fonts.robotoRegular,
-                       color: .systemGray,
-                       text: Texts.baseDescriptionLabelText)
-  <> {
-    $0.textAlignment = .left
-  }
-  
-  // MARK: - CategoryBaseViewCell
-  
-  static let titleCategoryViewCell = baseLabelStyle <>
-  appearanceLabelStyle(withFont: Fonts.robotoMediumForCategories,
-                       color: .darkGray,
-                       text: Texts.baseCategoryLabelText)
-  
+
   // MARK: - ModifiedItemCollectionViewCell
   
-  static let titleModifiedItemCell = baseLabelStyle <>
-  appearanceLabelStyle(withFont: Fonts.robotoRegular.withSize(13),
-                       color: Colors.labelGrayColor,
-                       text: "???")
-  <> {
-    $0.textAlignment = .left
-  }
-  
+
 
 }
 

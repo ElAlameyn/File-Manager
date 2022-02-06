@@ -9,8 +9,15 @@ import UIKit
 
 class ModifiedItemCollectionViewCell: UICollectionViewCell {
   
-  private let titleLabel = UILabel.withStyle(f: Style.titleModifiedItemCell)
-
+  private let titleLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <>
+    Style.appearanceLabelStyle(withFont: Fonts.robotoRegular.withSize(13),
+                         color: Colors.labelGrayColor,
+                         text: "???")
+    <> {
+      $0.textAlignment = .left
+    })
+  
   lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFit
@@ -36,13 +43,13 @@ class ModifiedItemCollectionViewCell: UICollectionViewCell {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-      setUpUI()
+    setUpUI()
   }
   
   @objc func descrButtonTapped() {
     print("Tapped")
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

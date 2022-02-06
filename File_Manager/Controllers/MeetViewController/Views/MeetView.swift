@@ -19,9 +19,27 @@ class MeetView: UIView {
     setUpUI()
   }
   
-  private var titleLabel = UILabel.withStyle(f: Style.titleLabelForMeet)
-  private var descriptionLabel = UILabel.withStyle(f: Style.descriptionLabelForMeet)
-  private var submitButton = UIButton.withStyle(f: Style.buttonForMeet)
+  private var titleLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMedium,
+      color: Colors.labelBlueColor,
+      text: Texts.meetTitleLabelText))
+  
+  private var descriptionLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoRegular,
+      color: .systemGray,
+      text: Texts.meetDescriptionLabelText)
+                                                   )
+  private var submitButton = UIButton.withStyle(
+    f: Style.rounded(radius: 20) <>
+    Style.configureButtonTitle(withTitle: Texts.meetButtonTitle, color: .white)
+    <> {
+      $0.backgroundColor = Colors.buttonBlueColor
+      $0.titleLabel?.font = Fonts.robotoBold
+    })
 
 
   private func setUpUI() {

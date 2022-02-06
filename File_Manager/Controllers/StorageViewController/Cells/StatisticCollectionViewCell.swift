@@ -9,14 +9,37 @@ import UIKit
 
 class StatisticCollectionViewCell: UICollectionViewCell {
 
-  private var usedLabel = UILabel.createStatisticLabel(with: "60 GB")
-  private var totalLabel = UILabel.createStatisticLabel(with: "160 GB")
-  private var availableLabel = UILabel.createStatisticLabel(with: "100 GB", fontSize: CGFloat(25))
+  private let statisticLabelStyle =
+    Style.baseLabelStyle <> Style.mask <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMedium.withSize(22),
+      color: Colors.labelStatisticColor,
+      text: "???")
+    
+  private let statisticDescriptionLabelStyle =
+    Style.baseLabelStyle <> Style.mask <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMediumForCategories.withSize(15),
+      color: Colors.labelGrayColor,
+      text: "???")
   
-  private var usedDescriptionLabel = UILabel.createDescriptionStatisticsLabel(with: "Used")
-  private var totalDescriptionLabel = UILabel.createDescriptionStatisticsLabel(with: "Total")
-  private var availableDescriptionLabel = UILabel.createDescriptionStatisticsLabel(with: "Available")
+  lazy private var usedLabel = UILabel.withStyle(f: statisticLabelStyle)
+  lazy private var totalLabel = UILabel.withStyle(f: statisticLabelStyle)
+  lazy private var availableLabel = UILabel.withStyle(
+    f: statisticLabelStyle <>
+    { $0.font = UIFontMetrics.default.scaledFont(
+      for: Fonts.robotoMedium.withSize(25))})
   
+  lazy private var usedDescriptionLabel = UILabel.withStyle(
+    f: statisticDescriptionLabelStyle <>
+    { $0.text = "Used"})
+  lazy private var totalDescriptionLabel = UILabel.withStyle(
+    f: statisticDescriptionLabelStyle <>
+    { $0.text = "Total"})
+  lazy private var availableDescriptionLabel = UILabel.withStyle(
+    f: statisticDescriptionLabelStyle <>
+    { $0.text = "Available"})
+
   private func getValueOf(percent: Int) -> CGFloat {
     let endAngle = (4 * CGFloat.pi / 2)
     let startAngle = (3 * CGFloat.pi / 2)

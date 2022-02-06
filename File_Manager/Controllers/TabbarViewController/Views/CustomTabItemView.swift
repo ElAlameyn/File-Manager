@@ -23,19 +23,13 @@ class CustomTabItemView: UIView {
   
   private var isChanged = false
   
-  lazy private var titleLabel: UILabel = {
-    let label = UILabel()
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMediumForCategories.withSize(12))
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 1
-    label.textAlignment = .center
-    label.textColor = .white
-    label.text = item.name
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
-  
+  lazy private var titleLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMediumForCategories.withSize(12),
+      color: .white,
+      text: item.name) <> Style.mask)
+
   private let imageView = UIImageView()
   
   init(with item: CustomTabItem, index: Int) {
