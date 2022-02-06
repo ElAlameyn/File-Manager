@@ -18,30 +18,11 @@ class TitleBaseViewCell: UICollectionViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
-  lazy private var titleLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMedium)
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 0
-    label.textAlignment = .left
-    label.textColor = .darkGray
-    label.text = Texts.baseTitleLabelText
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
   
-  lazy private var descriptionLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoRegular)
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 0
-    label.textAlignment = .left
-    label.textColor = .systemGray
-    label.text = Texts.baseDescriptionLabelText
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
+  private var titleLabel = UILabel.withStyle(f: Style.titleBaseViewCell)
+  
+  private var descriptionLabel = UILabel.withStyle(f: Style.descriptionBaseViewCell)
+
 }
 
 extension TitleBaseViewCell {

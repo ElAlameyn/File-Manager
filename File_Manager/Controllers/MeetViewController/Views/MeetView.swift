@@ -19,40 +19,11 @@ class MeetView: UIView {
     setUpUI()
   }
   
-  lazy private var titleLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMedium)
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 0
-    label.textAlignment = .center
-    label.textColor = Colors.labelBlueColor
-    label.text = Texts.meetTitleLabelText
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
-  
-  lazy private var descriptionLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoRegular)
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 0
-    label.textAlignment = .center
-    label.textColor = .systemGray
-    label.text = Texts.meetDescriptionLabelText
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
-  
-  lazy private var submitButton: UIButton = {
-    let button = UIButton()
-    button.layer.cornerRadius = 20
-    button.backgroundColor = Colors.buttonBlueColor
-    button.titleLabel?.font = Fonts.robotoBold
-    button.setTitleColor(.white, for: .normal)
-    button.setTitle(Texts.meetButtonTitle, for: .normal)
-    return button
-  }()
-  
+  private var titleLabel = UILabel.withStyle(f: Style.titleLabelForMeet)
+  private var descriptionLabel = UILabel.withStyle(f: Style.descriptionLabelForMeet)
+  private var submitButton = UIButton.withStyle(f: Style.buttonForMeet)
+
+
   private func setUpUI() {
     self.addSubview(titleLabel)
     titleLabel.addEdgeContstraints(exclude: .bottom, offset: UIEdgeInsets(top: 35, left: 22, bottom: 0, right: -22))

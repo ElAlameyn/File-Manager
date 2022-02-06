@@ -9,6 +9,13 @@ import UIKit
 
 extension UILabel
 {
+  
+  static func withStyle(f: @escaping (UILabel) -> Void) -> UILabel {
+    let label = UILabel()
+    f(label)
+    return label
+  }
+  
   func addCharacterSpacing(kernValue: Double = 1.15) {
     guard let text = text, !text.isEmpty else { return }
     let string = NSMutableAttributedString(string: text)

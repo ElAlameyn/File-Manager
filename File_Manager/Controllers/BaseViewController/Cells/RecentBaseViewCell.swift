@@ -20,6 +20,14 @@ class RecentBaseViewCell: UICollectionViewCell {
     return imageView
   }()
   
+  lazy var borderView: UIView = {
+    let borderView = UIView()
+    borderView.frame = self.bounds
+    borderView.layer.cornerRadius = 20
+    borderView.layer.masksToBounds = true
+    return borderView
+  }()
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     setUpUI()
@@ -41,16 +49,10 @@ extension RecentBaseViewCell {
     
     // MARK: - Layout
     
-    layer.shadowOffset = CGSize(width: 0, height: 5)
-    layer.shadowRadius = 1
-    layer.shadowOpacity = 0.2
+    Style.withShadow(withRadius: 1, offset: CGSize(width: 0, height: 5), opacity: 0.2)(self)
     
-    let borderView = UIView()
-    borderView.frame = self.bounds
-    borderView.layer.cornerRadius = 20
-    borderView.layer.masksToBounds = true
-    contentView.addSubview(borderView)
-    
+    addSubview(borderView)
+
     mainImageView.frame = borderView.bounds
     borderView.addSubview(mainImageView)
     

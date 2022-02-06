@@ -15,17 +15,7 @@ class CategoryBaseViewCell: UICollectionViewCell {
     return imageView
   }()
   
-  lazy private var titleLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMediumForCategories)
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 0
-    label.textAlignment = .center
-    label.textColor = .darkGray
-    label.text = Texts.baseCategoryLabelText
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
+  private var titleLabel = UILabel.withStyle(f: Style.titleCategoryViewCell)
   
   func configure(title: String? = nil, image: UIImage? = nil) {
     titleLabel.text = title
@@ -45,11 +35,13 @@ class CategoryBaseViewCell: UICollectionViewCell {
 extension CategoryBaseViewCell {
   func setUpUI() {
     backgroundColor = .white
-    layer.cornerRadius = 20
-    layer.shadowOffset = CGSize(width: 0, height: 5)
-    layer.shadowRadius = 2
-    layer.shadowOpacity = 0.3
     
+    Style.withShadow(withRadius: 2,
+                     offset: CGSize(width: 0, height: 5),
+                     opacity: 0.3) (self)
+    Style.rounded(radius: 20)(self)
+
+
     // MARK: - Layout
     
     contentView.addSubview(imageView)

@@ -1,0 +1,120 @@
+//
+//  ButtonStyles.swift.swift
+//  File_Manager
+//
+//  Created by Артем Калинкин on 06.02.2022.
+//
+
+import UIKit
+class Style
+
+{
+ static let baseLabelStyle: (UILabel) -> Void = {
+    $0.addCharacterSpacing(kernValue: -33)
+    $0.lineBreakMode = .byWordWrapping
+    $0.textAlignment = .center
+    $0.numberOfLines = 0
+  }
+  
+  static func appearanceLabelStyle(withFont font: UIFont,
+                                   color: UIColor,
+                                   text: String) -> (UILabel) -> Void {
+    {
+      $0.font = UIFontMetrics.default.scaledFont(for: font)
+      $0.textColor = color
+      $0.text = text
+    }
+  }
+  
+  static func rounded<V: UIView>(radius: CGFloat) -> (V) -> Void {
+    {
+      $0.layer.cornerRadius = radius
+    }
+  }
+  
+  static func withShadow(withRadius radius: CGFloat,
+                        offset: CGSize,
+                        opacity: Float
+  ) -> (UIView) -> Void {
+    {
+      $0.layer.shadowOffset = offset
+      $0.layer.shadowRadius = radius
+      $0.layer.shadowOpacity = opacity
+    }
+  }
+  
+  static func configureButtonTitle(withTitle title: String,
+                                   color: UIColor,
+                                   image: UIImage? = nil
+  ) -> (UIButton) -> Void {
+    {
+      $0.setTitle(title, for: .normal)
+      $0.setImage(image, for: .normal)
+      $0.setTitleColor(color, for: .normal)
+    }
+  }
+  
+  // MARK: - Meet View
+  
+  static let titleLabelForMeet = baseLabelStyle <>
+  appearanceLabelStyle(withFont: Fonts.robotoMedium,
+                       color: Colors.labelBlueColor,
+                       text: Texts.meetTitleLabelText)
+  
+  static let descriptionLabelForMeet = baseLabelStyle <>
+  appearanceLabelStyle(withFont: Fonts.robotoRegular,
+                       color: .systemGray,
+                       text: Texts.meetDescriptionLabelText)
+  
+  static let buttonForMeet = rounded(radius: 20) <>
+  configureButtonTitle(withTitle: Texts.meetButtonTitle, color: .white)
+  <> {
+    $0.backgroundColor = Colors.buttonBlueColor
+    $0.titleLabel?.font = Fonts.robotoBold
+  }
+  
+  // MARK: - Title Base View Cell
+  
+  static let titleBaseViewCell = baseLabelStyle <>
+  appearanceLabelStyle(withFont: Fonts.robotoMedium,
+                       color: .darkGray,
+                       text: Texts.baseTitleLabelText)
+  <> {
+    $0.textAlignment = .left
+  }
+  
+  static let descriptionBaseViewCell = baseLabelStyle <>
+  appearanceLabelStyle(withFont: Fonts.robotoRegular,
+                       color: .systemGray,
+                       text: Texts.baseDescriptionLabelText)
+  <> {
+    $0.textAlignment = .left
+  }
+  
+  // MARK: - CategoryBaseViewCell
+  
+  static let titleCategoryViewCell = baseLabelStyle <>
+  appearanceLabelStyle(withFont: Fonts.robotoMediumForCategories,
+                       color: .darkGray,
+                       text: Texts.baseCategoryLabelText)
+  
+  // MARK: - ModifiedItemCollectionViewCell
+  
+  static let titleModifiedItemCell = baseLabelStyle <>
+  appearanceLabelStyle(withFont: Fonts.robotoRegular.withSize(13),
+                       color: Colors.labelGrayColor,
+                       text: "???")
+  <> {
+    $0.textAlignment = .left
+  }
+  
+
+}
+
+
+
+
+
+
+
+  

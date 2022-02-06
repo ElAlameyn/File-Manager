@@ -8,18 +8,9 @@
 import UIKit
 
 class ModifiedItemCollectionViewCell: UICollectionViewCell {
-
-  lazy var titleLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoRegular.withSize(13))
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 0
-    label.textAlignment = .left
-    label.textColor = Colors.labelGrayColor
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
   
+  private let titleLabel = UILabel.withStyle(f: Style.titleModifiedItemCell)
+
   lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFit

@@ -23,7 +23,7 @@ struct Fonts
   }
   
   static var robotoRegular: UIFont {
-    UIFont(name: "Roboto-Regular", size: 18) ?? .preferredFont(forTextStyle: .body)
+    UIFont(name: "Roboto-Regular", size: 17) ?? .preferredFont(forTextStyle: .body)
   }
   
   static var robotoBold: UIFont {
