@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		136E00BF0AD406378182EFF0 /* Pods_File_Manager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA58616FBE89F9B42861E54A /* Pods_File_Manager.framework */; };
+		B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716027AEBAF50026040E /* OptionsViewController.swift */; };
+		B51A716427AEBB350026040E /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716327AEBB350026040E /* StatisticViewController.swift */; };
 		B524895227AD45110064C08C /* CustomTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895127AD45110064C08C /* CustomTabItem.swift */; };
 		B524895627AD4CC90064C08C /* CustomTabItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895527AD4CC90064C08C /* CustomTabItemView.swift */; };
 		B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895727AD4FA70064C08C /* CustomTabBar.swift */; };
@@ -59,6 +61,8 @@
 /* Begin PBXFileReference section */
 		1F58C2682AFD138EFF66209B /* Pods-File_Manager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.debug.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.debug.xcconfig"; sourceTree = "<group>"; };
 		5040F9BB037954F1BF629001 /* Pods-File_Manager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.release.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.release.xcconfig"; sourceTree = "<group>"; };
+		B51A716027AEBAF50026040E /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
+		B51A716327AEBB350026040E /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		B524895127AD45110064C08C /* CustomTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItem.swift; sourceTree = "<group>"; };
 		B524895527AD4CC90064C08C /* CustomTabItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItemView.swift; sourceTree = "<group>"; };
 		B524895727AD4FA70064C08C /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
@@ -147,6 +151,22 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		B51A715F27AEBAD90026040E /* OptionsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B51A716027AEBAF50026040E /* OptionsViewController.swift */,
+			);
+			path = OptionsViewController;
+			sourceTree = "<group>";
+		};
+		B51A716227AEBB250026040E /* StatisticViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B51A716327AEBB350026040E /* StatisticViewController.swift */,
+			);
+			path = StatisticViewController;
+			sourceTree = "<group>";
+		};
 		B524895327AD4CA10064C08C /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -231,6 +251,8 @@
 		B5DFB8DC27A2947A00196251 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B51A716227AEBB250026040E /* StatisticViewController */,
+				B51A715F27AEBAD90026040E /* OptionsViewController */,
 				B549DDC427AAA5E000BC05BA /* TabbarViewController */,
 				B5FB3F7627A84686007A0495 /* StorageViewController */,
 				B5DFB90D27A2C60400196251 /* BaseViewController */,
@@ -491,7 +513,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5DFB8E527A2AD7200196251 /* UIView+Extension.swift in Sources */,
+				B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */,
 				B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */,
+				B51A716427AEBB350026040E /* StatisticViewController.swift in Sources */,
 				B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */,
 				B5FB3F8427A855BD007A0495 /* ImageTransformator.swift in Sources */,
 				B549DDC627AAA64200BC05BA /* TabBarViewController.swift in Sources */,

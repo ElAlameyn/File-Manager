@@ -171,7 +171,7 @@ class BaseViewController: UIViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 5, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
         
         let sectionHeader = LayoutManager.createSectionHeader(
           wD: .fractionalWidth(1.0),

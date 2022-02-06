@@ -17,11 +17,11 @@ extension CustomTabItem {
     case .home:
       return UINavigationController(rootViewController: BaseViewController())
     case .statistic:
-      return UIViewController()
+      return UINavigationController(rootViewController: StatisticViewController())
     case .storage:
       return UINavigationController(rootViewController: StorageViewController())
     case .options:
-      return UIViewController()
+      return UINavigationController(rootViewController: OptionsViewController())
     }
   }
   

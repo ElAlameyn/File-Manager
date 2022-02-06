@@ -32,7 +32,6 @@ class TabBarViewController: UITabBarController
     
     view.addSubview(customBar)
     customBar.translatesAutoresizingMaskIntoConstraints = false
-    //    customBar.addEdgeContstraints(exclude: .top, offset: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
     NSLayoutConstraint.activate([
       customBar.leftAnchor.constraint(equalTo: view.leftAnchor),
       customBar.rightAnchor.constraint(equalTo: view.rightAnchor),

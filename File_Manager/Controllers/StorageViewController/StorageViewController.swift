@@ -8,7 +8,6 @@
 import UIKit
 
 class StorageViewController: UIViewController {
-  
   enum Section: Int {
     case statistics, lastModified
   }
@@ -24,6 +23,7 @@ class StorageViewController: UIViewController {
     super.viewDidLoad()
     
     title = "Storage"
+
     view.backgroundColor = Colors.baseBackground
     configureUI()
     applySnapshot()
@@ -61,6 +61,8 @@ class StorageViewController: UIViewController {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseViewCollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
+      view.descrButton.isHidden = false
+      view.delegate = self
       
       switch Section(rawValue: indexPath.section) {
       case .statistics:
@@ -80,7 +82,7 @@ class StorageViewController: UIViewController {
     snapshot.appendSections([.statistics, .lastModified])
     snapshot.appendItems( [StorageItem.statistic] , toSection: .statistics)
     snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
-    self.dataSource.apply(snapshot, animatingDifferences: false)
+    self.dataSource.apply(snapshot, animatingDifferences: true)
   }
   
   private func configureUI() {
@@ -116,7 +118,7 @@ class StorageViewController: UIViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = NSDirectionalEdgeInsets(top: 40, leading: 30, bottom: 25, trailing: 30)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 40, leading: 30, bottom: 40, trailing: 30)
         
         return section
         
@@ -127,7 +129,7 @@ class StorageViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 20, trailing: 30)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
         section.interGroupSpacing = 15
         
         let sectionHeader = LayoutManager.createSectionHeader(
@@ -140,4 +142,14 @@ class StorageViewController: UIViewController {
     }
     return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
   }
+}
+
+extension StorageViewController: SortButtonDelegate {
+  
+  func sortButtonTapped() {
+    StorageItem.allModifiedItems.sort()
+    applySnapshot()
+  }
+  
+  
 }

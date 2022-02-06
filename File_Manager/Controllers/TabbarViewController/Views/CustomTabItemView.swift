@@ -83,9 +83,6 @@ class CustomTabItemView: UIView {
         self.isChanged = true
         self.titleLabel.alpha = 1.0
       })
-      self.sizeToFit()
-      setNeedsLayout()
-      setNeedsDisplay()
     } else {
       if isChanged {
         UIView.animate(withDuration: 0.8, animations: {
