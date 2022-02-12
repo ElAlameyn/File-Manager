@@ -5,6 +5,8 @@
 //  Created by Артем Калинкин on 06.02.2022.
 //
 
+import ImageIO
+
 precedencegroup Fish {
   associativity: left
 }

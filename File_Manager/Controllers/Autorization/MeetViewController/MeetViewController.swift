@@ -27,10 +27,10 @@ class MeetViewController: UIViewController {
     
     meetView.addCenterConstraints(exclude: .axisY)
     meetView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -92).isActive = true
-    meetView.addHeightWeightConstraints(offset: CGPoint(x: 300, y: 300))
+    meetView.addHeightWeightConstraints(values: CGPoint(x: 300, y: 300))
     
     meetView.buttonHandler = {
-      let baseVC = TabBarViewController()
+      let baseVC = AuthViewController()
       self.navigationController?.pushViewController(baseVC, animated: true)
     }
   }
@@ -41,7 +41,7 @@ class MeetViewController: UIViewController {
     
     imageView.translatesAutoresizingMaskIntoConstraints = false
     imageView.addCenterConstraints()
-    imageView.addHeightWeightConstraints(offset: CGPoint(x: 800, y: 800))
+    imageView.addHeightWeightConstraints(values: CGPoint(x: 800, y: 800))
   }
 }
 

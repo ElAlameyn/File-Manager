@@ -59,7 +59,7 @@ extension RecentBaseViewCell {
     leftUpperImageView.tintColor = .white
     mainImageView.addSubview(leftUpperImageView)
     leftUpperImageView.addEdgeContstraints(exclude: .bottom, .right, offset: UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0))
-    leftUpperImageView.addHeightWeightConstraints(offset: CGPoint(x: 25, y: 25))
+    leftUpperImageView.addHeightWeightConstraints(values: CGPoint(x: 25, y: 25))
 
     bottomRightView.tintColor = .lightGray
     mainImageView.addSubview(bottomRightView)

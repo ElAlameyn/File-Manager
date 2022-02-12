@@ -59,10 +59,6 @@ class Style
     }
   }
 
-  // MARK: - ModifiedItemCollectionViewCell
-  
-
-
 }
 
 

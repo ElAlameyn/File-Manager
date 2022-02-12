@@ -50,7 +50,7 @@ extension CategoryBaseViewCell {
     // MARK: - Layout
     
     contentView.addSubview(imageView)
-    imageView.addHeightWeightConstraints(offset: CGPoint(x: 70, y: 70))
+    imageView.addHeightWeightConstraints(values: CGPoint(x: 70, y: 70))
     imageView.addCenterConstraints(offset: CGPoint(x: 0, y: -10))
     
     contentView.addSubview(titleLabel)

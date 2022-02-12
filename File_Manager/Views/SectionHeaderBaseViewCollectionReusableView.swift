@@ -28,19 +28,14 @@ class SectionHeaderBaseViewCollectionReusableView: UICollectionReusableView
     return button
   }()
   
-  lazy var titleLabel: UILabel = {
-    let label = UILabel()
-    label.font = UIFontMetrics.default.scaledFont(for: Fonts.robotoMedium).withSize(25)
-    label.lineBreakMode = .byWordWrapping
-    label.numberOfLines = 1
-    label.textAlignment = .left
-    label.textColor = .darkGray
-    label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-    label.text = Texts.baseTitleLabelText
-    label.addCharacterSpacing(kernValue: -0.33)
-    return label
-  }()
-  
+  lazy var titleLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <> Style.mask <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMedium.withSize(20),
+      color: .darkGray,
+      text: "")
+  )
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     

@@ -66,12 +66,12 @@ extension ModifiedItemCollectionViewCell {
     contentView.addSubview(imageView)
     imageView.addCenterConstraints(exclude: .axisX)
     imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
-    imageView.addHeightWeightConstraints(offset: CGPoint(x: 40, y: 40))
+    imageView.addHeightWeightConstraints(values: CGPoint(x: 40, y: 40))
     
     contentView.addSubview(descrButton)
     descrButton.addCenterConstraints(exclude: .axisX)
     descrButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20).isActive = true
-    descrButton.addHeightWeightConstraints(offset: CGPoint(x: 25, y: 25))
+    descrButton.addHeightWeightConstraints(values: CGPoint(x: 25, y: 25))
     
     descrButton.addTarget(self, action: #selector(descrButtonTapped), for: .touchUpInside)
     

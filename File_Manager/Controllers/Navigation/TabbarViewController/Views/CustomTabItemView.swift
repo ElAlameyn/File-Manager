@@ -59,7 +59,7 @@ class CustomTabItemView: UIView {
     titleLabel.alpha = 0.0
 
     containerView.addSubview(imageView)
-    imageView.addHeightWeightConstraints(offset: CGPoint(x: 30, y: 30))
+    imageView.addHeightWeightConstraints(values: CGPoint(x: 30, y: 30))
     
     NSLayoutConstraint.activate([
       imageView.centerXAnchor.constraint(equalTo: centerXAnchor),

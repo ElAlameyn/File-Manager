@@ -59,16 +59,16 @@ extension UIView
     }
   }
   
-  func addHeightWeightConstraints(exclude: HeightWidthType..., offset: CGPoint? = nil) {
+  func addHeightWeightConstraints(exclude: HeightWidthType..., values: CGPoint? = nil) {
     
     translatesAutoresizingMaskIntoConstraints = false
     
     if !exclude.contains(.height) {
-      heightAnchor.constraint(equalToConstant: offset?.y ?? 0).isActive = true
+      heightAnchor.constraint(equalToConstant: values?.y ?? 0).isActive = true
     }
     
     if !exclude.contains(.width) {
-      widthAnchor.constraint(equalToConstant: offset?.x ?? 0).isActive = true
+      widthAnchor.constraint(equalToConstant: values?.x ?? 0).isActive = true
     }
     
   }
