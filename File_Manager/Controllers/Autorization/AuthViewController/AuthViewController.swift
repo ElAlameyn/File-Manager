@@ -29,18 +29,18 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
     super.viewDidLayoutSubviews()
     webView.frame = view.bounds
   }
-
+  
   func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
     guard let url = webView.url else { return }
     let components = URLComponents(string: url.absoluteString)
     
     guard let code = components?.queryItems?
             .first(where: {$0.name == "code"})?.value,
-      let tokenURL = URL(string: DropboxURL.tokenURL)
+          let tokenURL = URL(string: DropboxURL.tokenURL)
     else { return }
     
     print("CODE ACESS TO DROPBOX: \(code)")
-
+    
     subscriber = URLSession.shared.dataTaskPublisher  (
       for: createTokenRequest(
         url: tokenURL,
@@ -56,14 +56,17 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
         switch completion {
         case .finished:
           print("Token achieved")
-        case .failure(_):
-          print("Error in token request")
+        case .failure(let error):
+          print("Error in token request: \(error.localizedDescription)")
         }
-      } receiveValue: { tokenResponse in
+      } receiveValue: {[weak self] tokenResponse in
         print("ACESS TOKEN : \(tokenResponse.accessToken)")
         if let data = try? JSONEncoder().encode(tokenResponse) {
-          KeychainSwift().set(data, forKey: TokenResponse.key, withAccess: .accessibleWhenUnlocked)
+          KeychainSwift().set(data, forKey: "\(TokenResponse.self)", withAccess: .accessibleWhenUnlocked)
         }
+       self?.dismiss(animated: true, completion: {
+          self?.subscriber?.cancel()
+        })
       }
   }
   
@@ -93,28 +96,3 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
   }
 }
 
-extension AuthViewController {
-  
-  private struct DropboxURL {
-    static let authURL = "https://www.dropbox.com/oauth2/authorize?"
-    static let clientID = "688rvrlb7upz9jb"
-    static let clientSecret = "2zb3cvcxd9e7a2s"
-    static let tokenURL = "https://api.dropboxapi.com/oauth2/token"
-    static let redirectURI = "https://github.com"
-  }
-  
-  struct TokenResponse: Codable {
-    static let key = "dropbox_token_response"
-    
-    var date = Date()
-    let accessToken: String
-    let expiresIn: Int
-    let refresh_token: String?
-    let tokenType: String
-    
-    var isValid: Bool {
-      Date().timeIntervalSince(date) < TimeInterval(expiresIn)
-    }
-  }
- 
-}

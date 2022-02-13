@@ -30,8 +30,13 @@ class MeetViewController: UIViewController {
     meetView.addHeightWeightConstraints(values: CGPoint(x: 300, y: 300))
     
     meetView.buttonHandler = {
-      let baseVC = AuthViewController()
-      self.navigationController?.pushViewController(baseVC, animated: true)
+      let authVC = AuthViewController()
+      authVC.modalTransitionStyle = .crossDissolve
+      authVC.modalPresentationStyle = .fullScreen
+      self.navigationController?.present(authVC, animated: true, completion: { [weak self] in
+        guard let self = self else { return }
+        self.navigationController?.pushViewController(TabBarViewController(), animated: true)
+      })
     }
   }
 
