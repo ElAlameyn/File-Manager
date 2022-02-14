@@ -7,9 +7,8 @@
 
 import UIKit
 
-extension UILabel
-{
-  
+extension UILabel {
+
   static func withStyle(f: @escaping (UILabel) -> Void) -> UILabel {
     let label = UILabel()
     f(label)

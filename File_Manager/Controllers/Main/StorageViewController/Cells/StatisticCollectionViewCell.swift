@@ -29,7 +29,7 @@ class StatisticCollectionViewCell: UICollectionViewCell {
     f: statisticLabelStyle <>
     { $0.font = UIFontMetrics.default.scaledFont(
       for: Fonts.robotoMedium.withSize(25))})
-  
+
   lazy private var usedDescriptionLabel = UILabel.withStyle(
     f: statisticDescriptionLabelStyle <>
     { $0.text = "Used"})
@@ -163,5 +163,4 @@ class StatisticCollectionViewCell: UICollectionViewCell {
     contentView.layer.addSublayer(trackShape)
   }
   
-
 }

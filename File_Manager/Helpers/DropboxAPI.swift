@@ -10,10 +10,6 @@ import Combine
 
 final class DropboxAPI {
   
-  struct EndPoint {
-    
-  }
-  
   static let shared = DropboxAPI()
 
   func fetchUsageSpace() -> AnyPublisher<UsageSpaceResponse, Error> {

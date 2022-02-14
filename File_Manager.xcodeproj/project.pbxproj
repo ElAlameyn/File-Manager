@@ -32,6 +32,7 @@
 		B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAF0227AFE602000E81BB /* FishOperator.swift */; };
 		B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */; };
 		B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */; };
+		B5B19B0527BA87B4009B65E7 /* ResponseConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */; };
 		B5DFB8C827A286A900196251 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C727A286A900196251 /* AppDelegate.swift */; };
 		B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C927A286A900196251 /* SceneDelegate.swift */; };
 		B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8CB27A286A900196251 /* MeetViewController.swift */; };
@@ -94,6 +95,7 @@
 		B54FAF0227AFE602000E81BB /* FishOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishOperator.swift; sourceTree = "<group>"; };
 		B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBaseViewCell.swift; sourceTree = "<group>"; };
 		B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBaseViewCell.swift; sourceTree = "<group>"; };
+		B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseConfiguration.swift; sourceTree = "<group>"; };
 		B5DFB8C427A286A900196251 /* File_Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = File_Manager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5DFB8C727A286A900196251 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5DFB8C927A286A900196251 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -429,6 +431,7 @@
 				B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */,
 				B54FAF0227AFE602000E81BB /* FishOperator.swift */,
 				B5487B9927B9894F00258B58 /* DropboxAPI.swift */,
+				B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -601,6 +604,7 @@
 				B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */,
 				B51A716427AEBB350026040E /* StatisticViewController.swift in Sources */,
 				B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift.swift in Sources */,
+				B5B19B0527BA87B4009B65E7 /* ResponseConfiguration.swift in Sources */,
 				B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */,
 				B5FB3F8427A855BD007A0495 /* ImageTransformator.swift in Sources */,
 				B549DDC627AAA64200BC05BA /* TabBarViewController.swift in Sources */,
