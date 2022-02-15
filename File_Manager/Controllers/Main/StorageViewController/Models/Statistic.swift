@@ -16,9 +16,9 @@ struct Statistic: Hashable {
     totalMemory - usedMemory
   }
 
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
-  }
+//  func hash(into hasher: inout Hasher) {
+//    hasher.combine(id)
+//  }
   
   static func == (lhs: Statistic, rhs: Statistic) -> Bool {
     lhs.id == rhs.id

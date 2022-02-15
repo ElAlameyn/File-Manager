@@ -8,7 +8,7 @@
 import UIKit
 
 enum StorageItem: Hashable, Comparable {
-  
+
   static func < (lhs: StorageItem, rhs: StorageItem) -> Bool {
     switch lhs {
     case .statistics(_):
@@ -26,7 +26,7 @@ enum StorageItem: Hashable, Comparable {
     }
   }
   
-  case statistics(Statistic?)
+  case statistics(UsageSpaceResponse?)
   case lastModified(LastModifiedItem?)
 }
 
@@ -38,8 +38,8 @@ extension StorageItem {
     .lastModified(LastModifiedItem(title: "Aideo.mkv", image: Images.categoryVideos)),
   ]
   
-  static let statistic: StorageItem = .statistics(Statistic(usedMemory: 25, totalMemory: 150))
-  
+//  static let statistic: StorageItem = .statistics(Statistic(usedMemory: 25, totalMemory: 150))
+//  
 }
 
 

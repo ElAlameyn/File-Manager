@@ -80,13 +80,14 @@ enum RequestConfigurator {
                        forHTTPHeaderField: "Authorization")
       request.setValue("application/x-www-form-urlencoded",
                        forHTTPHeaderField: "Content-Type")
-      
 //       For PCKE extension
       //      URLQueryItem(name: "client_id", value: AuthViewController.Const.clientID),
       //      URLQueryItem(name: "code_verifier", value: code)
     case .users:
-      guard let token = KeychainSwift().get(DropboxAPI.tokenKey) else { return nil }
-      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+      guard let tokenResponse = KeychainSwift().getData(DropboxAPI.tokenKey) else { return nil }
+      guard let token = try? JSONDecoder().decode(AuthViewController.TokenResponse.self, from: tokenResponse) else { return nil }
+      print("TOKEN: \(token.accessToken)")
+      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
       request.timeoutInterval = 30
     }
     request.httpBody = requestComponents.query?.data(using: .utf8)

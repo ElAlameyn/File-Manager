@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class StorageViewController: UIViewController {
   enum Section: Int {
@@ -17,8 +18,12 @@ class StorageViewController: UIViewController {
   
   private let sections: [Section] = [.statistics, .lastModified]
   
+  private let usageSpaceViewModel = UsageSpaceViewModel()
+  
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
+  private var cancellables: Set<AnyCancellable> = []
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -26,7 +31,21 @@ class StorageViewController: UIViewController {
 
     view.backgroundColor = Colors.baseBackground
     configureUI()
+    bindViewModels()
     applySnapshot()
+  }
+  
+  private func bindViewModels() {
+    usageSpaceViewModel.$usageSpace
+      .sink(receiveValue: {[weak self] value in
+        self?.applySnapshot(usageSpace: value)
+      })
+      .store(in: &cancellables)
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    usageSpaceViewModel.fetch()
   }
   
   private func configureDataSource() -> DataSource {
@@ -35,12 +54,12 @@ class StorageViewController: UIViewController {
       
       // TO-DO: add Statistic and configure
       
-      var statistic: Statistic?
+      var usageSpace: UsageSpaceResponse?
       var lastModifiedItem: LastModifiedItem?
       
       switch item {
-      case .statistics(let itemStatistic):
-        statistic = itemStatistic
+      case .statistics(let info):
+        usageSpace = info
       case .lastModified(let itemModified):
         lastModifiedItem = itemModified
       }
@@ -48,7 +67,7 @@ class StorageViewController: UIViewController {
       switch self.sections[indexPath.section] {
       case .statistics:
         let cell: StatisticCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(statistic: statistic)
+        cell.configure(usageSpace: usageSpace)
         return cell
       case .lastModified:
         let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -77,10 +96,10 @@ class StorageViewController: UIViewController {
     return dataSource
   }
   
-  private func applySnapshot() {
+  private func applySnapshot(usageSpace: UsageSpaceResponse? = nil) {
     var snapshot = Snapshot()
     snapshot.appendSections([.statistics, .lastModified])
-    snapshot.appendItems( [StorageItem.statistic] , toSection: .statistics)
+    snapshot.appendItems( [StorageItem.statistics(usageSpace)] , toSection: .statistics)
     snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
     self.dataSource.apply(snapshot, animatingDifferences: true)
   }

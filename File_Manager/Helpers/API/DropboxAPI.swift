@@ -15,6 +15,7 @@ final class DropboxAPI {
 
   func fetchUsageSpace() -> AnyPublisher<UsageSpaceResponse, Error>? {
     guard let request = RequestConfigurator.users(.usageSpace).setRequest() else { return nil }
+    print(request.url?.absoluteString as Any)
     return getPublisher(request: request)
   }
   
@@ -24,6 +25,13 @@ final class DropboxAPI {
     URLSession.shared.dataTaskPublisher(for: request)
       .subscribe(on: DispatchQueue.global())
       .map ({ $0.data })
+      .map({ value in
+        print(value)
+        let object = try? JSONSerialization.jsonObject(with: value, options: .fragmentsAllowed)
+        print(object)
+        print(T.self)
+        return value
+      })
       .decode(type: T.self,
               decoder: JSONDecoder())
       .receive(on: RunLoop.main)

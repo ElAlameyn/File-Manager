@@ -5,7 +5,7 @@
 //  Created by Артем Калинкин on 15.02.2022.
 //
 
-import Foundation
+import Combine
 
 protocol ViewModelProtocol {
   func fetch()

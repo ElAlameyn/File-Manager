@@ -20,7 +20,7 @@ final class UsageSpaceViewModel: ObservableObject, ViewModelProtocol {
         case .finished:
           print("Usage space respnose received")
         case .failure(let error):
-          print("Usage space respnose failed due to: \(error.localizedDescription)")
+          print("Usage space respnose failed due to: \(error)")
         }
       }, receiveValue: { response in
         self.usageSpace = response
