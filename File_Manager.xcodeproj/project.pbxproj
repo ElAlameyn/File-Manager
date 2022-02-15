@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		136E00BF0AD406378182EFF0 /* Pods_File_Manager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA58616FBE89F9B42861E54A /* Pods_File_Manager.framework */; };
+		B508201C27BBA52800102539 /* UsageSpaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */; };
+		B508201F27BBA89B00102539 /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B508201E27BBA89B00102539 /* ViewModelProtocol.swift */; };
 		B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716027AEBAF50026040E /* OptionsViewController.swift */; };
 		B51A716427AEBB350026040E /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716327AEBB350026040E /* StatisticViewController.swift */; };
 		B524895227AD45110064C08C /* CustomTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895127AD45110064C08C /* CustomTabItem.swift */; };
@@ -71,6 +73,8 @@
 /* Begin PBXFileReference section */
 		1F58C2682AFD138EFF66209B /* Pods-File_Manager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.debug.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.debug.xcconfig"; sourceTree = "<group>"; };
 		5040F9BB037954F1BF629001 /* Pods-File_Manager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.release.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.release.xcconfig"; sourceTree = "<group>"; };
+		B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceViewModel.swift; sourceTree = "<group>"; };
+		B508201E27BBA89B00102539 /* ViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
 		B51A716027AEBAF50026040E /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		B51A716327AEBB350026040E /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		B524895127AD45110064C08C /* CustomTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItem.swift; sourceTree = "<group>"; };
@@ -163,6 +167,49 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B508201727BB9CA100102539 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				B5487B9927B9894F00258B58 /* DropboxAPI.swift */,
+				B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		B508201827BB9CCA00102539 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B54FAEFD27AFD55A000E81BB /* Style.swift */,
+				B5FB3F7427A8313E007A0495 /* LayoutManager.swift */,
+				B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		B508201927BB9CDC00102539 /* Operators */ = {
+			isa = PBXGroup;
+			children = (
+				B54FAF0227AFE602000E81BB /* FishOperator.swift */,
+			);
+			path = Operators;
+			sourceTree = "<group>";
+		};
+		B508201A27BBA50A00102539 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
+		B508201D27BBA88F00102539 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				B508201E27BBA89B00102539 /* ViewModelProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		B51A715E27AEAD1A0026040E /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +291,7 @@
 		B5487B9B27B989D200258B58 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B508201D27BBA88F00102539 /* Protocols */,
 				B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */,
 			);
 			path = Models;
@@ -299,6 +347,8 @@
 			isa = PBXGroup;
 			children = (
 				B5DFB8DB27A2946300196251 /* Supporting Files */,
+				B508201A27BBA50A00102539 /* View Models */,
+				B5487B9B27B989D200258B58 /* Models */,
 				B5FB3F7327A83124007A0495 /* Helpers */,
 				B5DFB8E327A2AD6900196251 /* Extensions */,
 				B5DFB8DD27A2A76200196251 /* Constants */,
@@ -313,7 +363,6 @@
 		B5DFB8DB27A2946300196251 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B5487B9B27B989D200258B58 /* Models */,
 				B5DFB8EB27A2B46800196251 /* Fonts */,
 				B5DFB8D227A286AC00196251 /* LaunchScreen.storyboard */,
 				B5DFB8C927A286A900196251 /* SceneDelegate.swift */,
@@ -423,12 +472,9 @@
 		B5FB3F7327A83124007A0495 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				B54FAEFD27AFD55A000E81BB /* Style.swift */,
-				B5FB3F7427A8313E007A0495 /* LayoutManager.swift */,
-				B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */,
-				B54FAF0227AFE602000E81BB /* FishOperator.swift */,
-				B5487B9927B9894F00258B58 /* DropboxAPI.swift */,
-				B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */,
+				B508201827BB9CCA00102539 /* UI */,
+				B508201727BB9CA100102539 /* API */,
+				B508201927BB9CDC00102539 /* Operators */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -595,6 +641,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B508201C27BBA52800102539 /* UsageSpaceViewModel.swift in Sources */,
 				B5DFB8E527A2AD7200196251 /* UIView+Extension.swift in Sources */,
 				B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */,
 				B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */,
@@ -634,6 +681,7 @@
 				B5487B9A27B9894F00258B58 /* DropboxAPI.swift in Sources */,
 				B5DFB90C27A2B9C200196251 /* Texts.swift in Sources */,
 				B524895227AD45110064C08C /* CustomTabItem.swift in Sources */,
+				B508201F27BBA89B00102539 /* ViewModelProtocol.swift in Sources */,
 				B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */,
 				B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */,
 				B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */,

@@ -70,29 +70,27 @@ enum RequestConfigurator {
   }
   
   func setRequest() -> URLRequest? {
+    guard let url = URL(string: configuredURL) else { return nil }
+    var request = URLRequest(url: url)
+    request.httpMethod = method.rawValue
+    
     switch self {
     case .token:
-      guard let url = URL(string: configuredURL) else { return nil }
-      var request = URLRequest(url: url)
-      request.httpMethod = method.rawValue
-      
       request.setValue("Basic \("\(TokenCredentials.clientID):\(TokenCredentials.clientSecret)".toBase64())",
                        forHTTPHeaderField: "Authorization")
       request.setValue("application/x-www-form-urlencoded",
                        forHTTPHeaderField: "Content-Type")
-      request.httpBody = requestComponents.query?.data(using: .utf8)
       
-      return request
-      
-      // For PCKE extension
+//       For PCKE extension
       //      URLQueryItem(name: "client_id", value: AuthViewController.Const.clientID),
       //      URLQueryItem(name: "code_verifier", value: code)
     case .users:
-      return nil
-//      guard let token = KeychainSwift().get(DropboxAPI.tokenKey) else { return }
-//      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-//      request.timeoutInterval = 30
+      guard let token = KeychainSwift().get(DropboxAPI.tokenKey) else { return nil }
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+      request.timeoutInterval = 30
     }
+    request.httpBody = requestComponents.query?.data(using: .utf8)
+    return request
   }
 
 
