@@ -10,13 +10,13 @@ import WebKit
 import Combine
 import KeychainSwift
 
-class AuthViewController: UIViewController, WKNavigationDelegate {
+class AuthViewController: UIViewController, WKNavigationDelegate
+{
   
   private var webView = WKWebView()
-  
   private var subscriber: AnyCancellable?
   
-  struct DropboxURL {
+  private struct DropboxURL {
     static let authURL = "https://www.dropbox.com/oauth2/authorize?"
     static let clientID = "688rvrlb7upz9jb"
     static let redirectURI = "http://localhost"
@@ -41,18 +41,14 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
   
   func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
     guard let url = webView.url else { return }
+    guard let code = getCodeFrom(url: url) else { return }
     print("CURRENT URL: \(url.absoluteString)")
-    
-    let components = URLComponents(string: url.absoluteString)
-    guard let code = components?.queryItems?
-            .first(where: {$0.name == "code"})?.value
-    else { return }
-    
     print("CODE ACESS TO DROPBOX: \(code)")
     
-    guard let tokenRequest = createTokenRequest(code: code) else { return }
+    guard let request = RequestConfigurator.token(code).setRequest() else { return }
+    
     subscriber = URLSession.shared.dataTaskPublisher  (
-      for: tokenRequest)
+      for: request)
       .map { $0.data }
       .decode(type: TokenResponse.self, decoder: JSONDecoder())
       .receive(on: RunLoop.main)
@@ -65,27 +61,20 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
           print("Error in token request due to: \(error.localizedDescription)")
         }
       } receiveValue: {[weak self] tokenResponse in
-        print("ACESS TOKEN : \(tokenResponse.accessToken)")
+        print("ACCESS TOKEN : \(tokenResponse.accessToken)")
         if let data = try? JSONEncoder().encode(tokenResponse) {
-          KeychainSwift().set(data, forKey: "\(TokenResponse.self)", withAccess: .accessibleWhenUnlocked)
+          KeychainSwift().set(data, forKey: "\(DropboxAPI.tokenKey)", withAccess: .accessibleWhenUnlocked)
         }
        self?.dismiss(animated: true)
       }
   }
   
-  private func createTokenRequest(code: String) -> URLRequest? {
-    let responseConfig = ResponseConfig.token(code)
-    guard let tokenURL = URL(string: responseConfig.configuredURL) else { return nil}
-    var tokenRequest = URLRequest(url: tokenURL)
-    tokenRequest.httpMethod = responseConfig.method.rawValue
-    responseConfig.setHeaders(for: &tokenRequest)
-    var requestComponents = URLComponents()
-    requestComponents.queryItems = responseConfig.components?.compactMap({ (key, value) in
-      URLQueryItem(name: key, value: value)
-    })
-    tokenRequest.httpBody = requestComponents.query?.data(using: .utf8)
-    return tokenRequest
+  private func getCodeFrom(url: URL) -> String? {
+    let components = URLComponents(string: url.absoluteString)
+    guard let code = components?.queryItems?
+            .first(where: {$0.name == "code"})?.value
+    else { return nil }
+    return code
   }
- 
 }
 

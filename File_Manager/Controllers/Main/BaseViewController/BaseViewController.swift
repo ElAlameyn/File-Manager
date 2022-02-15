@@ -63,7 +63,7 @@ class BaseViewController: UIViewController {
     dataSource.supplementaryViewProvider = {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-      let view: SectionHeaderBaseViewCollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
+      let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
       
       switch Section(rawValue: indexPath.section) {
       case .category:
@@ -108,9 +108,9 @@ class BaseViewController: UIViewController {
     collectionView.register(RecentBaseViewCell.self, forCellWithReuseIdentifier: "\(RecentBaseViewCell.self)")
     
     collectionView.register(
-      SectionHeaderBaseViewCollectionReusableView.self,
+      SectionHeaderBaseView.self,
       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: "\(SectionHeaderBaseViewCollectionReusableView.self)")
+      withReuseIdentifier: "\(SectionHeaderBaseView.self)")
     
     view.addSubview(collectionView)
   }

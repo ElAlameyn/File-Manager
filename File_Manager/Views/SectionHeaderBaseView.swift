@@ -11,7 +11,7 @@ protocol SortButtonDelegate {
   func sortButtonTapped()
 }
 
-class SectionHeaderBaseViewCollectionReusableView: UICollectionReusableView
+class SectionHeaderBaseView: UICollectionReusableView
 {
   var delegate: SortButtonDelegate?
   

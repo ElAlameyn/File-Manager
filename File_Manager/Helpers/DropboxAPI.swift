@@ -11,6 +11,7 @@ import Combine
 final class DropboxAPI {
   
   static let shared = DropboxAPI()
+  static let tokenKey = "token_key"
 
   func fetchUsageSpace() -> AnyPublisher<UsageSpaceResponse, Error> {
 //    let publisher: AnyPublisher<UsageSpaceResponse, Error> =
@@ -28,5 +29,15 @@ final class DropboxAPI {
               decoder: JSONDecoder())
       .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
+  }
+  
+  private func createRequestWithToken(url: URL?, method: String) -> URLRequest? {
+//    let config = ResponseConfig.users(.usageSpace)
+//    guard let url = URL(string: config.configuredURL) else { return }
+//    var request = URLRequest(url: url)
+//    request.httpMethod = config.method.rawValue
+//    config.setHeaders(for: &request)
+//    return request
+    return nil
   }
 }

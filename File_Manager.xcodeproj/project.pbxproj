@@ -21,7 +21,6 @@
 		B5487B9A27B9894F00258B58 /* DropboxAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9927B9894F00258B58 /* DropboxAPI.swift */; };
 		B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */; };
 		B5487BA027B98AAE00258B58 /* TokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9F27B98AAE00258B58 /* TokenResponse.swift */; };
-		B5487BA227B98B7900258B58 /* DropboxURLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487BA127B98B7900258B58 /* DropboxURLs.swift */; };
 		B549DDC627AAA64200BC05BA /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B549DDC527AAA64200BC05BA /* TabBarViewController.swift */; };
 		B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B1BC627A6A03900AF1D84 /* Category.swift */; };
 		B54B1BC927A6A60F00AF1D84 /* BaseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B1BC827A6A60F00AF1D84 /* BaseItem.swift */; };
@@ -59,7 +58,7 @@
 		B5DFB90A27A2B97C00196251 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB90927A2B97C00196251 /* Fonts.swift */; };
 		B5DFB90C27A2B9C200196251 /* Texts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB90B27A2B9C200196251 /* Texts.swift */; };
 		B5DFB90F27A2C61B00196251 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB90E27A2C61B00196251 /* BaseViewController.swift */; };
-		B5FB3F7027A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */; };
+		B5FB3F7027A819EA007A0495 /* SectionHeaderBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseView.swift */; };
 		B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */; };
 		B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7427A8313E007A0495 /* LayoutManager.swift */; };
 		B5FB3F7827A84699007A0495 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7727A84699007A0495 /* StorageViewController.swift */; };
@@ -84,7 +83,6 @@
 		B5487B9927B9894F00258B58 /* DropboxAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxAPI.swift; sourceTree = "<group>"; };
 		B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceResponse.swift.swift; sourceTree = "<group>"; };
 		B5487B9F27B98AAE00258B58 /* TokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponse.swift; sourceTree = "<group>"; };
-		B5487BA127B98B7900258B58 /* DropboxURLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxURLs.swift; sourceTree = "<group>"; };
 		B549DDC527AAA64200BC05BA /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B54B1BC627A6A03900AF1D84 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		B54B1BC827A6A60F00AF1D84 /* BaseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseItem.swift; sourceTree = "<group>"; };
@@ -124,7 +122,7 @@
 		B5DFB90927A2B97C00196251 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		B5DFB90B27A2B9C200196251 /* Texts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Texts.swift; sourceTree = "<group>"; };
 		B5DFB90E27A2C61B00196251 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderBaseViewCollectionReusableView.swift; sourceTree = "<group>"; };
+		B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderBaseView.swift; sourceTree = "<group>"; };
 		B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift.swift"; sourceTree = "<group>"; };
 		B5FB3F7427A8313E007A0495 /* LayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 		B5FB3F7727A84699007A0495 /* StorageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewController.swift; sourceTree = "<group>"; };
@@ -168,7 +166,7 @@
 		B51A715E27AEAD1A0026040E /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift */,
+				B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -255,7 +253,6 @@
 			isa = PBXGroup;
 			children = (
 				B5487B9F27B98AAE00258B58 /* TokenResponse.swift */,
-				B5487BA127B98B7900258B58 /* DropboxURLs.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -598,7 +595,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5487BA227B98B7900258B58 /* DropboxURLs.swift in Sources */,
 				B5DFB8E527A2AD7200196251 /* UIView+Extension.swift in Sources */,
 				B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */,
 				B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */,
@@ -610,7 +606,7 @@
 				B549DDC627AAA64200BC05BA /* TabBarViewController.swift in Sources */,
 				B5DFB90F27A2C61B00196251 /* BaseViewController.swift in Sources */,
 				B5DFB8DF27A2A76E00196251 /* Colors.swift in Sources */,
-				B5FB3F7027A819EA007A0495 /* SectionHeaderBaseViewCollectionReusableView.swift in Sources */,
+				B5FB3F7027A819EA007A0495 /* SectionHeaderBaseView.swift in Sources */,
 				B5487BA027B98AAE00258B58 /* TokenResponse.swift in Sources */,
 				B5FB3F8027A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift in Sources */,
 				B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */,

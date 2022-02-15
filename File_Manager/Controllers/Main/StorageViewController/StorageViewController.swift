@@ -60,7 +60,7 @@ class StorageViewController: UIViewController {
     dataSource.supplementaryViewProvider = {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-      let view: SectionHeaderBaseViewCollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
+      let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
       view.descrButton.isHidden = false
       view.delegate = self
       
@@ -93,9 +93,9 @@ class StorageViewController: UIViewController {
     collectionView.register(ModifiedItemCollectionViewCell.self, forCellWithReuseIdentifier: "\(ModifiedItemCollectionViewCell.self)")
 
     collectionView.register(
-      SectionHeaderBaseViewCollectionReusableView.self,
+      SectionHeaderBaseView.self,
       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: "\(SectionHeaderBaseViewCollectionReusableView.self)")
+      withReuseIdentifier: "\(SectionHeaderBaseView.self)")
 
     view.addSubview(collectionView)
   }
