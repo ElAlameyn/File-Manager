@@ -17,7 +17,7 @@ extension CustomTabItem {
     case .home:
       return UINavigationController(rootViewController: BaseViewController())
     case .statistic:
-      return UINavigationController(rootViewController: StatisticViewController())
+      return UINavigationController(rootViewController: StorageViewController())
     case .storage:
       return UINavigationController(rootViewController: StorageViewController())
     case .options:

@@ -32,28 +32,16 @@ class BaseViewController: UIViewController {
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: BaseItem) -> UICollectionViewCell? in
-      
-      var category: Category?
-      var recents: RecentFile?
-      
+
       switch item {
-      case .title:
-        break
-      case .category(let itemCategory):
-        category = itemCategory
-      case .recents(let itemRecents):
-        recents = itemRecents
-      }
-      
-      switch self.sections[indexPath.section] {
       case .title:
         let cell: TitleBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         return cell
-      case .category:
+      case .category(let category):
         let cell: CategoryBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(title: category?.title, image: category?.image)
         return cell
-      case .recentFiles:
+      case .recents(let recents):
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(image: recents?.image)
         return cell
@@ -77,7 +65,6 @@ class BaseViewController: UIViewController {
       }
       return view
     }
-    
     return dataSource
   }
   

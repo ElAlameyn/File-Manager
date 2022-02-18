@@ -19,6 +19,12 @@ final class DropboxAPI {
     return getPublisher(request: request)
   }
   
+  func fetchAllFiles() -> AnyPublisher<ListFoldersResponse, Error>? {
+    guard let request = RequestConfigurator.files(.listAllFolders).setRequest() else { return nil }
+    print("REQUEST FOLDERS: \(request.url?.absoluteString as Any)")
+    return getPublisher(request: request)
+  }
+  
   // MARK: - Private
   
   private func getPublisher<T: Decodable>(request: URLRequest) -> AnyPublisher<T, Error> {
@@ -26,10 +32,8 @@ final class DropboxAPI {
       .subscribe(on: DispatchQueue.global())
       .map ({ $0.data })
       .map({ value in
-        print(value)
         let object = try? JSONSerialization.jsonObject(with: value, options: .fragmentsAllowed)
-        print(object)
-        print(T.self)
+        print("Object: \(object)")
         return value
       })
       .decode(type: T.self,

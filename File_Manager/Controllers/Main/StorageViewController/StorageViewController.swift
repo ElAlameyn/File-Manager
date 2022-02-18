@@ -10,15 +10,21 @@ import Combine
 
 class StorageViewController: UIViewController {
   enum Section: Int {
-    case statistics, lastModified
+    case usageSpace, lastModified
   }
   
   typealias DataSource = UICollectionViewDiffableDataSource<Section, StorageItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, StorageItem>
   
-  private let sections: [Section] = [.statistics, .lastModified]
+  private let sections: [Section] = [.usageSpace, .lastModified]
+  
+  private let viewModels: [Any] = [
+    UsageSpaceViewModel(),
+    ListFoldersViewModel()
+  ]
   
   private let usageSpaceViewModel = UsageSpaceViewModel()
+  private let listFoldersViewModel = ListFoldersViewModel()
   
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
@@ -36,42 +42,38 @@ class StorageViewController: UIViewController {
   }
   
   private func bindViewModels() {
-    usageSpaceViewModel.$usageSpace
+
+    usageSpaceViewModel.$value
       .sink(receiveValue: {[weak self] value in
-        self?.applySnapshot(usageSpace: value)
+        self?.updateUsageSpace(usageSpace: value)
       })
       .store(in: &cancellables)
+
+//    listFoldersViewModel.$value
+//      .sink { [weak self] value in
+////        self?.applySnapshot(usageSpace: value)
+//      }
+//      .store(in: &cancellables)
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     usageSpaceViewModel.fetch()
+    listFoldersViewModel.fetch()
   }
   
   private func configureDataSource() -> DataSource {
     let dataSource = DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: StorageItem) -> UICollectionViewCell? in
       
-      // TO-DO: add Statistic and configure
-      
-      var usageSpace: UsageSpaceResponse?
-      var lastModifiedItem: LastModifiedItem?
-      
       switch item {
-      case .statistics(let info):
-        usageSpace = info
-      case .lastModified(let itemModified):
-        lastModifiedItem = itemModified
-      }
-      
-      switch self.sections[indexPath.section] {
-      case .statistics:
+      case .usageSpace(let info):
         let cell: StatisticCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(usageSpace: usageSpace)
+        cell.configure(usageSpace: info)
         return cell
-      case .lastModified:
+      case .lastModified(let itemModified):
         let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(title: lastModifiedItem?.title, image: lastModifiedItem?.image)
+        cell.configure(title: itemModified?.title, image: itemModified?.image)
         return cell
       }
     }
@@ -84,7 +86,7 @@ class StorageViewController: UIViewController {
       view.delegate = self
       
       switch Section(rawValue: indexPath.section) {
-      case .statistics:
+      case .usageSpace:
         break
       case .lastModified:
         view.titleLabel.text = "Last Modified"
@@ -98,12 +100,21 @@ class StorageViewController: UIViewController {
   
   private func applySnapshot(usageSpace: UsageSpaceResponse? = nil) {
     var snapshot = Snapshot()
-    snapshot.appendSections([.statistics, .lastModified])
-    snapshot.appendItems( [StorageItem.statistics(usageSpace)] , toSection: .statistics)
+    snapshot.appendSections([.usageSpace, .lastModified])
+    snapshot.appendItems( [StorageItem.usageSpace(usageSpace)] , toSection: .usageSpace)
     snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
     self.dataSource.apply(snapshot, animatingDifferences: true)
   }
   
+  private func updateUsageSpace(usageSpace: UsageSpaceResponse?) {
+    var snapshot = Snapshot()
+    snapshot.appendSections([.usageSpace, .lastModified])
+    snapshot.appendItems( [StorageItem.usageSpace(usageSpace)] , toSection: .usageSpace)
+    snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
+    self.dataSource.apply(snapshot, animatingDifferences: true)
+  }
+  
+
   private func configureUI() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -124,7 +135,7 @@ class StorageViewController: UIViewController {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
       -> NSCollectionLayoutSection? in
       switch self.sections[sectionIndex] {
-      case .statistics:
+      case .usageSpace:
         
         let item = LayoutManager.createItem(
           wD: .estimated(330),
@@ -169,6 +180,4 @@ extension StorageViewController: SortButtonDelegate {
     StorageItem.allModifiedItems.sort()
     applySnapshot()
   }
-  
-  
 }

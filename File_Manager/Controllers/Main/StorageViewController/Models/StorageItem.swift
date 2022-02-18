@@ -11,11 +11,11 @@ enum StorageItem: Hashable, Comparable {
 
   static func < (lhs: StorageItem, rhs: StorageItem) -> Bool {
     switch lhs {
-    case .statistics(_):
+    case .usageSpace(_):
       return false
     case .lastModified(let value1):
       switch rhs {
-      case .statistics(_):
+      case .usageSpace(_):
         return false
       case .lastModified(let value2):
         if let v1 = value1, let v2 = value2  {
@@ -26,7 +26,7 @@ enum StorageItem: Hashable, Comparable {
     }
   }
   
-  case statistics(UsageSpaceResponse?)
+  case usageSpace(UsageSpaceResponse?)
   case lastModified(LastModifiedItem?)
 }
 

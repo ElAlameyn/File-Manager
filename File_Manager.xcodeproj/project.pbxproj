@@ -7,16 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		136E00BF0AD406378182EFF0 /* Pods_File_Manager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA58616FBE89F9B42861E54A /* Pods_File_Manager.framework */; };
 		B508201C27BBA52800102539 /* UsageSpaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */; };
 		B508201F27BBA89B00102539 /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B508201E27BBA89B00102539 /* ViewModelProtocol.swift */; };
+		B515C21F27BFE07A008EAF28 /* Pods_File_Manager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B515C21E27BFE07A008EAF28 /* Pods_File_Manager.framework */; };
+		B515C22227BFE5D1008EAF28 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B515C22127BFE5D1008EAF28 /* KeychainSwift */; };
+		B515C22427C027E9008EAF28 /* ListFoldersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B515C22327C027E9008EAF28 /* ListFoldersViewModel.swift */; };
+		B515C22627C028CE008EAF28 /* ListFoldersResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */; };
 		B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716027AEBAF50026040E /* OptionsViewController.swift */; };
 		B51A716427AEBB350026040E /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716327AEBB350026040E /* StatisticViewController.swift */; };
 		B524895227AD45110064C08C /* CustomTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895127AD45110064C08C /* CustomTabItem.swift */; };
 		B524895627AD4CC90064C08C /* CustomTabItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895527AD4CC90064C08C /* CustomTabItemView.swift */; };
 		B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895727AD4FA70064C08C /* CustomTabBar.swift */; };
 		B535379C27B28B1A003A7C6A /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B535379B27B28B1A003A7C6A /* AuthViewController.swift */; };
-		B535379F27B2AC7C003A7C6A /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B535379E27B2AC7C003A7C6A /* KeychainSwift */; };
 		B539670927B3CA2B009125E5 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B539670827B3CA2B009125E5 /* String+Extension.swift */; };
 		B53B29B627A927B40060FF19 /* Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B29B527A927B40060FF19 /* Statistic.swift */; };
 		B53B29B827A927D20060FF19 /* LastModifiedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B29B727A927D20060FF19 /* LastModifiedItem.swift */; };
@@ -75,6 +77,9 @@
 		5040F9BB037954F1BF629001 /* Pods-File_Manager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.release.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.release.xcconfig"; sourceTree = "<group>"; };
 		B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceViewModel.swift; sourceTree = "<group>"; };
 		B508201E27BBA89B00102539 /* ViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
+		B515C21E27BFE07A008EAF28 /* Pods_File_Manager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_File_Manager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B515C22327C027E9008EAF28 /* ListFoldersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFoldersViewModel.swift; sourceTree = "<group>"; };
+		B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFoldersResponse.swift; sourceTree = "<group>"; };
 		B51A716027AEBAF50026040E /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		B51A716327AEBB350026040E /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
 		B524895127AD45110064C08C /* CustomTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItem.swift; sourceTree = "<group>"; };
@@ -142,8 +147,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B535379F27B2AC7C003A7C6A /* KeychainSwift in Frameworks */,
-				136E00BF0AD406378182EFF0 /* Pods_File_Manager.framework in Frameworks */,
+				B515C22227BFE5D1008EAF28 /* KeychainSwift in Frameworks */,
+				B515C21F27BFE07A008EAF28 /* Pods_File_Manager.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +167,7 @@
 		AEA9ECA3ECC941FD76D65A82 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B515C21E27BFE07A008EAF28 /* Pods_File_Manager.framework */,
 				EA58616FBE89F9B42861E54A /* Pods_File_Manager.framework */,
 			);
 			name = Frameworks;
@@ -198,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */,
+				B515C22327C027E9008EAF28 /* ListFoldersViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -208,6 +215,15 @@
 				B508201E27BBA89B00102539 /* ViewModelProtocol.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		B50C31F727BF98B6008716F4 /* APIResponses */ = {
+			isa = PBXGroup;
+			children = (
+				B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */,
+				B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */,
+			);
+			path = APIResponses;
 			sourceTree = "<group>";
 		};
 		B51A715E27AEAD1A0026040E /* Views */ = {
@@ -291,8 +307,8 @@
 		B5487B9B27B989D200258B58 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B50C31F727BF98B6008716F4 /* APIResponses */,
 				B508201D27BBA88F00102539 /* Protocols */,
-				B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -527,7 +543,7 @@
 			);
 			name = File_Manager;
 			packageProductDependencies = (
-				B535379E27B2AC7C003A7C6A /* KeychainSwift */,
+				B515C22127BFE5D1008EAF28 /* KeychainSwift */,
 			);
 			productName = File_Manager;
 			productReference = B5DFB8C427A286A900196251 /* File_Manager.app */;
@@ -558,7 +574,7 @@
 			);
 			mainGroup = B5DFB8BB27A286A900196251;
 			packageReferences = (
-				B535379D27B2AC7C003A7C6A /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = B5DFB8C527A286A900196251 /* Products */;
 			projectDirPath = "";
@@ -679,12 +695,14 @@
 				B5FB3F7827A84699007A0495 /* StorageViewController.swift in Sources */,
 				B5FB3F7B27A84729007A0495 /* StorageItem.swift in Sources */,
 				B5487B9A27B9894F00258B58 /* DropboxAPI.swift in Sources */,
+				B515C22627C028CE008EAF28 /* ListFoldersResponse.swift in Sources */,
 				B5DFB90C27A2B9C200196251 /* Texts.swift in Sources */,
 				B524895227AD45110064C08C /* CustomTabItem.swift in Sources */,
 				B508201F27BBA89B00102539 /* ViewModelProtocol.swift in Sources */,
 				B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */,
 				B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */,
 				B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */,
+				B515C22427C027E9008EAF28 /* ListFoldersViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -898,7 +916,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B535379D27B2AC7C003A7C6A /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+		B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
@@ -909,9 +927,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B535379E27B2AC7C003A7C6A /* KeychainSwift */ = {
+		B515C22127BFE5D1008EAF28 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B535379D27B2AC7C003A7C6A /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
 /* End XCSwiftPackageProductDependency section */

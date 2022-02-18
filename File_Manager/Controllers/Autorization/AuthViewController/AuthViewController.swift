@@ -22,6 +22,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     static let redirectURI = "http://localhost"
   }
   
+
   override func viewDidLoad() {
     super.viewDidLoad()
     

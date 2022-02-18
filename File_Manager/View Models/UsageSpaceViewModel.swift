@@ -10,7 +10,7 @@ import Combine
 
 
 final class UsageSpaceViewModel: ObservableObject, ViewModelProtocol {
-  @Published private(set) var usageSpace: UsageSpaceResponse?
+  @Published private(set) var value: UsageSpaceResponse?
   var subscriber: AnyCancellable?
   
   func fetch() {
@@ -23,7 +23,7 @@ final class UsageSpaceViewModel: ObservableObject, ViewModelProtocol {
           print("Usage space respnose failed due to: \(error)")
         }
       }, receiveValue: { response in
-        self.usageSpace = response
+        self.value = response
         print("USAGE SPACE RESPONSE: \(response)")
       })
   }

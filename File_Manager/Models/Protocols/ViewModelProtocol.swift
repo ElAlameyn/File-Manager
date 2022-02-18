@@ -7,7 +7,13 @@
 
 import Combine
 
-protocol ViewModelProtocol {
+protocol BaseProtocol: AnyObject{}
+
+protocol ViewModelProtocol: BaseProtocol {
+  associatedtype T: Hashable, Decodable
+  
   func fetch()
   var subscriber: AnyCancellable? { get }
+  var value: T { get }
 }
+

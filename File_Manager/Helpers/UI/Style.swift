@@ -11,7 +11,7 @@ class Style
 {
   
  static let baseLabelStyle: (UILabel) -> Void = {
-    $0.addCharacterSpacing(kernValue: -33)
+//    $0.addCharacterSpacing(kernValue: 100)
     $0.lineBreakMode = .byWordWrapping
     $0.textAlignment = .center
     $0.numberOfLines = 0

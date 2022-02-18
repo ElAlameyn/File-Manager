@@ -8,7 +8,6 @@
 import Foundation
 
 struct UsageSpaceResponse: Codable, Hashable {
-  
   let used: Int
   let allocation: Allocation
   
@@ -25,5 +24,4 @@ struct UsageSpaceResponse: Codable, Hashable {
       case allocated = "allocated"
     }
   }
-  
 }
