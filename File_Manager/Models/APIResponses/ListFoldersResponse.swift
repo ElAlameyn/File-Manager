@@ -10,7 +10,7 @@ import Foundation
 struct ListFoldersResponse: Decodable, Hashable {
   
   static func == (lhs: ListFoldersResponse, rhs: ListFoldersResponse) -> Bool {
-    return false
+    lhs.entries.files == rhs.entries.files
   }
 
   let entries: Entries

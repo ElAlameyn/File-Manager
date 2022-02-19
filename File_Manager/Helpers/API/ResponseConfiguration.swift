@@ -71,20 +71,20 @@ enum RequestConfigurator {
     }
   }
   
-//  var requestComponents: URLComponents {
-//    var components = URLComponents()
-//    components.queryItems = self.components?.compactMap({ (key, value) in
-//      URLQueryItem(name: key, value: value)
-//    })
-//    return components
-//  }
-  
-  var requestData: Data? {
-    try? JSONSerialization.data(withJSONObject: components, options: .fragmentsAllowed)
+  private var requestComponents: URLComponents {
+    var components = URLComponents()
+    components.queryItems = self.components?.compactMap({ (key, value) in
+      guard let string = value as? String else { return nil }
+      return URLQueryItem(name: key, value: string)
+    })
+    return components
   }
   
-  
-  var method: Method {
+  private var jsonData: Data? {
+    try? JSONSerialization.data(withJSONObject: components as Any, options: .fragmentsAllowed)
+  }
+
+  private var method: Method {
     switch self {
     case .token, .users, .files:
       return .post
@@ -110,16 +110,17 @@ enum RequestConfigurator {
 //       For PCKE extension
       //      URLQueryItem(name: "client_id", value: AuthViewController.Const.clientID),
       //      URLQueryItem(name: "code_verifier", value: code)
+      
+      request.httpBody = requestComponents.query?.data(using: .utf8)
     case .users:
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
     case .files:
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json",
                        forHTTPHeaderField: "Content-Type")
+      request.httpBody = jsonData
     }
-    request.timeoutInterval = 30
-//    request.httpBody = requestComponents.query?.data(using: .utf8)
-    request.httpBody = requestData
+    request.timeoutInterval = 60
     return request
   }
 

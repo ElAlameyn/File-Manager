@@ -67,8 +67,8 @@
 		B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7427A8313E007A0495 /* LayoutManager.swift */; };
 		B5FB3F7827A84699007A0495 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7727A84699007A0495 /* StorageViewController.swift */; };
 		B5FB3F7B27A84729007A0495 /* StorageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7A27A84729007A0495 /* StorageItem.swift */; };
-		B5FB3F7E27A84D97007A0495 /* StatisticCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7D27A84D97007A0495 /* StatisticCollectionViewCell.swift */; };
-		B5FB3F8027A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7F27A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift */; };
+		B5FB3F7E27A84D97007A0495 /* UsageSpaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7D27A84D97007A0495 /* UsageSpaceCell.swift */; };
+		B5FB3F8027A84DAF007A0495 /* ModifiedItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7F27A84DAF007A0495 /* ModifiedItemCell.swift */; };
 		B5FB3F8427A855BD007A0495 /* ImageTransformator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */; };
 /* End PBXBuildFile section */
 
@@ -136,8 +136,8 @@
 		B5FB3F7427A8313E007A0495 /* LayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 		B5FB3F7727A84699007A0495 /* StorageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewController.swift; sourceTree = "<group>"; };
 		B5FB3F7A27A84729007A0495 /* StorageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageItem.swift; sourceTree = "<group>"; };
-		B5FB3F7D27A84D97007A0495 /* StatisticCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCollectionViewCell.swift; sourceTree = "<group>"; };
-		B5FB3F7F27A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifiedItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		B5FB3F7D27A84D97007A0495 /* UsageSpaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceCell.swift; sourceTree = "<group>"; };
+		B5FB3F7F27A84DAF007A0495 /* ModifiedItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifiedItemCell.swift; sourceTree = "<group>"; };
 		B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTransformator.swift; sourceTree = "<group>"; };
 		EA58616FBE89F9B42861E54A /* Pods_File_Manager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_File_Manager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -518,8 +518,8 @@
 		B5FB3F7C27A84D6F007A0495 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				B5FB3F7D27A84D97007A0495 /* StatisticCollectionViewCell.swift */,
-				B5FB3F7F27A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift */,
+				B5FB3F7D27A84D97007A0495 /* UsageSpaceCell.swift */,
+				B5FB3F7F27A84DAF007A0495 /* ModifiedItemCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -671,7 +671,7 @@
 				B5DFB8DF27A2A76E00196251 /* Colors.swift in Sources */,
 				B5FB3F7027A819EA007A0495 /* SectionHeaderBaseView.swift in Sources */,
 				B5487BA027B98AAE00258B58 /* TokenResponse.swift in Sources */,
-				B5FB3F8027A84DAF007A0495 /* ModifiedItemCollectionViewCell.swift in Sources */,
+				B5FB3F8027A84DAF007A0495 /* ModifiedItemCell.swift in Sources */,
 				B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */,
 				B535379C27B28B1A003A7C6A /* AuthViewController.swift in Sources */,
 				B53B29B827A927D20060FF19 /* LastModifiedItem.swift in Sources */,
@@ -690,7 +690,7 @@
 				B54B1BCD27A6B51400AF1D84 /* RecentBaseViewCell.swift in Sources */,
 				B54B1BC927A6A60F00AF1D84 /* BaseItem.swift in Sources */,
 				B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */,
-				B5FB3F7E27A84D97007A0495 /* StatisticCollectionViewCell.swift in Sources */,
+				B5FB3F7E27A84D97007A0495 /* UsageSpaceCell.swift in Sources */,
 				B54B1BCB27A6A6A100AF1D84 /* Recents.swift in Sources */,
 				B5FB3F7827A84699007A0495 /* StorageViewController.swift in Sources */,
 				B5FB3F7B27A84729007A0495 /* StorageItem.swift in Sources */,

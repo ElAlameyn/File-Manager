@@ -15,6 +15,7 @@ class StorageViewController: UIViewController {
   
   typealias DataSource = UICollectionViewDiffableDataSource<Section, StorageItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, StorageItem>
+  typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<StorageItem>
   
   private let sections: [Section] = [.usageSpace, .lastModified]
   
@@ -45,15 +46,15 @@ class StorageViewController: UIViewController {
 
     usageSpaceViewModel.$value
       .sink(receiveValue: {[weak self] value in
-        self?.updateUsageSpace(usageSpace: value)
+        self?.updateUsageSpace(usageSpaceResponse: value)
       })
       .store(in: &cancellables)
 
-//    listFoldersViewModel.$value
-//      .sink { [weak self] value in
-////        self?.applySnapshot(usageSpace: value)
-//      }
-//      .store(in: &cancellables)
+    listFoldersViewModel.$value
+      .sink { [weak self] value in
+        print("FOLDER MODEL: \(value)")
+      }
+      .store(in: &cancellables)
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -68,11 +69,11 @@ class StorageViewController: UIViewController {
       
       switch item {
       case .usageSpace(let info):
-        let cell: StatisticCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        let cell: UsageSpaceCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(usageSpace: info)
         return cell
       case .lastModified(let itemModified):
-        let cell: ModifiedItemCollectionViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        let cell: ModifiedItemCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(title: itemModified?.title, image: itemModified?.image)
         return cell
       }
@@ -98,29 +99,26 @@ class StorageViewController: UIViewController {
     return dataSource
   }
   
-  private func applySnapshot(usageSpace: UsageSpaceResponse? = nil) {
+  private func applySnapshot() {
     var snapshot = Snapshot()
     snapshot.appendSections([.usageSpace, .lastModified])
-    snapshot.appendItems( [StorageItem.usageSpace(usageSpace)] , toSection: .usageSpace)
+    snapshot.appendItems([StorageItem.usageSpace(nil)], toSection: .usageSpace)
     snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
     self.dataSource.apply(snapshot, animatingDifferences: true)
   }
   
-  private func updateUsageSpace(usageSpace: UsageSpaceResponse?) {
-    var snapshot = Snapshot()
-    snapshot.appendSections([.usageSpace, .lastModified])
-    snapshot.appendItems( [StorageItem.usageSpace(usageSpace)] , toSection: .usageSpace)
-    snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
-    self.dataSource.apply(snapshot, animatingDifferences: true)
+  private func updateUsageSpace(usageSpaceResponse: UsageSpaceResponse?) {
+    var snapshot = SectionSnapshot()
+    snapshot.append([StorageItem.usageSpace(usageSpaceResponse)])
+    self.dataSource.apply(snapshot, to: .usageSpace, animatingDifferences: true)
   }
-  
 
   private func configureUI() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
-    collectionView.register(StatisticCollectionViewCell.self, forCellWithReuseIdentifier: "\(StatisticCollectionViewCell.self)")
-    collectionView.register(ModifiedItemCollectionViewCell.self, forCellWithReuseIdentifier: "\(ModifiedItemCollectionViewCell.self)")
+    collectionView.register(UsageSpaceCell.self, forCellWithReuseIdentifier: "\(UsageSpaceCell.self)")
+    collectionView.register(ModifiedItemCell.self, forCellWithReuseIdentifier: "\(ModifiedItemCell.self)")
 
     collectionView.register(
       SectionHeaderBaseView.self,

@@ -31,7 +31,7 @@ class SectionHeaderBaseView: UICollectionReusableView
   lazy var titleLabel = UILabel.withStyle(
     f: Style.baseLabelStyle <> Style.mask <>
     Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMedium.withSize(20),
+      withFont: Fonts.robotoMedium.withSize(24),
       color: .darkGray,
       text: "")
   )
@@ -59,7 +59,6 @@ class SectionHeaderBaseView: UICollectionReusableView
     delegate?.sortButtonTapped()
   }
 
-  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

@@ -7,28 +7,28 @@
 
 import UIKit
 
-class StatisticCollectionViewCell: UICollectionViewCell {
+class UsageSpaceCell: UICollectionViewCell {
 
   private let statisticLabelStyle =
     Style.baseLabelStyle <> Style.mask <>
     Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMedium.withSize(22),
+      withFont: Fonts.robotoMedium.withSize(24),
       color: Colors.labelStatisticColor,
-      text: "???")
-    
+      text: "?")
+
   private let statisticDescriptionLabelStyle =
     Style.baseLabelStyle <> Style.mask <>
     Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMediumForCategories.withSize(15),
+      withFont: Fonts.robotoMediumForCategories.withSize(18),
       color: Colors.labelGrayColor,
-      text: "???")
+      text: "?")
   
   lazy private var usedLabel = UILabel.withStyle(f: statisticLabelStyle)
   lazy private var totalLabel = UILabel.withStyle(f: statisticLabelStyle)
   lazy private var availableLabel = UILabel.withStyle(
     f: statisticLabelStyle <>
     { $0.font = UIFontMetrics.default.scaledFont(
-      for: Fonts.robotoMedium.withSize(25))})
+      for: Fonts.robotoMedium.withSize(32))})
 
   lazy private var usedDescriptionLabel = UILabel.withStyle(
     f: statisticDescriptionLabelStyle <>
@@ -40,7 +40,7 @@ class StatisticCollectionViewCell: UICollectionViewCell {
     f: statisticDescriptionLabelStyle <>
     { $0.text = "Available"})
 
-  private func getValueOf(percent: Int) -> CGFloat {
+  private func getValueOf(percent: Double) -> CGFloat {
     let endAngle = (4 * CGFloat.pi / 2)
     let startAngle = (3 * CGFloat.pi / 2)
     return CGFloat(startAngle + (endAngle * CGFloat(percent)) / 100)
@@ -77,17 +77,19 @@ class StatisticCollectionViewCell: UICollectionViewCell {
   
   func configure(usageSpace: UsageSpaceResponse? = nil) {
     if let usageSpace = usageSpace {
+      let used = Double(usageSpace.used / 1024 / 1024)
+      let total = Double(usageSpace.allocation.allocated / 1024 / 1024)
+      let available = total - used
       
-      usedLabel.text = "\(usageSpace.used / 1024 / 1024) MB"
-      totalLabel.text = "\(usageSpace.allocation.allocated / 1024 / 1024) MB"
-      availableLabel.text = "\((usageSpace.allocation.allocated - usageSpace.used) / 1024 / 1024) MB"
+      usedLabel.text = "\(used) MB"
+      totalLabel.text = "\(total) MB"
+      availableLabel.text = "\(available) MB"
       
       let shapePath = UIBezierPath(
         arcCenter: circleCenter,
         radius: circleRadius,
         startAngle: 3 * .pi / 2,
-        endAngle: getValueOf(percent: usageSpace.used * 100 / usageSpace.allocation.allocated),
-//        endAngle: getValueOf(percent: usageSpace.used * 100 / 1000),
+        endAngle: getValueOf(percent: used * 100 / total),
         clockwise: true)
       
       shape.path = shapePath.cgPath

@@ -7,16 +7,15 @@
 
 import UIKit
 
-class ModifiedItemCollectionViewCell: UICollectionViewCell {
+class ModifiedItemCell: UICollectionViewCell {
   
   private let titleLabel = UILabel.withStyle(
     f: Style.baseLabelStyle <>
-    Style.appearanceLabelStyle(withFont: Fonts.robotoRegular.withSize(13),
-                         color: Colors.labelGrayColor,
-                         text: "???")
-    <> {
-      $0.textAlignment = .left
-    })
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoRegular.withSize(18),
+      color: Colors.labelGrayColor,
+      text: "???")
+    <> { $0.textAlignment = .left })
   
   lazy var imageView: UIImageView = {
     let imageView = UIImageView()
@@ -55,7 +54,7 @@ class ModifiedItemCollectionViewCell: UICollectionViewCell {
   }
 }
 
-extension ModifiedItemCollectionViewCell {
+extension ModifiedItemCell {
   private func setUpUI() {
     backgroundColor = .white
     layer.cornerRadius = 10
