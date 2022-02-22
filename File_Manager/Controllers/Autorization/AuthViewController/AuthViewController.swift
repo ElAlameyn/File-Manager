@@ -28,10 +28,25 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     
     webView.navigationDelegate = self
     view.addSubview(webView)
+    
+    let codeVerifier = RequestConfigurator.createCodeVerifier()
+    
+    print("CODE VERIFIER: \(codeVerifier)")
+    
+    let codeChallenge = RequestConfigurator.createCodeChallenge(
+      for: codeVerifier)
+    
+    KeychainSwift().set(codeVerifier,
+                        forKey: RequestConfigurator.codeVerifierKey,
+                        withAccess: .accessibleWhenUnlocked)
+    
     let url = URL(string: DropboxURL.authURL +
                   "client_id=\(DropboxURL.clientID)" +
                   "&response_type=code" +
-                  "&redirect_uri=\(DropboxURL.redirectURI)")
+                  "&redirect_uri=\(DropboxURL.redirectURI)" +
+                  "&code_challenge=\(codeChallenge)" +
+                  "&code_challenge_method=S256"
+    )
     webView.load(URLRequest(url: url!))
   }
   
@@ -43,6 +58,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate
   func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
     guard let url = webView.url else { return }
     guard let code = getCodeFrom(url: url) else { return }
+    
     print("CURRENT URL: \(url.absoluteString)")
     print("CODE ACESS TO DROPBOX: \(code)")
     
@@ -51,6 +67,12 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     subscriber = URLSession.shared.dataTaskPublisher  (
       for: request)
       .map { $0.data }
+      .map({ value in
+        let object = try? JSONSerialization.jsonObject(with: value, options: .fragmentsAllowed)
+        print("Object: \(object)")
+        return value
+
+      })
       .decode(type: TokenResponse.self, decoder: JSONDecoder())
       .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
@@ -59,7 +81,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate
         case .finished:
           print("Token achieved")
         case .failure(let error):
-          print("Error in token request due to: \(error.localizedDescription)")
+          print("Error in token request due to: \(error)")
         }
       } receiveValue: {[weak self] tokenResponse in
         print("ACCESS TOKEN : \(tokenResponse.accessToken)")

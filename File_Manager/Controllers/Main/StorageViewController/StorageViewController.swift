@@ -19,11 +19,6 @@ class StorageViewController: UIViewController {
   
   private let sections: [Section] = [.usageSpace, .lastModified]
   
-  private let viewModels: [Any] = [
-    UsageSpaceViewModel(),
-    ListFoldersViewModel()
-  ]
-  
   private let usageSpaceViewModel = UsageSpaceViewModel()
   private let listFoldersViewModel = ListFoldersViewModel()
   

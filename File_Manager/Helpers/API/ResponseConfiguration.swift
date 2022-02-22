@@ -7,8 +7,11 @@
 
 import Foundation
 import KeychainSwift
+import CommonCrypto
 
 enum RequestConfigurator {
+  
+  static let codeVerifierKey = "code_verifier_key"
   
   enum Method: String {
     case get = "GET"
@@ -57,9 +60,13 @@ enum RequestConfigurator {
   private var components: [String: Any]? {
     switch self {
     case .token(let code):
+      print("USED CODE VERIFIER: \(KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? "")")
       return ["grant_type": "authorization_code",
               "code": code,
-              "redirect_uri": TokenCredentials.redirectURI]
+              "redirect_uri": TokenCredentials.redirectURI,
+//              "client_id": TokenCredentials.clientID,
+              "code_verifier": KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? ""
+      ]
     case .users: return nil
     case .files(let type):
       switch type {
@@ -107,9 +114,6 @@ enum RequestConfigurator {
                        forHTTPHeaderField: "Authorization")
       request.setValue("application/x-www-form-urlencoded",
                        forHTTPHeaderField: "Content-Type")
-//       For PCKE extension
-      //      URLQueryItem(name: "client_id", value: AuthViewController.Const.clientID),
-      //      URLQueryItem(name: "code_verifier", value: code)
       
       request.httpBody = requestComponents.query?.data(using: .utf8)
     case .users:
@@ -125,4 +129,34 @@ enum RequestConfigurator {
   }
 
 
+}
+
+extension RequestConfigurator {
+  
+  // MARK: - PCKE extension
+  
+  static func createCodeVerifier() -> String {
+      var buffer = [UInt8](repeating: 0, count: 32)
+      _ = SecRandomCopyBytes(kSecRandomDefault, buffer.count, &buffer)
+    return Data(bytes: buffer)
+          .base64EncodedString()
+          .replacingOccurrences(of: "+", with: "-")
+          .replacingOccurrences(of: "/", with: "_")
+          .replacingOccurrences(of: "=", with: "")
+          .trimmingCharacters(in: .whitespaces)
+  }
+
+  static func createCodeChallenge(for verifier: String) -> String {
+      guard let data = verifier.data(using: .utf8) else { fatalError() }
+      var buffer = [UInt8](repeating: 0,  count: Int(CC_SHA256_DIGEST_LENGTH))
+      data.withUnsafeBytes {
+          _ = CC_SHA256($0, CC_LONG(data.count), &buffer)
+      }
+    let hash = Data(bytes: buffer)
+      return hash.base64EncodedString()
+          .replacingOccurrences(of: "+", with: "-")
+          .replacingOccurrences(of: "/", with: "_")
+          .replacingOccurrences(of: "=", with: "")
+          .trimmingCharacters(in: .whitespaces)
+  }
 }

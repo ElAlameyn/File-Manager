@@ -12,7 +12,7 @@ final class ListFoldersViewModel: ObservableObject, ViewModelProtocol {
   @Published private(set) var value: ListFoldersResponse?
   var subscriber: AnyCancellable?
   
-  func fetch() {
+  func fetch(with filterType: FilterType? = nil) {
     subscriber = DropboxAPI.shared.fetchAllFiles()?
       .sink(receiveCompletion: { completion in
         switch completion {
@@ -23,7 +23,22 @@ final class ListFoldersViewModel: ObservableObject, ViewModelProtocol {
         }
       }, receiveValue: { responce in
         self.value = responce
+        switch filterType {
+        case .modified:
+          break
+        case .byName: self.value?.entries.sort(by: {$0.name < $1.name })
+        case .starred:
+          break
+        case .none:
+          break
+        }
       })
   }
 
+}
+
+extension ListFoldersViewModel {
+  enum FilterType {
+    case modified, byName, starred
+  }
 }
