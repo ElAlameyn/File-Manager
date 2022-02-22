@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 class ModifiedItemCell: UICollectionViewCell {
   
@@ -35,8 +36,18 @@ class ModifiedItemCell: UICollectionViewCell {
   }()
   
   func configure(title: String? = nil, image: UIImage? = nil) {
+    guard let title = title else { return }
     titleLabel.text = title
-    imageView.image = image
+    
+    let fileExtension = NSURL(fileURLWithPath: title).pathExtension
+    guard let uti = UTType(filenameExtension: fileExtension!) else { return }
+    if uti.conforms(to: .image) {
+      imageView.image = Images.categoryImages
+    } else if uti.conforms(to: .video) {
+      imageView.image = Images.categoryVideos
+    } else if uti.conforms(to: .item) {
+      imageView.image = Images.categoryFiles
+    }
   }
   
   

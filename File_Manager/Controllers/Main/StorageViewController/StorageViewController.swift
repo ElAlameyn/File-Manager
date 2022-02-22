@@ -26,6 +26,8 @@ class StorageViewController: UIViewController {
   private var collectionView: UICollectionView! = nil
   private var cancellables: Set<AnyCancellable> = []
   
+  private var inverse: Bool = false
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -47,7 +49,8 @@ class StorageViewController: UIViewController {
 
     listFoldersViewModel.$value
       .sink { [weak self] value in
-        print("FOLDER MODEL: \(value)")
+        self?.updateListFiles(files: value?.filteredByDateModified())
+        print("FOLDER MODEL: \(value?.filteredByDateModified())")
       }
       .store(in: &cancellables)
   }
@@ -67,9 +70,9 @@ class StorageViewController: UIViewController {
         let cell: UsageSpaceCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(usageSpace: info)
         return cell
-      case .lastModified(let itemModified):
+      case .lastModified(let item):
         let cell: ModifiedItemCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(title: itemModified?.title, image: itemModified?.image)
+        cell.configure(title: item.name, image: nil)
         return cell
       }
     }
@@ -82,12 +85,9 @@ class StorageViewController: UIViewController {
       view.delegate = self
       
       switch Section(rawValue: indexPath.section) {
-      case .usageSpace:
-        break
-      case .lastModified:
-        view.titleLabel.text = "Last Modified"
-      case .none:
-        break
+      case .usageSpace: break
+      case .lastModified: view.titleLabel.text = "Last Modified"
+      case .none: break
       }
       return view
     }
@@ -97,8 +97,6 @@ class StorageViewController: UIViewController {
   private func applySnapshot() {
     var snapshot = Snapshot()
     snapshot.appendSections([.usageSpace, .lastModified])
-    snapshot.appendItems([StorageItem.usageSpace(nil)], toSection: .usageSpace)
-    snapshot.appendItems(StorageItem.allModifiedItems, toSection: .lastModified)
     self.dataSource.apply(snapshot, animatingDifferences: true)
   }
   
@@ -107,6 +105,15 @@ class StorageViewController: UIViewController {
     snapshot.append([StorageItem.usageSpace(usageSpaceResponse)])
     self.dataSource.apply(snapshot, to: .usageSpace, animatingDifferences: true)
   }
+  
+  private func updateListFiles(files: [ListFoldersResponse.File]?) {
+    var snapshot = SectionSnapshot()
+    if let storages = files?.compactMap({ StorageItem.lastModified($0)}) {
+      snapshot.append(storages)
+      self.dataSource.apply(snapshot, to: .lastModified, animatingDifferences: true)
+    }
+  }
+  
 
   private func configureUI() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
@@ -170,7 +177,8 @@ class StorageViewController: UIViewController {
 extension StorageViewController: SortButtonDelegate {
   
   func sortButtonTapped() {
-    StorageItem.allModifiedItems.sort()
-    applySnapshot()
+    inverse.toggle()
+    updateListFiles(files: listFoldersViewModel.value?.filteredByDateModified(inverse: inverse))
   }
+  
 }

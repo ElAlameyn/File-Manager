@@ -14,5 +14,7 @@ protocol ViewModelProtocol: BaseProtocol {
   
   var subscriber: AnyCancellable? { get }
   var value: T { get }
+  
+  func fetch()
 }
 

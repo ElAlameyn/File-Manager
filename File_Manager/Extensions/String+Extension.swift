@@ -19,4 +19,16 @@ extension String {
   func toBase64() -> String {
       return Data(self.utf8).base64EncodedString()
   }
+  
+  func toDate(dateFormat: String) -> Date? {
+
+     let dateFormatter = DateFormatter()
+     dateFormatter.dateFormat = dateFormat
+
+     let date: Date? = dateFormatter.date(from: self)
+     return date
+  }
+  
+  
+
 }

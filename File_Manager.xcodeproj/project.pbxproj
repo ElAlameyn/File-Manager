@@ -33,6 +33,7 @@
 		B54FAEFE27AFD55A000E81BB /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAEFD27AFD55A000E81BB /* Style.swift */; };
 		B54FAF0027AFDEEB000E81BB /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */; };
 		B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAF0227AFE602000E81BB /* FishOperator.swift */; };
+		B57A971827C52AC900DDA6D8 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57A971727C52AC900DDA6D8 /* Data+Extension.swift */; };
 		B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */; };
 		B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */; };
 		B5B19B0527BA87B4009B65E7 /* ResponseConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */; };
@@ -100,6 +101,7 @@
 		B54FAEFD27AFD55A000E81BB /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		B54FAF0227AFE602000E81BB /* FishOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishOperator.swift; sourceTree = "<group>"; };
+		B57A971727C52AC900DDA6D8 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBaseViewCell.swift; sourceTree = "<group>"; };
 		B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBaseViewCell.swift; sourceTree = "<group>"; };
 		B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseConfiguration.swift; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 				B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */,
 				B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */,
 				B539670827B3CA2B009125E5 /* String+Extension.swift */,
+				B57A971727C52AC900DDA6D8 /* Data+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -684,6 +687,7 @@
 				B524895627AD4CC90064C08C /* CustomTabItemView.swift in Sources */,
 				B53B29B627A927B40060FF19 /* Statistic.swift in Sources */,
 				B539670927B3CA2B009125E5 /* String+Extension.swift in Sources */,
+				B57A971827C52AC900DDA6D8 /* Data+Extension.swift in Sources */,
 				B5DFB90827A2B8BC00196251 /* UILabel+Extension.swift in Sources */,
 				B5DFB8C827A286A900196251 /* AppDelegate.swift in Sources */,
 				B5DFB90A27A2B97C00196251 /* Fonts.swift in Sources */,

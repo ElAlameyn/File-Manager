@@ -138,12 +138,7 @@ extension RequestConfigurator {
   static func createCodeVerifier() -> String {
       var buffer = [UInt8](repeating: 0, count: 32)
       _ = SecRandomCopyBytes(kSecRandomDefault, buffer.count, &buffer)
-    return Data(bytes: buffer)
-          .base64EncodedString()
-          .replacingOccurrences(of: "+", with: "-")
-          .replacingOccurrences(of: "/", with: "_")
-          .replacingOccurrences(of: "=", with: "")
-          .trimmingCharacters(in: .whitespaces)
+    return Data(buffer).replaceHash()
   }
 
   static func createCodeChallenge(for verifier: String) -> String {
@@ -152,11 +147,6 @@ extension RequestConfigurator {
       data.withUnsafeBytes {
           _ = CC_SHA256($0, CC_LONG(data.count), &buffer)
       }
-    let hash = Data(bytes: buffer)
-      return hash.base64EncodedString()
-          .replacingOccurrences(of: "+", with: "-")
-          .replacingOccurrences(of: "/", with: "_")
-          .replacingOccurrences(of: "=", with: "")
-          .trimmingCharacters(in: .whitespaces)
+    return Data(buffer).replaceHash()
   }
 }

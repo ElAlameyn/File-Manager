@@ -7,13 +7,10 @@
 
 import Foundation
 
-struct UsageSpaceResponse: Codable, Hashable {
+struct UsageSpaceResponse
+{
   let used: Int
   let allocation: Allocation
-  
-  static func == (lhs: UsageSpaceResponse, rhs: UsageSpaceResponse) -> Bool {
-    return lhs.used == rhs.used
-  }
 
   struct Allocation: Codable, Hashable {
     let tag: String
@@ -23,5 +20,11 @@ struct UsageSpaceResponse: Codable, Hashable {
       case tag = ".tag"
       case allocated = "allocated"
     }
+  }
+}
+
+extension UsageSpaceResponse: Codable, Hashable {
+  static func == (lhs: UsageSpaceResponse, rhs: UsageSpaceResponse) -> Bool {
+    return lhs.used == rhs.used
   }
 }
