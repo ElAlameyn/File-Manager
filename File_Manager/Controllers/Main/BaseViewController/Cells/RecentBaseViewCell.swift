@@ -34,9 +34,10 @@ class RecentBaseViewCell: UICollectionViewCell {
   }
   
   func configure(image: UIImage? = nil) {
-    if let image = image {
-      mainImageView.image = ImageTransformator.scaled(image: image)
-    }
+    mainImageView.image = image
+//    if let image = image {
+//      mainImageView.image = ImageTransformator.scaled(image: image)
+//    }
   }
   
   required init?(coder: NSCoder) {

@@ -26,7 +26,7 @@ class CustomTabItemView: UIView {
   lazy private var titleLabel = UILabel.withStyle(
     f: Style.baseLabelStyle <>
     Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMediumForCategories.withSize(12),
+      withFont: Fonts.robotoMediumForCategories.withSize(14),
       color: .white,
       text: item.name) <> Style.mask)
 

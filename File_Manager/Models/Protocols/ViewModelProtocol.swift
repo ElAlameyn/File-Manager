@@ -11,10 +11,11 @@ protocol BaseProtocol: AnyObject{}
 
 protocol ViewModelProtocol: BaseProtocol {
   associatedtype T: Hashable, Decodable
-  
-  var subscriber: AnyCancellable? { get }
   var value: T { get }
+  var subscriber: AnyCancellable? { get }
   
   func fetch()
 }
+
+
 

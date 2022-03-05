@@ -7,18 +7,17 @@
 
 import UIKit
 
-struct RecentFile: Hashable
+struct ImageModel: Hashable
 {
   var id = UUID()
   var image: UIImage?
-  var files: String?
-  var videos: String?
-  
+  var imageName: String
+
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
   
-  static func == (lhs: RecentFile, rhs: RecentFile) -> Bool {
+  static func == (lhs: ImageModel, rhs: ImageModel) -> Bool {
     lhs.id == rhs.id
   }
 }

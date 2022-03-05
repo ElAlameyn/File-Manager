@@ -7,12 +7,12 @@
 
 import Foundation
 import Combine
+import UniformTypeIdentifiers
 
 final class ListFoldersViewModel: ObservableObject, ViewModelProtocol {
   @Published private(set) var value: ListFoldersResponse?
   var subscriber: AnyCancellable?
   
-
   func fetch() {
     subscriber = DropboxAPI.shared.fetchAllFiles()?
       .sink(receiveCompletion: { completion in
@@ -26,11 +26,40 @@ final class ListFoldersViewModel: ObservableObject, ViewModelProtocol {
         self.value = responce
       })
   }
+  
+  func countFilesAmount(value: ListFoldersResponse?) -> (images: Int, videos: Int, files: Int) {
+    var images = 0
+    var videos = 0
+    var files = 0
+    value?.files.forEach {
+      if let fileExtension = NSURL(fileURLWithPath: $0.name).pathExtension {
+        guard let uti = UTType(filenameExtension: fileExtension) else { return }
+        if uti.conforms(to: .image) {
+          images += 1
+        } else if uti.conforms(to: .video) {
+          videos += 1
+        } else if uti.conforms(to: .item) {
+          files += 1
+        }
+      }
+    }
+    return (images, videos, files)
+  }
+  
+  func images(_ value: ListFoldersResponse?) -> [ListFoldersResponse.File]? {
+    guard let value = value else { return nil }
+    var result = [ListFoldersResponse.File]()
+    
+    for file in value.files {
+      if let fileExtension = NSURL(fileURLWithPath: file.name).pathExtension {
+        guard let uti = UTType(filenameExtension: fileExtension) else { break }
+        if uti.conforms(to: .image) {
+          result.append(file)
+        }
+      }
+    }
 
-}
-
-extension ListFoldersViewModel {
-  enum FilterType {
-    case modified, byName, starred
+    return result
   }
 }
+

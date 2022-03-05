@@ -10,8 +10,10 @@ import UIKit
 struct Category: Hashable
 {
   var id = UUID()
+  
   var title: String
   var image: UIImage?
+  var amount: Int
   
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)

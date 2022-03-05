@@ -30,17 +30,15 @@ class StorageViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     title = "Storage"
-
     view.backgroundColor = Colors.baseBackground
+    
     configureUI()
     bindViewModels()
     applySnapshot()
   }
   
   private func bindViewModels() {
-
     usageSpaceViewModel.$value
       .sink(receiveValue: {[weak self] value in
         self?.updateUsageSpace(usageSpaceResponse: value)
@@ -72,7 +70,7 @@ class StorageViewController: UIViewController {
         return cell
       case .lastModified(let item):
         let cell: ModifiedItemCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(title: item.name, image: nil)
+        cell.configure(title: item.name)
         return cell
       }
     }
@@ -113,7 +111,6 @@ class StorageViewController: UIViewController {
       self.dataSource.apply(snapshot, to: .lastModified, animatingDifferences: true)
     }
   }
-  
 
   private func configureUI() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())

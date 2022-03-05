@@ -15,11 +15,13 @@ struct ListFoldersResponse
     let tag: String
     let name: String
     let clientModified: String?
+    let pathDisplay: String?
     
     enum CodingKeys: String, CodingKey {
       case tag = ".tag"
       case name = "name"
       case clientModified = "client_modified"
+      case pathDisplay = "path_display"
     }
   }
 }
@@ -32,8 +34,12 @@ extension ListFoldersResponse: Decodable, Hashable {
 
 extension ListFoldersResponse {
   
+  var files: [ListFoldersResponse.File] {
+    entries.filter({ $0.tag == "file" })
+  }
+  
   func filteredByDateModified(inverse: Bool? = false) -> [ListFoldersResponse.File] {
-    var filtered = entries.filter { $0.tag == "file"}
+    var filtered = files
     let dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
     if !(inverse!) {
       filtered.sort {
@@ -54,5 +60,7 @@ extension ListFoldersResponse {
     }
     return filtered
   }
-
+  
+  
+  
 }

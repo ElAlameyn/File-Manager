@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class BaseViewController: UIViewController {
   
@@ -16,15 +17,72 @@ class BaseViewController: UIViewController {
   typealias DataSource = UICollectionViewDiffableDataSource<Section, BaseItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, BaseItem>
   
+  typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<BaseItem>
+  
   private let sections: [Section] = [.title, .category, .recentFiles]
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
+  
+  private let listFoldersViewModel = ListFoldersViewModel()
+  private var thumbnailViewModels = [ThumbnailViewModel]()
+  private var cancellables: Set<AnyCancellable> = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
     configureUI()
+    bindViewModels()
     applySnapshot()
+  }
+  
+  private func bindViewModels() {
+    listFoldersViewModel.$value
+      .sink(receiveValue: {[weak self] response in
+        guard let self = self else { return }
+        response?.files.forEach {
+          let viewModel = ThumbnailViewModel()
+          viewModel.fetch(path: $0.pathDisplay)
+          self.thumbnailViewModels.append(viewModel)
+        }
+        self.updateFilesAmount(files: self.listFoldersViewModel.countFilesAmount(value: response))
+      })
+      .store(in: &cancellables)
+    
+    thumbnailViewModels.forEach {
+      $0.$image
+        .sink { image in
+          print("image: \(image)")
+        }
+        .store(in: &cancellables)
+    }
+
+//    thumbnailViewModel.$image
+//      .sink { [weak self] value in
+//        guard let self = self else { return }
+//        let imageView = UIImageView(image: value)
+//      }
+  }
+  
+  private func updateFilesAmount(files: (images: Int, videos: Int, files: Int)) {
+    var snapshot = SectionSnapshot()
+    snapshot.append([
+        .category(Category(title: "Images", amount: files.images)),
+        .category(Category(title: "Videos", amount: files.videos)),
+        .category(Category(title: "Files", amount: files.files))
+      ])
+    dataSource.apply(snapshot, to: .category, animatingDifferences: true)
+  }
+  
+  private func updateImages() {
+    var snapshot = SectionSnapshot()
+    let items = thumbnailViewModels.map { BaseItem.recents($0) }
+    snapshot.append(items)
+    dataSource.apply(snapshot, to: .recentFiles, animatingDifferences: true)
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    listFoldersViewModel.fetch()
   }
   
   // MARK: - Data Source
@@ -32,18 +90,18 @@ class BaseViewController: UIViewController {
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: BaseItem) -> UICollectionViewCell? in
-
+      
       switch item {
       case .title:
         let cell: TitleBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         return cell
       case .category(let category):
         let cell: CategoryBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(title: category?.title, image: category?.image)
+        cell.configure(title: category?.title, amount: category?.amount)
         return cell
-      case .recents(let recents):
+      case .recents(let model):
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(image: recents?.image)
+        cell.configure(image: model?.image)
         return cell
       }
     }
@@ -72,11 +130,11 @@ class BaseViewController: UIViewController {
     var snapshot = Snapshot()
     snapshot.appendSections([.title, .category, .recentFiles])
     snapshot.appendItems( [.title] , toSection: .title)
-    snapshot.appendItems(BaseItem.allCategories, toSection: .category)
+    snapshot.appendItems([], toSection: .category)
     self.dataSource.apply(snapshot, animatingDifferences: false)
     
     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-      snapshot.appendItems(BaseItem.allRecents ?? [], toSection: .recentFiles)
+      snapshot.appendItems([], toSection: .recentFiles)
       self?.dataSource.apply(snapshot, animatingDifferences: false)
     }
   }

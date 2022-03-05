@@ -17,7 +17,7 @@ extension CustomTabItem {
     case .home:
       return UINavigationController(rootViewController: BaseViewController())
     case .statistic:
-      return UINavigationController(rootViewController: StorageViewController())
+      return UINavigationController(rootViewController: StatisticViewController())
     case .storage:
       return UINavigationController(rootViewController: StorageViewController())
     case .options:
@@ -28,15 +28,20 @@ extension CustomTabItem {
   var icon: UIImage? {
     switch self {
     case .home:
-      return UIImage(systemName: "house.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?
+      return UIImage(systemName: "house.fill",
+                     withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?
         .withTintColor(.white, renderingMode: .alwaysOriginal)
     case .statistic:
       return UIImage(named: "timelapse")
     case .storage:
-      return UIImage(systemName: "doc.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?
+      return UIImage(systemName: "doc.fill",
+                     withConfiguration:
+                      UIImage.SymbolConfiguration(pointSize: 30))?
         .withTintColor(.white, renderingMode: .alwaysOriginal)
     case .options:
-      return UIImage(systemName: "wrench.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 30))?
+      return UIImage(systemName: "wrench.fill",
+                     withConfiguration:
+                      UIImage.SymbolConfiguration(pointSize: 30))?
         .withTintColor(.white, renderingMode: .alwaysOriginal)
     }
   }

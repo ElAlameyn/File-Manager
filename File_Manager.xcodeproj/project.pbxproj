@@ -15,6 +15,7 @@
 		B515C22627C028CE008EAF28 /* ListFoldersResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */; };
 		B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716027AEBAF50026040E /* OptionsViewController.swift */; };
 		B51A716427AEBB350026040E /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716327AEBB350026040E /* StatisticViewController.swift */; };
+		B522327A27D3B87C00D69B5F /* ImagesCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B522327927D3B87C00D69B5F /* ImagesCollectionController.swift */; };
 		B524895227AD45110064C08C /* CustomTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895127AD45110064C08C /* CustomTabItem.swift */; };
 		B524895627AD4CC90064C08C /* CustomTabItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895527AD4CC90064C08C /* CustomTabItemView.swift */; };
 		B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895727AD4FA70064C08C /* CustomTabBar.swift */; };
@@ -23,7 +24,7 @@
 		B53B29B627A927B40060FF19 /* Statistic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B29B527A927B40060FF19 /* Statistic.swift */; };
 		B53B29B827A927D20060FF19 /* LastModifiedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53B29B727A927D20060FF19 /* LastModifiedItem.swift */; };
 		B5487B9A27B9894F00258B58 /* DropboxAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9927B9894F00258B58 /* DropboxAPI.swift */; };
-		B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */; };
+		B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift */; };
 		B5487BA027B98AAE00258B58 /* TokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9F27B98AAE00258B58 /* TokenResponse.swift */; };
 		B549DDC627AAA64200BC05BA /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B549DDC527AAA64200BC05BA /* TabBarViewController.swift */; };
 		B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B1BC627A6A03900AF1D84 /* Category.swift */; };
@@ -34,8 +35,10 @@
 		B54FAF0027AFDEEB000E81BB /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */; };
 		B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAF0227AFE602000E81BB /* FishOperator.swift */; };
 		B57A971827C52AC900DDA6D8 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57A971727C52AC900DDA6D8 /* Data+Extension.swift */; };
+		B57A971A27C6197500DDA6D8 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */; };
 		B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */; };
 		B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */; };
+		B59D310E27C9434A00C521D7 /* ThumbnailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59D310D27C9434A00C521D7 /* ThumbnailViewModel.swift */; };
 		B5B19B0527BA87B4009B65E7 /* ResponseConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */; };
 		B5DFB8C827A286A900196251 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C727A286A900196251 /* AppDelegate.swift */; };
 		B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C927A286A900196251 /* SceneDelegate.swift */; };
@@ -83,6 +86,7 @@
 		B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFoldersResponse.swift; sourceTree = "<group>"; };
 		B51A716027AEBAF50026040E /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		B51A716327AEBB350026040E /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
+		B522327927D3B87C00D69B5F /* ImagesCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionController.swift; sourceTree = "<group>"; };
 		B524895127AD45110064C08C /* CustomTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItem.swift; sourceTree = "<group>"; };
 		B524895527AD4CC90064C08C /* CustomTabItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItemView.swift; sourceTree = "<group>"; };
 		B524895727AD4FA70064C08C /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
@@ -91,7 +95,7 @@
 		B53B29B527A927B40060FF19 /* Statistic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistic.swift; sourceTree = "<group>"; };
 		B53B29B727A927D20060FF19 /* LastModifiedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastModifiedItem.swift; sourceTree = "<group>"; };
 		B5487B9927B9894F00258B58 /* DropboxAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxAPI.swift; sourceTree = "<group>"; };
-		B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceResponse.swift.swift; sourceTree = "<group>"; };
+		B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceResponse.swift; sourceTree = "<group>"; };
 		B5487B9F27B98AAE00258B58 /* TokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponse.swift; sourceTree = "<group>"; };
 		B549DDC527AAA64200BC05BA /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B54B1BC627A6A03900AF1D84 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -102,8 +106,10 @@
 		B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		B54FAF0227AFE602000E81BB /* FishOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishOperator.swift; sourceTree = "<group>"; };
 		B57A971727C52AC900DDA6D8 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
+		B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBaseViewCell.swift; sourceTree = "<group>"; };
 		B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBaseViewCell.swift; sourceTree = "<group>"; };
+		B59D310D27C9434A00C521D7 /* ThumbnailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailViewModel.swift; sourceTree = "<group>"; };
 		B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseConfiguration.swift; sourceTree = "<group>"; };
 		B5DFB8C427A286A900196251 /* File_Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = File_Manager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5DFB8C727A286A900196251 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -207,6 +213,7 @@
 			children = (
 				B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */,
 				B515C22327C027E9008EAF28 /* ListFoldersViewModel.swift */,
+				B59D310D27C9434A00C521D7 /* ThumbnailViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -222,7 +229,7 @@
 		B50C31F727BF98B6008716F4 /* APIResponses */ = {
 			isa = PBXGroup;
 			children = (
-				B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift.swift */,
+				B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift */,
 				B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */,
 			);
 			path = APIResponses;
@@ -250,6 +257,14 @@
 				B51A716327AEBB350026040E /* StatisticViewController.swift */,
 			);
 			path = StatisticViewController;
+			sourceTree = "<group>";
+		};
+		B522327627D3A3C000D69B5F /* ImagesCollectionController */ = {
+			isa = PBXGroup;
+			children = (
+				B522327927D3B87C00D69B5F /* ImagesCollectionController.swift */,
+			);
+			path = ImagesCollectionController;
 			sourceTree = "<group>";
 		};
 		B524895327AD4CA10064C08C /* Models */ = {
@@ -428,6 +443,7 @@
 				B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */,
 				B539670827B3CA2B009125E5 /* String+Extension.swift */,
 				B57A971727C52AC900DDA6D8 /* Data+Extension.swift */,
+				B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -471,6 +487,7 @@
 		B5DFB90D27A2C60400196251 /* BaseViewController */ = {
 			isa = PBXGroup;
 			children = (
+				B522327627D3A3C000D69B5F /* ImagesCollectionController */,
 				B54B1BC527A6A03100AF1D84 /* Models */,
 				B5DFB93527A54AE500196251 /* Cells */,
 				B5DFB90E27A2C61B00196251 /* BaseViewController.swift */,
@@ -665,7 +682,7 @@
 				B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */,
 				B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */,
 				B51A716427AEBB350026040E /* StatisticViewController.swift in Sources */,
-				B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift.swift in Sources */,
+				B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift in Sources */,
 				B5B19B0527BA87B4009B65E7 /* ResponseConfiguration.swift in Sources */,
 				B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */,
 				B5FB3F8427A855BD007A0495 /* ImageTransformator.swift in Sources */,
@@ -680,6 +697,7 @@
 				B53B29B827A927D20060FF19 /* LastModifiedItem.swift in Sources */,
 				B5DFB8E127A2A8C600196251 /* Images.swift in Sources */,
 				B54FAF0027AFDEEB000E81BB /* UIButton+Extension.swift in Sources */,
+				B59D310E27C9434A00C521D7 /* ThumbnailViewModel.swift in Sources */,
 				B5DFB8EA27A2AE1F00196251 /* MeetView.swift in Sources */,
 				B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */,
 				B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */,
@@ -702,10 +720,12 @@
 				B515C22627C028CE008EAF28 /* ListFoldersResponse.swift in Sources */,
 				B5DFB90C27A2B9C200196251 /* Texts.swift in Sources */,
 				B524895227AD45110064C08C /* CustomTabItem.swift in Sources */,
+				B57A971A27C6197500DDA6D8 /* UIImageView+Extension.swift in Sources */,
 				B508201F27BBA89B00102539 /* ViewModelProtocol.swift in Sources */,
 				B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */,
 				B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */,
 				B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */,
+				B522327A27D3B87C00D69B5F /* ImagesCollectionController.swift in Sources */,
 				B515C22427C027E9008EAF28 /* ListFoldersViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

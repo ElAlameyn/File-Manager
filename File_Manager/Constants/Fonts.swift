@@ -15,15 +15,15 @@ struct Fonts
   }
   
   static var robotoMedium: UIFont {
-    UIFont(name: "Roboto-Medium", size: 24) ?? .preferredFont(forTextStyle: .body)
+    UIFont(name: "Roboto-Medium", size: 30) ?? .preferredFont(forTextStyle: .body)
   }
   
   static var robotoMediumForCategories: UIFont {
-    UIFont(name: "Roboto-Medium", size: 12) ?? .preferredFont(forTextStyle: .body)
+    UIFont(name: "Roboto-Medium", size: 14) ?? .preferredFont(forTextStyle: .body)
   }
   
   static var robotoRegular: UIFont {
-    UIFont(name: "Roboto-Regular", size: 17) ?? .preferredFont(forTextStyle: .body)
+    UIFont(name: "Roboto-Regular", size: 24) ?? .preferredFont(forTextStyle: .body)
   }
   
   static var robotoBold: UIFont {

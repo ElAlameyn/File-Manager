@@ -22,14 +22,16 @@ class CategoryBaseViewCell: UICollectionViewCell {
       color: .darkGray,
       text: Texts.baseCategoryLabelText))
   
-  func configure(title: String? = nil, image: UIImage? = nil) {
-    titleLabel.text = title
-    imageView.image = image
+  func configure(title: String? = nil, amount: Int? = nil ) {
+    guard let title = title, let amount = amount else { return }
+    titleLabel.text = "\(title) \(amount)"
+    imageView.setImageForCategory(name: title)
   }
   
   override init(frame: CGRect) {
     super.init(frame: frame)
     setUpUI()
+    setUpLayout()
   }
   
   required init?(coder: NSCoder) {
@@ -38,7 +40,7 @@ class CategoryBaseViewCell: UICollectionViewCell {
 }
 
 extension CategoryBaseViewCell {
-  func setUpUI() {
+  private func setUpUI() {
     backgroundColor = .white
     
     Style.withShadow(withRadius: 2,
@@ -46,14 +48,14 @@ extension CategoryBaseViewCell {
                      opacity: 0.3) (self)
     Style.rounded(radius: 20)(self)
 
-
-    // MARK: - Layout
-    
     contentView.addSubview(imageView)
+    contentView.addSubview(titleLabel)
+  }
+  
+  private func setUpLayout() {
     imageView.addHeightWeightConstraints(values: CGPoint(x: 70, y: 70))
     imageView.addCenterConstraints(offset: CGPoint(x: 0, y: -10))
     
-    contentView.addSubview(titleLabel)
     titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 1).isActive = true
     titleLabel.addEdgeContstraints(exclude: .bottom, .top, offset: UIEdgeInsets(top: 5, left: 16, bottom: 0, right: -16))
   }

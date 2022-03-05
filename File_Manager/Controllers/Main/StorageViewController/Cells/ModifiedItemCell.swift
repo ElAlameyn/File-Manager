@@ -18,13 +18,13 @@ class ModifiedItemCell: UICollectionViewCell {
       text: "???")
     <> { $0.textAlignment = .left })
   
-  lazy var imageView: UIImageView = {
+  lazy private var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFit
     return imageView
   }()
   
-  lazy var descrButton: UIButton = {
+  lazy private var descrButton: UIButton = {
     let button = UIButton()
     button.setImage(UIImage(
       systemName: "ellipsis",
@@ -38,19 +38,9 @@ class ModifiedItemCell: UICollectionViewCell {
   func configure(title: String? = nil, image: UIImage? = nil) {
     guard let title = title else { return }
     titleLabel.text = title
-    
-    let fileExtension = NSURL(fileURLWithPath: title).pathExtension
-    guard let uti = UTType(filenameExtension: fileExtension!) else { return }
-    if uti.conforms(to: .image) {
-      imageView.image = Images.categoryImages
-    } else if uti.conforms(to: .video) {
-      imageView.image = Images.categoryVideos
-    } else if uti.conforms(to: .item) {
-      imageView.image = Images.categoryFiles
-    }
+    imageView.setImageForCategory(file: title)
   }
-  
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     setUpUI()

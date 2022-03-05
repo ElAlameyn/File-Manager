@@ -32,7 +32,7 @@ class TitleBaseViewCell: UICollectionViewCell {
   private var descriptionLabel = UILabel.withStyle(
     f: Style.baseLabelStyle <>
     Style.appearanceLabelStyle(
-      withFont: Fonts.robotoRegular,
+      withFont: Fonts.robotoRegular.withSize(20),
       color: .systemGray,
       text: Texts.baseDescriptionLabelText)
     <> {
@@ -48,7 +48,8 @@ extension TitleBaseViewCell {
     
     contentView.addSubview(descriptionLabel)
     descriptionLabel.addEdgeContstraints(exclude: .bottom, .top, offset: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: -16))
-    descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+    descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5).isActive = true
+    descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
   }
 }
 
