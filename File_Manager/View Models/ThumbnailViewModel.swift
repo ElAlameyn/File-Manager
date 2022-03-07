@@ -14,21 +14,25 @@ final class ThumbnailViewModel: ObservableObject {
   
   private let id = UUID()
   
-  @Published private(set) var image: UIImage?
+  @Published private(set) var images: [UIImage]?
   var subscriber: AnyCancellable?
 
   func fetch(path: String? = nil) {
-    subscriber = DropboxAPI.shared.fetchThumbnail(path: path)?.sink(receiveCompletion: { completion in
+    subscriber = DropboxAPI.shared.fetchDownload(id: path)?.sink(receiveCompletion: { completion in
       switch completion {
       case .finished:
         print("Fetched thmbnail succesful")
       case .failure(let error):
         print("Fetch thmbnail failed due to \(error)")
       }
-    }, receiveValue: { data in
+    }, receiveValue: { [weak self] data in
+      guard let self = self else { return }
       if let image = UIImage(data: data ) {
-        self.image = image
-        self.update?()
+        guard var images = self.images else { return }
+        if images.filter { $0 == image }.isEmpty {
+          self.images?.append(image)
+          self.update?()
+        }
         print("Successful thumbnail unarchived")
       }
     })
@@ -43,5 +47,4 @@ extension ThumbnailViewModel: Hashable {
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
-  
 }

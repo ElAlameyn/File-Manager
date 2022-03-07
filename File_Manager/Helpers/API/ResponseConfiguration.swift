@@ -36,6 +36,7 @@ enum RequestConfigurator {
   case users(Users)
   case files(Files)
   case thumbnail(String)
+  case download(String)
   
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
@@ -59,6 +60,9 @@ enum RequestConfigurator {
     case .thumbnail(_):
       let startPoint = contentURL + "/2/files"
       return startPoint + "/get_thumbnail"
+    case .download(_):
+      let startPoint = contentURL + "/2/files"
+      return startPoint + "/download"
     }
   }
   
@@ -85,6 +89,8 @@ enum RequestConfigurator {
                "format": "jpeg",
                "size": "w64h64",
                "mode": "strict" ]
+    case .download(let id):
+      return ["path": id]
     }
   }
   
@@ -103,7 +109,7 @@ enum RequestConfigurator {
   
   private var method: Method {
     switch self {
-    case .token, .users, .files, .thumbnail:
+    case .token, .users, .files, .thumbnail, .download:
       return .post
     }
   }
@@ -130,19 +136,18 @@ enum RequestConfigurator {
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
     case .files:
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
-      request.setValue("application/json",
-                       forHTTPHeaderField: "Content-Type")
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = jsonData
     case .thumbnail(let path):
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
-      request.setValue(path,
-                       forHTTPHeaderField: "Dropbox-API-Arg")
+      request.setValue(path, forHTTPHeaderField: "Dropbox-API-Arg")
+    case .download(let id):
+      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue(id, forHTTPHeaderField: "Dropbox-API-Arg")
     }
     request.timeoutInterval = 60
     return request
   }
-  
-  
 }
 
   // MARK: - PCKE extension

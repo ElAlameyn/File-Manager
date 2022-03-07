@@ -24,12 +24,24 @@ final class DropboxAPI {
     return getPublisher(request: request)
   }
   
+  func fetchDownload(id: String? = nil) -> AnyPublisher<Data, Error>? {
+    guard let id = id else { return nil }
+    guard let request = RequestConfigurator.download(
+    """
+      {"path":"\(id)"}
+    """
+    ).setRequest() else { return nil }
+    return getDataPublisher(request: request)
+  }
+
   func fetchThumbnail(path: String? = nil) -> AnyPublisher<Data, Error>? {
     guard let path = path else { return nil }
     print("PATH: \(path)")
-    guard let request = RequestConfigurator.thumbnail("""
-{"path":"\(path)", "format":"jpeg"}
-""").setRequest() else { return nil }
+    guard let request = RequestConfigurator.thumbnail(
+    """
+      {"path":"\(path)", "format":"jpeg"}
+    """
+    ).setRequest() else { return nil }
     print("REQUEST THUMBNAIL: \(request.url?.absoluteString as Any)")
     return getDataPublisher(request: request)
   }

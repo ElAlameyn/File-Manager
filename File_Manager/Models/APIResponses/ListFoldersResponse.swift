@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct ListFoldersResponse
-{
+struct ListFoldersResponse {
   var entries: [File]
 
   struct File: Decodable, Hashable {
     let tag: String
     let name: String
+    let id: String
     let clientModified: String?
     let pathDisplay: String?
     
@@ -22,6 +22,7 @@ struct ListFoldersResponse
       case name = "name"
       case clientModified = "client_modified"
       case pathDisplay = "path_display"
+      case id
     }
   }
 }

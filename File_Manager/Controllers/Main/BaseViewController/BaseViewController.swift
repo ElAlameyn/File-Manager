@@ -16,7 +16,6 @@ class BaseViewController: UIViewController {
   
   typealias DataSource = UICollectionViewDiffableDataSource<Section, BaseItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, BaseItem>
-  
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<BaseItem>
   
   private let sections: [Section] = [.title, .category, .recentFiles]
@@ -24,15 +23,16 @@ class BaseViewController: UIViewController {
   private var collectionView: UICollectionView! = nil
   
   private let listFoldersViewModel = ListFoldersViewModel()
-  private var thumbnailViewModels = [ThumbnailViewModel]()
+  private var thumbnailViewModel = ThumbnailViewModel()
   private var cancellables: Set<AnyCancellable> = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
-    configureUI()
+    configureCollectionView()
     bindViewModels()
     applySnapshot()
+    listFoldersViewModel.fetch()
   }
   
   private func bindViewModels() {
@@ -41,48 +41,35 @@ class BaseViewController: UIViewController {
         guard let self = self else { return }
         response?.files.forEach {
           let viewModel = ThumbnailViewModel()
-          viewModel.fetch(path: $0.pathDisplay)
-          self.thumbnailViewModels.append(viewModel)
+          viewModel.fetch(path: $0.id)
+          viewModel.update = { [weak self] in
+            self?.updateImages()
+          }
         }
         self.updateFilesAmount(files: self.listFoldersViewModel.countFilesAmount(value: response))
       })
       .store(in: &cancellables)
-    
-    thumbnailViewModels.forEach {
-      $0.$image
-        .sink { image in
-          print("image: \(image)")
-        }
-        .store(in: &cancellables)
-    }
-
-//    thumbnailViewModel.$image
-//      .sink { [weak self] value in
-//        guard let self = self else { return }
-//        let imageView = UIImageView(image: value)
-//      }
   }
   
   private func updateFilesAmount(files: (images: Int, videos: Int, files: Int)) {
     var snapshot = SectionSnapshot()
     snapshot.append([
-        .category(Category(title: "Images", amount: files.images)),
-        .category(Category(title: "Videos", amount: files.videos)),
-        .category(Category(title: "Files", amount: files.files))
-      ])
+      .category(Category(title: "Images", amount: files.images)),
+      .category(Category(title: "Videos", amount: files.videos)),
+      .category(Category(title: "Files", amount: files.files))
+    ])
     dataSource.apply(snapshot, to: .category, animatingDifferences: true)
   }
   
   private func updateImages() {
     var snapshot = SectionSnapshot()
-    let items = thumbnailViewModels.map { BaseItem.recents($0) }
-    snapshot.append(items)
+//    let items = thumbnailViewModels.map { BaseItem.recents($0) }
+//    snapshot.append(items)
     dataSource.apply(snapshot, to: .recentFiles, animatingDifferences: true)
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    listFoldersViewModel.fetch()
   }
   
   // MARK: - Data Source
@@ -101,7 +88,7 @@ class BaseViewController: UIViewController {
         return cell
       case .recents(let model):
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(image: model?.image)
+//        cell.configure(image: model?[indexPath.row])
         return cell
       }
     }
@@ -141,7 +128,7 @@ class BaseViewController: UIViewController {
   
   // MARK: - Collection View Setup
   
-  private func configureUI() {
+  private func configureCollectionView() {
     addLeftBarButtonItem()
     addRightBarButtonItem()
     
@@ -155,10 +142,13 @@ class BaseViewController: UIViewController {
     collectionView.register(
       SectionHeaderBaseView.self,
       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: "\(SectionHeaderBaseView.self)")
+      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
+    )
     
+    collectionView.delegate = self
     view.addSubview(collectionView)
   }
+  
   
   private func createLayout() -> UICollectionViewLayout {
     
@@ -170,24 +160,20 @@ class BaseViewController: UIViewController {
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),
           hD: .fractionalHeight(1.0))
-        
         let group = LayoutManager.createHorizontalGroup(
           wD: .fractionalWidth(1.0),
           hD: .estimated(120),
           item: item)
-        
         return NSCollectionLayoutSection(group: group)
         
       case .category:
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),
           hD: .fractionalHeight(1.0))
-        
         let group = LayoutManager.createHorizontalGroup(
           wD: .estimated(130),
           hD: .estimated(150),
           item: item)
-        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 10)
@@ -205,7 +191,6 @@ class BaseViewController: UIViewController {
         let item = LayoutManager.createItem(
           wD: .estimated(155),
           hD: .estimated(220))
-        
         let group = LayoutManager.createHorizontalGroup(
           wD: .fractionalWidth(1.0),
           hD: .estimated(220),
@@ -222,7 +207,6 @@ class BaseViewController: UIViewController {
           wD: .fractionalWidth(1.0),
           hD: .estimated(30))
         section.boundarySupplementaryItems = [sectionHeader]
-        
         return section
       }
     }
@@ -234,11 +218,11 @@ class BaseViewController: UIViewController {
   private func addLeftBarButtonItem() {
     let button = UIButton(type: .custom)
     button.setImage(Images.baseLeftItem, for: .normal)
-    button.setImage(UIImage(systemName: "circle.grid.2x2.fill",
-                            withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
+    button.setImage(UIImage(
+      systemName: "circle.grid.2x2.fill",
+      withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
                       .withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
     button.sizeToFit()
-    
     button.addTarget(self, action: #selector(leftBarButtonItemTapped), for: .touchUpInside)
     navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
   }
@@ -246,8 +230,9 @@ class BaseViewController: UIViewController {
   private func addRightBarButtonItem() {
     let button = UIButton(type: .custom)
     
-    button.setImage(UIImage(systemName: "magnifyingglass",
-                            withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
+    button.setImage(UIImage(
+      systemName: "magnifyingglass",
+      withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
                       .withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
     button.addTarget(self, action: #selector(rightBarButtonItemTapped), for: .touchUpInside)
     navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
@@ -259,5 +244,19 @@ class BaseViewController: UIViewController {
   
   @objc func rightBarButtonItemTapped() {
     print("Left button tapped")
+  }
+}
+
+extension BaseViewController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    switch sections[indexPath.section] {
+    case .title: break
+    case .category: break
+      //      let detailVC =
+      
+      //      DropboxAPI.shared.fetchDownload(id: <#T##String?#>)
+    case .recentFiles: break
+      
+    }
   }
 }
