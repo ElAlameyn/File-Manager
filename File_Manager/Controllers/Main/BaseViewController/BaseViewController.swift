@@ -22,9 +22,15 @@ class BaseViewController: UIViewController {
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
   
-  private let listFoldersViewModel = ListFoldersViewModel()
-  private var thumbnailViewModel = ThumbnailViewModel()
+  private let filesViewModel = FilesViewModel()
+  private var imagesLoader = ImagesLoader()
   private var cancellables: Set<AnyCancellable> = []
+  
+  private var images: [BaseItem] = [] {
+    didSet {
+      updateImages()
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -32,23 +38,25 @@ class BaseViewController: UIViewController {
     configureCollectionView()
     bindViewModels()
     applySnapshot()
-    listFoldersViewModel.fetch()
+    filesViewModel.fetch()
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
   }
   
   private func bindViewModels() {
-    listFoldersViewModel.$value
-      .sink(receiveValue: {[weak self] response in
-        guard let self = self else { return }
-        response?.files.forEach {
-          let viewModel = ThumbnailViewModel()
-          viewModel.fetch(path: $0.id)
-          viewModel.update = { [weak self] in
-            self?.updateImages()
-          }
+    filesViewModel.update = { [weak self] in
+      guard let self = self else { return }
+      self.updateFilesAmount(
+        files: self.filesViewModel.countFilesAmount()
+      )
+      self.filesViewModel.images.forEach {
+        self.imagesLoader.fetch(path: $0.id) { [weak self] image in
+          self?.images.append(BaseItem.recents(ImageModel(image: image)))
         }
-        self.updateFilesAmount(files: self.listFoldersViewModel.countFilesAmount(value: response))
-      })
-      .store(in: &cancellables)
+      }
+    }
   }
   
   private func updateFilesAmount(files: (images: Int, videos: Int, files: Int)) {
@@ -64,15 +72,32 @@ class BaseViewController: UIViewController {
   private func updateImages() {
     var snapshot = SectionSnapshot()
 //    let items = thumbnailViewModels.map { BaseItem.recents($0) }
-//    snapshot.append(items)
+    snapshot.append(images)
     dataSource.apply(snapshot, to: .recentFiles, animatingDifferences: true)
   }
   
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
+
+  // MARK: - Collection View Setup
+  private func configureCollectionView() {
+    addLeftBarButtonItem()
+    addRightBarButtonItem()
+    
+    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createBaseViewControllerLayout())
+    collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+    collectionView.backgroundColor = Colors.baseBackground
+    collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
+    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
+    collectionView.register(RecentBaseViewCell.self, forCellWithReuseIdentifier: "\(RecentBaseViewCell.self)")
+    
+    collectionView.register(
+      SectionHeaderBaseView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
+    )
+    
+    collectionView.delegate = self
+    view.addSubview(collectionView)
   }
-  
-  // MARK: - Data Source
   
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
@@ -88,7 +113,7 @@ class BaseViewController: UIViewController {
         return cell
       case .recents(let model):
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-//        cell.configure(image: model?[indexPath.row])
+        cell.configure(image: model?.image)
         return cell
       }
     }
@@ -117,7 +142,11 @@ class BaseViewController: UIViewController {
     var snapshot = Snapshot()
     snapshot.appendSections([.title, .category, .recentFiles])
     snapshot.appendItems( [.title] , toSection: .title)
-    snapshot.appendItems([], toSection: .category)
+    snapshot.appendItems([
+      .category(Category(title: "Images", amount: 0)),
+      .category(Category(title: "Videos", amount: 0)),
+      .category(Category(title: "Files", amount: 0))
+], toSection: .category)
     self.dataSource.apply(snapshot, animatingDifferences: false)
     
     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -126,93 +155,7 @@ class BaseViewController: UIViewController {
     }
   }
   
-  // MARK: - Collection View Setup
-  
-  private func configureCollectionView() {
-    addLeftBarButtonItem()
-    addRightBarButtonItem()
-    
-    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-    collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-    collectionView.backgroundColor = Colors.baseBackground
-    collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
-    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
-    collectionView.register(RecentBaseViewCell.self, forCellWithReuseIdentifier: "\(RecentBaseViewCell.self)")
-    
-    collectionView.register(
-      SectionHeaderBaseView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
-    )
-    
-    collectionView.delegate = self
-    view.addSubview(collectionView)
-  }
-  
-  
-  private func createLayout() -> UICollectionViewLayout {
-    
-    let sectionProvider = {
-      (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
-      -> NSCollectionLayoutSection? in
-      switch self.sections[sectionIndex] {
-      case .title:
-        let item = LayoutManager.createItem(
-          wD: .fractionalWidth(1.0),
-          hD: .fractionalHeight(1.0))
-        let group = LayoutManager.createHorizontalGroup(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(120),
-          item: item)
-        return NSCollectionLayoutSection(group: group)
-        
-      case .category:
-        let item = LayoutManager.createItem(
-          wD: .fractionalWidth(1.0),
-          hD: .fractionalHeight(1.0))
-        let group = LayoutManager.createHorizontalGroup(
-          wD: .estimated(130),
-          hD: .estimated(150),
-          item: item)
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 10)
-        section.interGroupSpacing = 20
-        
-        // Supplementary header view setup
-        let sectionHeader = LayoutManager.createSectionHeader(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(30))
-        
-        section.boundarySupplementaryItems = [sectionHeader]
-        return section
-        
-      case .recentFiles:
-        let item = LayoutManager.createItem(
-          wD: .estimated(155),
-          hD: .estimated(220))
-        let group = LayoutManager.createHorizontalGroup(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(220),
-          item: item)
-        
-        group.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: nil, trailing: nil, bottom: NSCollectionLayoutSpacing.fixed(20))
-        group.interItemSpacing = NSCollectionLayoutSpacing.flexible(10)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
-        
-        let sectionHeader = LayoutManager.createSectionHeader(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(30))
-        section.boundarySupplementaryItems = [sectionHeader]
-        return section
-      }
-    }
-    return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
-  }
-  
+
   // MARK: - Navigation Buttons
   
   private func addLeftBarButtonItem() {

@@ -20,7 +20,7 @@ class ImagesCollectionController: UIViewController
   
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
-  private let listFoldersViewModel = ListFoldersViewModel()
+  private let listFoldersViewModel = FilesViewModel()
   private var cancellables: Set<AnyCancellable> = []
   
   override func viewDidLoad() {

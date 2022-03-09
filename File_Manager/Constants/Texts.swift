@@ -10,13 +10,16 @@ import Foundation
 struct Texts
 {
   // Base Controller
-  static var baseTitleLabelText = "File Manager"
-  static var baseDescriptionLabelText = "Let’s manage and clean your file’s"
-  
-  static var baseCategoryLabelText = "Category"
+  static let baseTitleLabelText = "File Manager"
+  static let baseDescriptionLabelText = "Let’s manage and clean your file’s"
+  static let baseCategorySectionName = "Category"
+  static let baseRecentsSectionName = "Recent Files"
+
+  static let baseCategoryLabelText = "Category"
   
   // Meet Controller
-  static var meetTitleLabelText = "Manage your files with best way"
-  static var meetDescriptionLabelText = "Keep your files organized more easily"
-  static var meetButtonTitle = "Get Started"
+  static let meetTitleLabelText = "Manage your files with best way"
+  static let meetDescriptionLabelText = "Keep your files organized more easily"
+  static let meetButtonTitle = "Get Started"
+  
 }

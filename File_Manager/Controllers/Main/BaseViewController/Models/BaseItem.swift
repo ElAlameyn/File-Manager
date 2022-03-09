@@ -11,6 +11,6 @@ enum BaseItem: Hashable
 {
   case title
   case category(Category?)
-  case recents(ThumbnailViewModel?)
+  case recents(ImageModel?)
 }
 

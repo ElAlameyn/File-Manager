@@ -37,6 +37,7 @@ enum RequestConfigurator {
   case files(Files)
   case thumbnail(String)
   case download(String)
+  case check
   
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
@@ -63,6 +64,9 @@ enum RequestConfigurator {
     case .download(_):
       let startPoint = contentURL + "/2/files"
       return startPoint + "/download"
+    case .check:
+      let startPoint = baseURL + "/2/check"
+      return startPoint + "/user"
     }
   }
   
@@ -91,6 +95,8 @@ enum RequestConfigurator {
                "mode": "strict" ]
     case .download(let id):
       return ["path": id]
+    case .check:
+      return ["query": "foo"]
     }
   }
   
@@ -107,17 +113,17 @@ enum RequestConfigurator {
     try? JSONSerialization.data(withJSONObject: components as Any, options: .fragmentsAllowed)
   }
   
-  private var method: Method {
-    switch self {
-    case .token, .users, .files, .thumbnail, .download:
-      return .post
-    }
-  }
+//  private var method: Method {
+//    switch self {
+//    case .token, .users, .files, .thumbnail, .download:
+//      return .post
+//    }
+//  }
   
   func setRequest() -> URLRequest? {
     guard let url = URL(string: configuredURL) else { return nil }
     var request = URLRequest(url: url)
-    request.httpMethod = method.rawValue
+    request.httpMethod = "POST"
     guard let tokenResponse = KeychainSwift()
             .getData(DropboxAPI.tokenKey) else { return nil }
     guard let token = try? JSONDecoder()
@@ -144,6 +150,9 @@ enum RequestConfigurator {
     case .download(let id):
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
       request.setValue(id, forHTTPHeaderField: "Dropbox-API-Arg")
+    case .check:
+      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     }
     request.timeoutInterval = 60
     return request
@@ -165,4 +174,5 @@ extension RequestConfigurator {
     data.withUnsafeBytes { _ = CC_SHA256($0, CC_LONG(data.count), &buffer) }
     return Data(buffer).replaceHash()
   }
+  
 }

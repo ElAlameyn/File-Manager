@@ -20,7 +20,7 @@ class StorageViewController: UIViewController {
   private let sections: [Section] = [.usageSpace, .lastModified]
   
   private let usageSpaceViewModel = UsageSpaceViewModel()
-  private let listFoldersViewModel = ListFoldersViewModel()
+  private let listFoldersViewModel = FilesViewModel()
   
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil

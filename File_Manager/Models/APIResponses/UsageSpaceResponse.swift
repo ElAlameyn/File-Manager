@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct UsageSpaceResponse
-{
+struct UsageSpaceResponse {
   let used: Int
   let allocation: Allocation
 

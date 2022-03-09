@@ -11,7 +11,7 @@ struct ImageModel: Hashable
 {
   var id = UUID()
   var image: UIImage?
-  var imageName: String
+  var imageName: String?
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)

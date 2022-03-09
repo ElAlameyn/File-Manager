@@ -64,7 +64,6 @@ final class DropboxAPI {
       })
       .decode(type: T.self,
               decoder: JSONDecoder())
-//      .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
   }
   

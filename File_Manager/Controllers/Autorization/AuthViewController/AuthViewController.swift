@@ -30,9 +30,6 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     view.addSubview(webView)
     
     let codeVerifier = RequestConfigurator.createCodeVerifier()
-    
-    print("CODE VERIFIER: \(codeVerifier)")
-    
     let codeChallenge = RequestConfigurator.createCodeChallenge(
       for: codeVerifier)
     
@@ -58,33 +55,21 @@ class AuthViewController: UIViewController, WKNavigationDelegate
   func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
     guard let url = webView.url else { return }
     guard let code = getCodeFrom(url: url) else { return }
-    
-    print("CURRENT URL: \(url.absoluteString)")
-    print("CODE ACESS TO DROPBOX: \(code)")
-    
     guard let request = RequestConfigurator.token(code).setRequest() else { return }
     
     subscriber = URLSession.shared.dataTaskPublisher  (
       for: request)
       .map { $0.data }
-      .map({ value in
-        let object = try? JSONSerialization.jsonObject(with: value, options: .fragmentsAllowed)
-        print("Object: \(object)")
-        return value
-
-      })
       .decode(type: TokenResponse.self, decoder: JSONDecoder())
       .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
       .sink { completion in
         switch completion {
-        case .finished:
-          print("Token achieved")
+        case .finished: print("Token achieved")
         case .failure(let error):
           print("Error in token request due to: \(error)")
         }
       } receiveValue: {[weak self] tokenResponse in
-        print("ACCESS TOKEN : \(tokenResponse.accessToken)")
         if let data = try? JSONEncoder().encode(tokenResponse) {
           KeychainSwift().set(data, forKey: "\(DropboxAPI.tokenKey)", withAccess: .accessibleWhenUnlocked)
         }

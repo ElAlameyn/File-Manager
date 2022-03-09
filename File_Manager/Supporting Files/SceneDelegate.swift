@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     window = UIWindow(frame: windowScene.coordinateSpace.bounds)
     window?.windowScene = windowScene
     
-    let navVC = UINavigationController(rootViewController: TabBarViewController())
+    let navVC = UINavigationController(rootViewController: MeetViewController())
     navVC.navigationBar.prefersLargeTitles = false
 
     window?.rootViewController = navVC
