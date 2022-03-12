@@ -11,6 +11,14 @@ enum BaseItem: Hashable
 {
   case title
   case category(Category?)
-  case recents(ImageModel?)
+  case recents(ImageIdContainer?)
+  
+  var id: String? {
+    switch self {
+    case .recents(let optional): return optional?.imageId
+    default: return nil
+    }
+  }
+
 }
 

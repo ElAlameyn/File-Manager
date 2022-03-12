@@ -7,17 +7,16 @@
 
 import UIKit
 
-struct ImageModel: Hashable
+struct ImageIdContainer: Hashable
 {
   var id = UUID()
-  var image: UIImage?
-  var imageName: String?
+  var imageId: String?
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }
   
-  static func == (lhs: ImageModel, rhs: ImageModel) -> Bool {
+  static func == (lhs: ImageIdContainer, rhs: ImageIdContainer) -> Bool {
     lhs.id == rhs.id
   }
 }

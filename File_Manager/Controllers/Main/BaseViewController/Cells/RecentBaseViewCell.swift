@@ -10,8 +10,11 @@ import UIKit
 class RecentBaseViewCell: UICollectionViewCell {
   private var leftUpperImageView = UIImageView(image: UIImage(systemName: "heart"))
   private var bottomRightView = UIImageView(image: UIImage(systemName: "photo.fill"))
-
+  private var activityView: UIActivityIndicatorView?
+  
+  private var imagesLoader = ImagesLoader()
   private var isLiked = false
+  var isFethed = false
   
   var mainImageView: UIImageView = {
     let imageView = UIImageView()
@@ -20,24 +23,33 @@ class RecentBaseViewCell: UICollectionViewCell {
     return imageView
   }()
   
-  lazy var borderView: UIView = {
+  private lazy var borderView: UIView = {
     let borderView = UIView()
     borderView.frame = self.bounds
     borderView.layer.cornerRadius = 20
     borderView.layer.masksToBounds = true
+    borderView.backgroundColor = .white
     return borderView
   }()
   
   override init(frame: CGRect) {
     super.init(frame: frame)
     setUpUI()
+    setUpLayout()
   }
   
-  func configure(image: UIImage? = nil) {
-    mainImageView.image = image
-//    if let image = image {
-//      mainImageView.image = ImageTransformator.scaled(image: image)
-//    }
+  func fetch(id: String) {
+    showActivityIndicator()
+    imagesLoader.fetch(path: id) { [weak self] image in
+      self?.hideActivityIndicator()
+      self?.mainImageView.image = image
+      self?.isFethed = true
+    }
+  }
+  
+  @objc func likedTapped(_ sender: UITapGestureRecognizer) {
+    isLiked.toggle()
+    leftUpperImageView.image = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
   }
   
   required init?(coder: NSCoder) {
@@ -46,31 +58,48 @@ class RecentBaseViewCell: UICollectionViewCell {
 }
 
 extension RecentBaseViewCell {
+  
   private func setUpUI() {
-    
-    // MARK: - Layout
-    
-    Style.withShadow(withRadius: 1, offset: CGSize(width: 0, height: 5), opacity: 0.2)(self)
-    
     addSubview(borderView)
-
-    mainImageView.frame = borderView.bounds
     borderView.addSubview(mainImageView)
-    
-    leftUpperImageView.tintColor = .white
     mainImageView.addSubview(leftUpperImageView)
-    leftUpperImageView.addEdgeContstraints(exclude: .bottom, .right, offset: UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0))
-    leftUpperImageView.addHeightWeightConstraints(values: CGPoint(x: 25, y: 25))
-
-    bottomRightView.tintColor = .lightGray
     mainImageView.addSubview(bottomRightView)
-    bottomRightView.addEdgeContstraints(exclude: .top, .left, offset: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: -10))
   }
   
-  @objc func likedTapped(_ sender: UITapGestureRecognizer) {
-    print("tapped")
-    isLiked.toggle()
-    leftUpperImageView.image = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
-  }
+  private func setUpLayout() {
+    Style.withShadow(withRadius: 1, offset: CGSize(width: 0, height: 5), opacity: 0.2)(self)
+    
 
+    mainImageView.frame = borderView.bounds
+    
+    leftUpperImageView.tintColor = .white
+    leftUpperImageView.addEdgeContstraints(
+      exclude: .bottom, .right,
+      offset: UIEdgeInsets(top: 5, left: 5, bottom: 0, right: 0)
+    )
+    
+    leftUpperImageView.addHeightWeightConstraints(values: CGPoint(x: 25, y: 25))
+    
+    bottomRightView.tintColor = .lightGray
+    bottomRightView.addEdgeContstraints(
+      exclude: .top, .left,
+      offset: UIEdgeInsets(top: 0, left: 0, bottom: -10, right: -10)
+    )
+  }
+  
+}
+
+extension RecentBaseViewCell {
+  func showActivityIndicator() {
+    activityView = UIActivityIndicatorView(style: .medium)
+    activityView?.center = self.contentView.center
+    contentView.addSubview(activityView!)
+    activityView?.startAnimating()
+  }
+  
+  func hideActivityIndicator(){
+    if (activityView != nil){
+      activityView?.stopAnimating()
+    }
+  }
 }

@@ -21,17 +21,11 @@ class BaseViewController: UIViewController {
   private let sections: [Section] = [.title, .category, .recentFiles]
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
-  
-  private let filesViewModel = FilesViewModel()
-  private var imagesLoader = ImagesLoader()
   private var cancellables: Set<AnyCancellable> = []
   
-  private var images: [BaseItem] = [] {
-    didSet {
-      updateImages()
-    }
-  }
-  
+  private let filesViewModel = FilesViewModel()
+  private var images: [BaseItem] = [] { didSet { updateImages() }}
+
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
@@ -51,10 +45,8 @@ class BaseViewController: UIViewController {
       self.updateFilesAmount(
         files: self.filesViewModel.countFilesAmount()
       )
-      self.filesViewModel.images.forEach {
-        self.imagesLoader.fetch(path: $0.id) { [weak self] image in
-          self?.images.append(BaseItem.recents(ImageModel(image: image)))
-        }
+      self.filesViewModel.images.forEach { [weak self] in
+        self?.images.append(BaseItem.recents(ImageIdContainer(imageId: $0.id)))
       }
     }
   }
@@ -113,7 +105,9 @@ class BaseViewController: UIViewController {
         return cell
       case .recents(let model):
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-        cell.configure(image: model?.image)
+        if !cell.isFethed {
+          cell.fetch(id: model?.imageId ?? "") 
+        }
         return cell
       }
     }
@@ -126,12 +120,9 @@ class BaseViewController: UIViewController {
       switch Section(rawValue: indexPath.section) {
       case .category:
         view.titleLabel.text = "Category"
-      case .title:
-        break
       case .recentFiles:
-        view.titleLabel.text = "Recent Files"
-      case .none:
-        break
+        view.titleLabel.text = "Recent Images"
+      default: break
       }
       return view
     }
@@ -195,11 +186,18 @@ extension BaseViewController: UICollectionViewDelegate {
     switch sections[indexPath.section] {
     case .title: break
     case .category: break
-      //      let detailVC =
-      
-      //      DropboxAPI.shared.fetchDownload(id: <#T##String?#>)
-    case .recentFiles: break
-      
+    case .recentFiles:
+      switch images[indexPath.row] {
+      case .recents:
+        let detailVC = DetailImageController()
+        detailVC.modalPresentationStyle = .fullScreen
+        present(detailVC, animated: true) {
+          if let item = collectionView.cellForItem(at: indexPath) as? RecentBaseViewCell {
+            detailVC.change(image: item.mainImageView.image)
+          }
+        }
+      default: break
+      }
     }
   }
 }

@@ -14,9 +14,9 @@ class ImagesCollectionController: UIViewController
     case main
   }
   
-  typealias DataSource = UICollectionViewDiffableDataSource<Section, ImageModel>
-  typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ImageModel>
-  typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<ImageModel>
+  typealias DataSource = UICollectionViewDiffableDataSource<Section, ImageIdContainer>
+  typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ImageIdContainer>
+  typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<ImageIdContainer>
   
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
@@ -64,9 +64,9 @@ class ImagesCollectionController: UIViewController
   
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
-      (collectionView: UICollectionView, indexPath: IndexPath, item: ImageModel) -> UICollectionViewCell? in
+      (collectionView: UICollectionView, indexPath: IndexPath, item: ImageIdContainer) -> UICollectionViewCell? in
       let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-      cell.configure(image: item.image)
+//      cell.configure(image: item.image)
       return cell
     }
     
