@@ -35,6 +35,7 @@
 		B54FAF0027AFDEEB000E81BB /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */; };
 		B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54FAF0227AFE602000E81BB /* FishOperator.swift */; };
 		B55F515127D920570010D0E7 /* DetailImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55F515027D920570010D0E7 /* DetailImageController.swift */; };
+		B56D267A27E0EBF500853B95 /* Limited.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56D267927E0EBF500853B95 /* Limited.swift */; };
 		B57A971827C52AC900DDA6D8 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57A971727C52AC900DDA6D8 /* Data+Extension.swift */; };
 		B57A971A27C6197500DDA6D8 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */; };
 		B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */; };
@@ -43,6 +44,7 @@
 		B5B09C7F27D6120D0075A5A2 /* Publiser+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B09C7E27D6120D0075A5A2 /* Publiser+Extension.swift */; };
 		B5B19B0527BA87B4009B65E7 /* ResponseConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */; };
 		B5DBAE6327DCDD0900BE2485 /* ImageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DBAE6227DCDD0900BE2485 /* ImageScrollView.swift */; };
+		B5DBAE6527DE6C1F00BE2485 /* URlRequest+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DBAE6427DE6C1F00BE2485 /* URlRequest+Extension.swift */; };
 		B5DFB8C827A286A900196251 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C727A286A900196251 /* AppDelegate.swift */; };
 		B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8C927A286A900196251 /* SceneDelegate.swift */; };
 		B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB8CB27A286A900196251 /* MeetViewController.swift */; };
@@ -109,6 +111,7 @@
 		B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		B54FAF0227AFE602000E81BB /* FishOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishOperator.swift; sourceTree = "<group>"; };
 		B55F515027D920570010D0E7 /* DetailImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageController.swift; sourceTree = "<group>"; };
+		B56D267927E0EBF500853B95 /* Limited.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Limited.swift; sourceTree = "<group>"; };
 		B57A971727C52AC900DDA6D8 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
 		B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBaseViewCell.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 		B5B09C7E27D6120D0075A5A2 /* Publiser+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publiser+Extension.swift"; sourceTree = "<group>"; };
 		B5B19B0427BA87B4009B65E7 /* ResponseConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseConfiguration.swift; sourceTree = "<group>"; };
 		B5DBAE6227DCDD0900BE2485 /* ImageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollView.swift; sourceTree = "<group>"; };
+		B5DBAE6427DE6C1F00BE2485 /* URlRequest+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URlRequest+Extension.swift"; sourceTree = "<group>"; };
 		B5DFB8C427A286A900196251 /* File_Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = File_Manager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5DFB8C727A286A900196251 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5DFB8C927A286A900196251 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -374,6 +378,14 @@
 			path = DetailViewController;
 			sourceTree = "<group>";
 		};
+		B56D267B27E0ED6B00853B95 /* ProperyWrappers */ = {
+			isa = PBXGroup;
+			children = (
+				B56D267927E0EBF500853B95 /* Limited.swift */,
+			);
+			path = ProperyWrappers;
+			sourceTree = "<group>";
+		};
 		B5DBAE6127DCDCEB00BE2485 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -468,6 +480,7 @@
 				B57A971727C52AC900DDA6D8 /* Data+Extension.swift */,
 				B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */,
 				B5B09C7E27D6120D0075A5A2 /* Publiser+Extension.swift */,
+				B5DBAE6427DE6C1F00BE2485 /* URlRequest+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -533,6 +546,7 @@
 		B5FB3F7327A83124007A0495 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				B56D267B27E0ED6B00853B95 /* ProperyWrappers */,
 				B508201827BB9CCA00102539 /* UI */,
 				B508201727BB9CA100102539 /* API */,
 				B508201927BB9CDC00102539 /* Operators */,
@@ -719,7 +733,9 @@
 				B5FB3F8027A84DAF007A0495 /* ModifiedItemCell.swift in Sources */,
 				B5DBAE6327DCDD0900BE2485 /* ImageScrollView.swift in Sources */,
 				B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */,
+				B5DBAE6527DE6C1F00BE2485 /* URlRequest+Extension.swift in Sources */,
 				B535379C27B28B1A003A7C6A /* AuthViewController.swift in Sources */,
+				B56D267A27E0EBF500853B95 /* Limited.swift in Sources */,
 				B53B29B827A927D20060FF19 /* LastModifiedItem.swift in Sources */,
 				B5DFB8E127A2A8C600196251 /* Images.swift in Sources */,
 				B54FAF0027AFDEEB000E81BB /* UIButton+Extension.swift in Sources */,

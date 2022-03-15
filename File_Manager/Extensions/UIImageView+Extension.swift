@@ -34,3 +34,13 @@ extension UIImageView {
     }
   }
 }
+
+extension UIImage {
+  func withPointSize(_ size: CGFloat) -> UIImage {
+    self.withConfiguration(UIImage.SymbolConfiguration(pointSize: size))
+  }
+  
+  func withTintColor(_ color: UIColor) -> UIImage {
+    self.withTintColor(color, renderingMode: .alwaysOriginal)
+  }
+}

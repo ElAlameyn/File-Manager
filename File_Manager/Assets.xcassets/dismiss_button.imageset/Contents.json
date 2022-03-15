@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "Dell_fill.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "d-va-overwatch-cosplay-3840x5502-970.jpg",
+      "filename" : "Dell_fill@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Dell_fill@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

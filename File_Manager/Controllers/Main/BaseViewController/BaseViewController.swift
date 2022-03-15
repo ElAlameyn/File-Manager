@@ -17,26 +17,26 @@ class BaseViewController: UIViewController {
   typealias DataSource = UICollectionViewDiffableDataSource<Section, BaseItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, BaseItem>
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<BaseItem>
-  
+
   private let sections: [Section] = [.title, .category, .recentFiles]
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
   private var cancellables: Set<AnyCancellable> = []
   
   private let filesViewModel = FilesViewModel()
-  private var images: [BaseItem] = [] { didSet { updateImages() }}
+  @Limited<BaseItem>(limit: 4) private var images {
+    didSet {
+      updateImages()
+    }
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
     configureCollectionView()
     bindViewModels()
-    applySnapshot()
+    applyInitSnapshot()
     filesViewModel.fetch()
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
   }
   
   private func bindViewModels() {
@@ -46,7 +46,10 @@ class BaseViewController: UIViewController {
         files: self.filesViewModel.countFilesAmount()
       )
       self.filesViewModel.images.forEach { [weak self] in
-        self?.images.append(BaseItem.recents(ImageIdContainer(imageId: $0.id)))
+        self?.images.append(BaseItem.recents(ImageIdContainer(
+          imageId: $0.id,
+          imageName: $0.name
+        )))
       }
     }
   }
@@ -63,7 +66,6 @@ class BaseViewController: UIViewController {
   
   private func updateImages() {
     var snapshot = SectionSnapshot()
-//    let items = thumbnailViewModels.map { BaseItem.recents($0) }
     snapshot.append(images)
     dataSource.apply(snapshot, to: .recentFiles, animatingDifferences: true)
   }
@@ -106,7 +108,7 @@ class BaseViewController: UIViewController {
       case .recents(let model):
         let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         if !cell.isFethed {
-          cell.fetch(id: model?.imageId ?? "") 
+          cell.fetch(id: model?.imageId ?? "")
         }
         return cell
       }
@@ -129,7 +131,7 @@ class BaseViewController: UIViewController {
     return dataSource
   }
   
-  private func applySnapshot() {
+  private func applyInitSnapshot() {
     var snapshot = Snapshot()
     snapshot.appendSections([.title, .category, .recentFiles])
     snapshot.appendItems( [.title] , toSection: .title)
@@ -182,6 +184,7 @@ class BaseViewController: UIViewController {
 }
 
 extension BaseViewController: UICollectionViewDelegate {
+  
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     switch sections[indexPath.section] {
     case .title: break
@@ -189,10 +192,11 @@ extension BaseViewController: UICollectionViewDelegate {
     case .recentFiles:
       switch images[indexPath.row] {
       case .recents:
-        let detailVC = DetailImageController()
+        let detailVC = DetailImageController(imageName: images[indexPath.row].name ?? "")
         detailVC.modalPresentationStyle = .fullScreen
-        present(detailVC, animated: true) {
-          if let item = collectionView.cellForItem(at: indexPath) as? RecentBaseViewCell {
+        guard let item = collectionView.cellForItem(at: indexPath) as? RecentBaseViewCell else { return }
+        if item.isFethed {
+          present(detailVC, animated: true) {
             detailVC.change(image: item.mainImageView.image)
           }
         }

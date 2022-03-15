@@ -19,6 +19,13 @@ enum BaseItem: Hashable
     default: return nil
     }
   }
+  
+  var name: String? {
+    switch self {
+    case .recents(let optional): return optional?.imageName
+    default: return nil
+    }
+  }
 
 }
 

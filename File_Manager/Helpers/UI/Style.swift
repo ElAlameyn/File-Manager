@@ -19,7 +19,7 @@ class Style
   
   static func appearanceLabelStyle(withFont font: UIFont,
                                    color: UIColor,
-                                   text: String) -> (UILabel) -> Void {
+                                   text: String? = "") -> (UILabel) -> Void {
     {
       $0.font = UIFontMetrics.default.scaledFont(for: font)
       $0.textColor = color
@@ -48,17 +48,30 @@ class Style
     }
   }
   
-  static func configureButtonTitle(withTitle title: String,
-                                   color: UIColor,
+  static func configureButtonTitle(withTitle title: String? = "",
+                                   color: UIColor? = nil,
                                    image: UIImage? = nil
   ) -> (UIButton) -> Void {
     {
       $0.setTitle(title, for: .normal)
-      $0.setImage(image, for: .normal)
-      $0.setTitleColor(color, for: .normal)
+      
+      switch $0 {
+      case _ where color != nil && image != nil:
+        $0.setImage(image?.withTintColor(color!), for: .normal)
+      case _ where color != nil:
+        $0.setTitleColor(color, for: .normal)
+      default:
+        $0.setImage(image, for: .normal)
+      }
     }
   }
-
+  
+  static func baseImageButtonStyle() -> (UIButton) -> Void {
+    {
+    $0.contentVerticalAlignment = .fill
+    $0.contentHorizontalAlignment = .fill
+    }
+  }
 }
 
 

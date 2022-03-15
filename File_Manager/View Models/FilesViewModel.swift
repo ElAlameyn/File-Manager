@@ -19,7 +19,7 @@ final class FilesViewModel: ObservableObject, ViewModelProtocol {
   var subscriber: AnyCancellable?
   
   var images: [ListFoldersResponse.File] {
-    return files.compactMap {
+    files.compactMap {
       if let fileExtension = NSURL(fileURLWithPath: $0.name).pathExtension {
         guard let uti = UTType(filenameExtension: fileExtension) else { return nil }
         if uti.conforms(to: .image) { return $0 }

@@ -22,16 +22,32 @@ class ImagesCollectionController: UIViewController
   private var collectionView: UICollectionView! = nil
   private let listFoldersViewModel = FilesViewModel()
   private var cancellables: Set<AnyCancellable> = []
+  private let filesViewModel = FilesViewModel()
+  
+  private var images: [ImageIdContainer] = [] {
+    didSet {
+      updateImages()
+    }
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
     configureUI()
     bindViewModels()
     applySnapshot()
+    filesViewModel.fetch()
   }
   
   private func bindViewModels() {
-    
+    filesViewModel.update = { [weak self] in
+      guard let self = self else { return }
+      self.filesViewModel.images.forEach { [weak self] in
+        self?.images.append(ImageIdContainer(
+          imageId: $0.id,
+          imageName: $0.name
+        ))
+      }
+    }
   }
   
   private func applySnapshot() {
@@ -41,13 +57,12 @@ class ImagesCollectionController: UIViewController
     self.dataSource.apply(snapshot, animatingDifferences: false)
   }
   
-  private func updateImages(response: ListFoldersResponse? = nil) {
+  private func updateImages() {
     var snapshot = SectionSnapshot()
-//    let items = listFoldersViewModel.images(response).map { ImageModel(image: <#T##UIImage?#>, imageName: <#T##String#>) }
-//    snapshot.append(items)
+    snapshot.append(images)
     dataSource.apply(snapshot, to: .main, animatingDifferences: true)
   }
-  
+
   private func configureUI() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -66,7 +81,9 @@ class ImagesCollectionController: UIViewController
     let dataSource =  DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: ImageIdContainer) -> UICollectionViewCell? in
       let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-//      cell.configure(image: item.image)
+      if !cell.isFethed {
+        cell.fetch(id: item.imageId ?? "")
+      }
       return cell
     }
     
@@ -74,7 +91,7 @@ class ImagesCollectionController: UIViewController
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-      view.titleLabel.text = "Images"
+      view.titleLabel.text = "All Images"
       return view
     }
     return dataSource

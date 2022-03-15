@@ -112,14 +112,7 @@ enum RequestConfigurator {
   private var jsonData: Data? {
     try? JSONSerialization.data(withJSONObject: components as Any, options: .fragmentsAllowed)
   }
-  
-//  private var method: Method {
-//    switch self {
-//    case .token, .users, .files, .thumbnail, .download:
-//      return .post
-//    }
-//  }
-  
+
   func setRequest() -> URLRequest? {
     guard let url = URL(string: configuredURL) else { return nil }
     var request = URLRequest(url: url)
@@ -176,3 +169,4 @@ extension RequestConfigurator {
   }
   
 }
+

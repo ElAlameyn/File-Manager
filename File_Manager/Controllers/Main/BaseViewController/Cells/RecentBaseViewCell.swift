@@ -15,7 +15,7 @@ class RecentBaseViewCell: UICollectionViewCell {
   private var imagesLoader = ImagesLoader()
   private var isLiked = false
   var isFethed = false
-  
+
   var mainImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
@@ -49,7 +49,6 @@ class RecentBaseViewCell: UICollectionViewCell {
   
   @objc func likedTapped(_ sender: UITapGestureRecognizer) {
     isLiked.toggle()
-    leftUpperImageView.image = isLiked ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
   }
   
   required init?(coder: NSCoder) {
@@ -69,7 +68,6 @@ extension RecentBaseViewCell {
   private func setUpLayout() {
     Style.withShadow(withRadius: 1, offset: CGSize(width: 0, height: 5), opacity: 0.2)(self)
     
-
     mainImageView.frame = borderView.bounds
     
     leftUpperImageView.tintColor = .white
@@ -90,6 +88,7 @@ extension RecentBaseViewCell {
 }
 
 extension RecentBaseViewCell {
+  
   func showActivityIndicator() {
     activityView = UIActivityIndicatorView(style: .medium)
     activityView?.center = self.contentView.center
