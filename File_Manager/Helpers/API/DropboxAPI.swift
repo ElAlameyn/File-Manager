@@ -21,7 +21,13 @@ final class DropboxAPI {
   }
   
   func fetchAllFiles() -> AnyPublisher<ListFoldersResponse?, Error>? {
-    guard let request = RequestConfigurator.files(.listAllFolders).setRequest() else { return nil }
+    guard let request = RequestConfigurator.listFolder(path: nil).setRequest() else { return nil }
+    return getPublisher(request: request)
+  }
+  
+  func fetchSearch(q: String = "") -> AnyPublisher<SearchResponse?, Error>? {
+    guard let request = RequestConfigurator.search(query: q).setRequest() else { return nil }
+    print("REQUEST: \(request.url)")
     return getPublisher(request: request)
   }
   
@@ -37,13 +43,11 @@ final class DropboxAPI {
   
   func fetchThumbnail(path: String? = nil) -> AnyPublisher<Data?, Error>? {
     guard let path = path else { return nil }
-    print("PATH: \(path)")
     guard let request = RequestConfigurator.thumbnail(
     """
       {"path":"\(path)", "format":"jpeg"}
     """
     ).setRequest() else { return nil }
-    print("REQUEST THUMBNAIL: \(request.url?.absoluteString as Any)")
     return getDataPublisher(request: request)
   }
   
@@ -56,8 +60,8 @@ final class DropboxAPI {
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
           throw APIError.statusCode(httpResponse.statusCode)
         }
-        //        let object = try? JSONSerialization.jsonObject(with: value, options: .fragmentsAllowed)
-        print("Object: \(data)")
+        let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+        print("Object: \(object)")
         return data
       }
       .decode(type: T.self,

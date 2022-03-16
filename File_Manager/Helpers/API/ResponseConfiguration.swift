@@ -22,10 +22,6 @@ enum RequestConfigurator {
     case usageSpace = "/get_space_usage"
   }
   
-  enum Files: String {
-    case listAllFolders = "/list_folder"
-  }
-  
   private struct TokenCredentials {
     static let clientID = "688rvrlb7upz9jb"
     static let clientSecret = "2zb3cvcxd9e7a2s"
@@ -34,10 +30,11 @@ enum RequestConfigurator {
   
   case token(String)
   case users(Users)
-  case files(Files)
+  case listFolder(path: String? = nil)
   case thumbnail(String)
   case download(String)
   case check
+  case search(query: String)
   
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
@@ -52,12 +49,9 @@ enum RequestConfigurator {
       case .usageSpace:
         return startPoint + user.rawValue
       }
-    case .files(let type):
+    case .listFolder:
       let startPoint = baseURL + "/2/files"
-      switch type {
-      case .listAllFolders:
-        return startPoint + type.rawValue
-      }
+      return startPoint + "/list_folder"
     case .thumbnail(_):
       let startPoint = contentURL + "/2/files"
       return startPoint + "/get_thumbnail"
@@ -67,6 +61,9 @@ enum RequestConfigurator {
     case .check:
       let startPoint = baseURL + "/2/check"
       return startPoint + "/user"
+    case .search:
+      let startPoint = baseURL + "/2/files"
+      return startPoint + "/search_v2"
     }
   }
   
@@ -81,13 +78,10 @@ enum RequestConfigurator {
               "code_verifier": KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? ""
       ]
     case .users: return nil
-    case .files(let type):
-      switch type {
-      case .listAllFolders:
+    case .listFolder:
         return ["path": "",
                 "recursive": true,
                 "limit": 10 ]
-      }
     case .thumbnail(let path):
       return [ "path": path,
                "format": "jpeg",
@@ -97,6 +91,8 @@ enum RequestConfigurator {
       return ["path": id]
     case .check:
       return ["query": "foo"]
+    case .search(query: let query):
+      return ["query": query]
     }
   }
   
@@ -133,7 +129,7 @@ enum RequestConfigurator {
       request.httpBody = requestComponents.query?.data(using: .utf8)
     case .users:
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
-    case .files:
+    case .listFolder:
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = jsonData
@@ -146,6 +142,10 @@ enum RequestConfigurator {
     case .check:
       request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    case .search:
+      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      request.httpBody = jsonData
     }
     request.timeoutInterval = 60
     return request

@@ -107,6 +107,10 @@ extension FilesViewController: UISearchResultsUpdating {
       .map { $0.object as? UISearchTextField }
       .map { $0?.text }
       .sink { text in
+        DropboxAPI.shared.fetchSearch(q: text ?? "")?
+          .sink(receiveCompletion: {_ in}, receiveValue: { data in
+            print("DATA \(String(describing: data?.matches.first?.metadata.metadata.name))")
+        })
         print("[SEARCH] - \(String(describing: text))")
       }
   }
