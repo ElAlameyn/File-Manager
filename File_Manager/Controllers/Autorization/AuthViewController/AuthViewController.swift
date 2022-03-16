@@ -14,7 +14,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate
 {
   
   private var webView = WKWebView()
-  private var subscriber: AnyCancellable?
+  private var cancellables = Set<AnyCancellable>()
   
   private struct DropboxURL {
     static let authURL = "https://www.dropbox.com/oauth2/authorize?"
@@ -57,8 +57,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     guard let code = getCodeFrom(url: url) else { return }
     guard let request = RequestConfigurator.token(code).setRequest() else { return }
     
-    subscriber = URLSession.shared.dataTaskPublisher  (
-      for: request)
+    URLSession.shared.dataTaskPublisher(for: request)
       .map { $0.data }
       .decode(type: TokenResponse.self, decoder: JSONDecoder())
       .receive(on: RunLoop.main)
@@ -75,6 +74,7 @@ class AuthViewController: UIViewController, WKNavigationDelegate
         }
        self?.dismiss(animated: true)
       }
+      .store(in: &cancellables)
   }
   
   private func getCodeFrom(url: URL) -> String? {

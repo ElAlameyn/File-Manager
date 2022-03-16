@@ -10,20 +10,18 @@ import Combine
 
 class BaseViewController: UIViewController {
   
-  enum Section: Int {
-    case title, category, recentFiles
-  }
-  
+  typealias Section = LayoutManager.BaseSections
   typealias DataSource = UICollectionViewDiffableDataSource<Section, BaseItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, BaseItem>
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<BaseItem>
 
-  private let sections: [Section] = [.title, .category, .recentFiles]
+  private let sections = Section.allCases
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
   private var cancellables: Set<AnyCancellable> = []
   
   private let filesViewModel = FilesViewModel()
+  
   @Limited<BaseItem>(limit: 4) private var images {
     didSet {
       updateImages()
@@ -36,10 +34,21 @@ class BaseViewController: UIViewController {
     configureCollectionView()
     bindViewModels()
     applyInitSnapshot()
-    filesViewModel.fetch()
+    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
   }
   
   private func bindViewModels() {
+    
+    filesViewModel.failedRequest = { [weak self] in
+      DispatchQueue.main.async {
+        let authVC = AuthViewController()
+        authVC.modalPresentationStyle = .fullScreen
+        self?.navigationController?.present(authVC, animated: true, completion: {
+          self?.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
+        })
+      }
+    }
+    
     filesViewModel.update = { [weak self] in
       guard let self = self else { return }
       self.updateFilesAmount(
@@ -81,7 +90,7 @@ class BaseViewController: UIViewController {
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
     collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
-    collectionView.register(RecentBaseViewCell.self, forCellWithReuseIdentifier: "\(RecentBaseViewCell.self)")
+    collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
     
     collectionView.register(
       SectionHeaderBaseView.self,
@@ -106,7 +115,7 @@ class BaseViewController: UIViewController {
         cell.configure(title: category?.title, amount: category?.amount)
         return cell
       case .recents(let model):
-        let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        let cell: ImageBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
         if !cell.isFethed {
           cell.fetch(id: model?.imageId ?? "")
         }
@@ -188,13 +197,21 @@ extension BaseViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     switch sections[indexPath.section] {
     case .title: break
-    case .category: break
+    case .category:
+      guard let category = Section.Category(rawValue: indexPath.row) else { return }
+      switch category {
+      case .images:
+        let imageVC = ImagesCollectionController()
+        navigationController?.pushViewController(imageVC, animated: true)
+      case .videos: break
+      case .files: break
+      }
     case .recentFiles:
       switch images[indexPath.row] {
       case .recents:
         let detailVC = DetailImageController(imageName: images[indexPath.row].name ?? "")
         detailVC.modalPresentationStyle = .fullScreen
-        guard let item = collectionView.cellForItem(at: indexPath) as? RecentBaseViewCell else { return }
+        guard let item = collectionView.cellForItem(at: indexPath) as? ImageBaseViewCell else { return }
         if item.isFethed {
           present(detailVC, animated: true) {
             detailVC.change(image: item.mainImageView.image)

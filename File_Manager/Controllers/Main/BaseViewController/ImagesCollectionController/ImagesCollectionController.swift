@@ -35,7 +35,7 @@ class ImagesCollectionController: UIViewController
     configureUI()
     bindViewModels()
     applySnapshot()
-    filesViewModel.fetch()
+    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
   }
   
   private func bindViewModels() {
@@ -67,7 +67,7 @@ class ImagesCollectionController: UIViewController
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
-    collectionView.register(RecentBaseViewCell.self, forCellWithReuseIdentifier: "\(RecentBaseViewCell.self)")
+    collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
     
     collectionView.register(
       SectionHeaderBaseView.self,
@@ -75,12 +75,13 @@ class ImagesCollectionController: UIViewController
       withReuseIdentifier: "\(SectionHeaderBaseView.self)")
     
     view.addSubview(collectionView)
+    collectionView.delegate = self
   }
   
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: ImageIdContainer) -> UICollectionViewCell? in
-      let cell: RecentBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
+      let cell: ImageBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
       if !cell.isFethed {
         cell.fetch(id: item.imageId ?? "")
       }
@@ -126,5 +127,18 @@ class ImagesCollectionController: UIViewController
       return section
     }
     return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
+  }
+}
+
+extension ImagesCollectionController: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    let detailVC = DetailImageController(imageName: images[indexPath.row].imageName ?? "")
+    detailVC.modalPresentationStyle = .fullScreen
+    guard let item = collectionView.cellForItem(at: indexPath) as? ImageBaseViewCell else { return }
+    if item.isFethed {
+      present(detailVC, animated: true) {
+        detailVC.change(image: item.mainImageView.image)
+      }
+    }
   }
 }

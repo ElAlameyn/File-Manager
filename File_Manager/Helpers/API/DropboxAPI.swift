@@ -12,18 +12,20 @@ import UIKit
 final class DropboxAPI {
   static let shared = DropboxAPI()
   static let tokenKey = "token_key"
-
-  func fetchUsageSpace() -> AnyPublisher<UsageSpaceResponse, Error>? {
+  
+  var presentAuth: (() -> Void)?
+  
+  func fetchUsageSpace() -> AnyPublisher<UsageSpaceResponse?, Error>? {
     guard let request = RequestConfigurator.users(.usageSpace).setRequest() else { return nil }
     return getPublisher(request: request)
   }
   
-  func fetchAllFiles() -> AnyPublisher<ListFoldersResponse, Error>? {
+  func fetchAllFiles() -> AnyPublisher<ListFoldersResponse?, Error>? {
     guard let request = RequestConfigurator.files(.listAllFolders).setRequest() else { return nil }
     return getPublisher(request: request)
   }
   
-  func fetchDownload(id: String? = nil) -> AnyPublisher<Data, Error>? {
+  func fetchDownload(id: String? = nil) -> AnyPublisher<Data?, Error>? {
     guard let id = id else { return nil }
     guard let request = RequestConfigurator.download(
     """
@@ -32,8 +34,8 @@ final class DropboxAPI {
     ).setRequest() else { return nil }
     return getDataPublisher(request: request)
   }
-
-  func fetchThumbnail(path: String? = nil) -> AnyPublisher<Data, Error>? {
+  
+  func fetchThumbnail(path: String? = nil) -> AnyPublisher<Data?, Error>? {
     guard let path = path else { return nil }
     print("PATH: \(path)")
     guard let request = RequestConfigurator.thumbnail(
@@ -50,34 +52,29 @@ final class DropboxAPI {
   private func getPublisher<T: Decodable>(request: URLRequest) -> AnyPublisher<T, Error> {
     URLSession.shared.dataTaskPublisher(for: request)
       .subscribe(on: DispatchQueue.global())
-      .map ({ $0.data })
-    // temporary for debugging
-      .map({ value in
-        let object = try? Data(value)
-        if let image = UIImage(data: value) {
-          print("Archived image: \(image)")
+      .tryMap {(data, response) in
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+          throw APIError.statusCode(httpResponse.statusCode)
         }
-//        let object = try? JSONSerialization.jsonObject(with: value, options: .fragmentsAllowed)
-        print("Object: \(object)")
-        return value
-      })
+        //        let object = try? JSONSerialization.jsonObject(with: value, options: .fragmentsAllowed)
+        print("Object: \(data)")
+        return data
+      }
       .decode(type: T.self,
               decoder: JSONDecoder())
       .eraseToAnyPublisher()
   }
   
-  private func getDataPublisher(request: URLRequest) -> AnyPublisher<Data, Error> {
+  private func getDataPublisher(request: URLRequest) ->  AnyPublisher<Data?, Error> {
     URLSession.shared.dataTaskPublisher(for: request)
       .subscribe(on: DispatchQueue.global())
-      .map ({ $0.data })
-      .tryMap({ Data($0) })
-      .map({
-        print("DATA IMAGE: \($0)")
-        if let _ = UIImage(data: $0) {
-          print("Archived")
+      .tryMap {(data, response) in
+        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+          throw APIError.statusCode(httpResponse.statusCode)
         }
-        return $0
-      })
+        print("DATA IMAGE: \(data)")
+        return data
+      }
       .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
   }

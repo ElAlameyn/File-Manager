@@ -8,7 +8,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-class ModifiedItemCell: UICollectionViewCell {
+class FileItemCell: UICollectionViewCell {
   
   private let titleLabel = UILabel.withStyle(
     f: Style.baseLabelStyle <>
@@ -55,7 +55,7 @@ class ModifiedItemCell: UICollectionViewCell {
   }
 }
 
-extension ModifiedItemCell {
+extension FileItemCell {
   private func setUpUI() {
     backgroundColor = .white
     layer.cornerRadius = 10

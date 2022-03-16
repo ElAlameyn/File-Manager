@@ -10,13 +10,18 @@ import Combine
 import UniformTypeIdentifiers
 
 final class FilesViewModel: ObservableObject, ViewModelProtocol {
-  @Published private(set) var value: ListFoldersResponse? {
-    didSet {
-      update?()
-    }
-  }
+  var failedRequest: (() -> Void)?
+  
+  var cancellables = Set<AnyCancellable>()
   var update: (() -> Void)?
-  var subscriber: AnyCancellable?
+  @Published var value: ListFoldersResponse? {
+    didSet { update?() }
+  }
+
+  var files: [ListFoldersResponse.File] {
+    guard let value = value else { return [] }
+    return value.entries.filter({ $0.tag == "file" })
+  }
   
   var images: [ListFoldersResponse.File] {
     files.compactMap {
@@ -27,24 +32,7 @@ final class FilesViewModel: ObservableObject, ViewModelProtocol {
       return nil
     }
   }
-  
-  var files: [ListFoldersResponse.File] {
-    guard let value = value else { return [] }
-    return value.entries.filter({ $0.tag == "file" })
-  }
-  
-  func fetch() {
-    subscriber = DropboxAPI.shared.fetchAllFiles()?
-      .sink(receiveCompletion: { completion in
-        switch completion {
-        case .finished: print("Finished list all folders request")
-        case .failure(let error): print("Failed list all folders request due to: \(error)")
-        }
-      }, receiveValue: { responce in
-        self.value = responce
-      })
-  }
-  
+
   func countFilesAmount() -> (images: Int, videos: Int, files: Int) {
     var images = 0
     var videos = 0
@@ -52,16 +40,38 @@ final class FilesViewModel: ObservableObject, ViewModelProtocol {
     self.files.forEach {
       if let fileExtension = NSURL(fileURLWithPath: $0.name).pathExtension {
         guard let uti = UTType(filenameExtension: fileExtension) else { return }
-        if uti.conforms(to: .image) {
-          images += 1
-        } else if uti.conforms(to: .video) {
-          videos += 1
-        } else if uti.conforms(to: .item) {
-          files += 1
+        switch uti {
+        case _ where uti.conforms(to: .image): images += 1
+        case _ where uti.conforms(to: .video): videos += 1
+        case _ where uti.conforms(to: .item): files += 1
+        default: break
         }
       }
     }
     return (images, videos, files)
+  }
+  
+  func filteredByDateModified(inverse: Bool? = false) -> [ListFoldersResponse.File] {
+    var filtered = files
+    let dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+    if !(inverse!) {
+      filtered.sort {
+        if let date1 = $0.clientModified?.toDate(dateFormat: dateFormat),
+           let date2 = $1.clientModified?.toDate(dateFormat: dateFormat) {
+          return date1 > date2
+        }
+        return false
+      }
+    } else {
+      filtered.sort {
+        if let date1 = $0.clientModified?.toDate(dateFormat: dateFormat),
+           let date2 = $1.clientModified?.toDate(dateFormat: dateFormat) {
+          return date1 < date2
+        }
+        return false
+      }
+    }
+    return filtered
   }
 }
 

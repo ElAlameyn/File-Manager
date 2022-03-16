@@ -20,8 +20,7 @@ class DetailImageController: UIViewController {
   
   private let dismissButton = UIButton.withStyle(
     f: Style.configureButtonTitle(
-      image: UIImage(named: "dismiss_button")?.withTintColor(.black))
-    <> Style.baseImageButtonStyle()
+      image: UIImage(systemName: "arrow.backward")?.withTintColor(.black).withPointSize(30))
   )
   
 
@@ -53,10 +52,10 @@ class DetailImageController: UIViewController {
     
     imageScrollView.addSubview(dismissButton)
     dismissButton.addEdgeContstraints(
-      exclude: .bottom, .left,
-      offset: UIEdgeInsets(top: 10, left: 0, bottom: 0, right: -15)
+      exclude: .bottom, .right,
+      offset: UIEdgeInsets(top: 10, left: 15, bottom: 0, right: 0)
     )
-    dismissButton.addHeightWeightConstraints(values: CGPoint(x: 40, y: 40))
+    dismissButton.addHeightWeightConstraints(values: CGPoint(x: 60, y: 40))
 
     dismissButton.addTarget(self, action: #selector(close), for: .touchUpInside)
   }

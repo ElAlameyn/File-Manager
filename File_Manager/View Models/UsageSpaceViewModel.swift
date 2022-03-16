@@ -10,21 +10,7 @@ import Combine
 
 
 final class UsageSpaceViewModel: ObservableObject, ViewModelProtocol {
-  @Published private(set) var value: UsageSpaceResponse?
-  var subscriber: AnyCancellable?
-  
-  func fetch() {
-    subscriber = DropboxAPI.shared.fetchUsageSpace()?.sink(
-      receiveCompletion: { completion in
-        switch completion {
-        case .finished:
-          print("Usage space respnose received")
-        case .failure(let error):
-          print("Usage space respnose failed due to: \(error)")
-        }
-      }, receiveValue: { response in
-        self.value = response
-        print("USAGE SPACE RESPONSE: \(response)")
-      })
-  }
+  var failedRequest: (() -> Void)?
+  var cancellables = Set<AnyCancellable>()
+  @Published var value: UsageSpaceResponse?
 }

@@ -7,12 +7,12 @@
 
 import UIKit
 
-class RecentBaseViewCell: UICollectionViewCell {
+class ImageBaseViewCell: UICollectionViewCell {
   private var leftUpperImageView = UIImageView(image: UIImage(systemName: "heart"))
   private var bottomRightView = UIImageView(image: UIImage(systemName: "photo.fill"))
   private var activityView: UIActivityIndicatorView?
   
-  private var imagesLoader = ImagesLoader()
+  private var imageViewModel = ImageViewModel()
   private var isLiked = false
   var isFethed = false
 
@@ -40,10 +40,12 @@ class RecentBaseViewCell: UICollectionViewCell {
   
   func fetch(id: String) {
     showActivityIndicator()
-    imagesLoader.fetch(path: id) { [weak self] image in
+    imageViewModel.fetch(f: DropboxAPI.shared.fetchDownload(id: id))
+    imageViewModel.update = { [weak self] image in
       self?.hideActivityIndicator()
       self?.mainImageView.image = image
       self?.isFethed = true
+      return nil
     }
   }
   
@@ -56,7 +58,7 @@ class RecentBaseViewCell: UICollectionViewCell {
   }
 }
 
-extension RecentBaseViewCell {
+extension ImageBaseViewCell {
   
   private func setUpUI() {
     addSubview(borderView)
@@ -87,7 +89,7 @@ extension RecentBaseViewCell {
   
 }
 
-extension RecentBaseViewCell {
+extension ImageBaseViewCell {
   
   func showActivityIndicator() {
     activityView = UIActivityIndicatorView(style: .medium)

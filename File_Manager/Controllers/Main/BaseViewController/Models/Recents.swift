@@ -7,12 +7,13 @@
 
 import UIKit
 
-struct ImageIdContainer: Hashable
-{
+struct ImageIdContainer {
   var id = UUID()
   var imageId: String?
   var imageName: String?
+}
 
+extension ImageIdContainer: Hashable {
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }

@@ -33,35 +33,3 @@ extension ListFoldersResponse: Decodable, Hashable {
   }
 }
 
-extension ListFoldersResponse {
-  
-  var files: [ListFoldersResponse.File] {
-    entries.filter({ $0.tag == "file" })
-  }
-  
-  func filteredByDateModified(inverse: Bool? = false) -> [ListFoldersResponse.File] {
-    var filtered = files
-    let dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-    if !(inverse!) {
-      filtered.sort {
-        if let date1 = $0.clientModified?.toDate(dateFormat: dateFormat),
-           let date2 = $1.clientModified?.toDate(dateFormat: dateFormat) {
-          return date1 > date2
-        }
-        return false
-      }
-    } else {
-      filtered.sort {
-        if let date1 = $0.clientModified?.toDate(dateFormat: dateFormat),
-           let date2 = $1.clientModified?.toDate(dateFormat: dateFormat) {
-          return date1 < date2
-        }
-        return false
-      }
-    }
-    return filtered
-  }
-  
-  
-  
-}

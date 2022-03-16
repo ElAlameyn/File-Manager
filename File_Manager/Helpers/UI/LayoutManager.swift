@@ -11,17 +11,52 @@ final class LayoutManager {
   
   static let shared = LayoutManager()
   
-  enum BaseSections: Int {
+  enum BaseSections: Int, CaseIterable {
     case title, category, recentFiles
+    
+    enum Category: Int {
+      case images, videos, files
+    }
   }
-
-  private let sections: [BaseSections] = [.title, .category, .recentFiles]
   
+  enum FilesSections: Int, CaseIterable {
+    case lastModified, main
+  }
+  
+  private let baseSections: [BaseSections] = [.title, .category, .recentFiles]
+  private let filesSectons: [FilesSections] = [.lastModified, .main]
+  
+  // MARK: - [FilesViewController]: Layout
+  
+  static func createFilesViewLayout() -> UICollectionViewLayout {
+    let sectionProvider = {
+      (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
+      -> NSCollectionLayoutSection? in
+      let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(60))
+      let item = NSCollectionLayoutItem(layoutSize: size)
+      
+      let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
+      
+      let section = NSCollectionLayoutSection(group: group)
+      section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
+      section.interGroupSpacing = 15
+      
+      let sectionHeader = LayoutManager.createSectionHeader(
+        wD: .fractionalWidth(1.0),
+        hD: .estimated(30))
+      section.boundarySupplementaryItems = [sectionHeader]
+      
+      return section
+    }
+    return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
+  }
+  
+  // MARK: - [BaseViewController]: Layout
   static func createBaseViewControllerLayout() -> UICollectionViewLayout {
     let sectionProvider = {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
       -> NSCollectionLayoutSection? in
-      switch shared.sections[sectionIndex] {
+      switch shared.baseSections[sectionIndex] {
       case .title:
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),

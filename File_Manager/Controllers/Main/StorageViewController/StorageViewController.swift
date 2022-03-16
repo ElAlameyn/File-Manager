@@ -20,12 +20,11 @@ class StorageViewController: UIViewController {
   private let sections: [Section] = [.usageSpace, .lastModified]
   
   private let usageSpaceViewModel = UsageSpaceViewModel()
-  private let listFoldersViewModel = FilesViewModel()
+  private let filesViewModel = FilesViewModel()
   
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
   private var cancellables: Set<AnyCancellable> = []
-  
   private var inverse: Bool = false
   
   override func viewDidLoad() {
@@ -36,6 +35,8 @@ class StorageViewController: UIViewController {
     configureUI()
     bindViewModels()
     applySnapshot()
+    usageSpaceViewModel.fetch(f: DropboxAPI.shared.fetchUsageSpace)
+    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
   }
   
   private func bindViewModels() {
@@ -44,19 +45,11 @@ class StorageViewController: UIViewController {
         self?.updateUsageSpace(usageSpaceResponse: value)
       })
       .store(in: &cancellables)
-
-    listFoldersViewModel.$value
-      .sink { [weak self] value in
-        self?.updateListFiles(files: value?.filteredByDateModified())
-        print("FOLDER MODEL: \(value?.filteredByDateModified())")
-      }
-      .store(in: &cancellables)
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    usageSpaceViewModel.fetch()
-    listFoldersViewModel.fetch()
+    
+    filesViewModel.update = { [weak self] in
+      guard let self = self else { return }
+      self.updateListFiles(files: self.filesViewModel.filteredByDateModified())
+    }
   }
   
   private func configureDataSource() -> DataSource {
@@ -69,7 +62,7 @@ class StorageViewController: UIViewController {
         cell.configure(usageSpace: info)
         return cell
       case .lastModified(let item):
-        let cell: ModifiedItemCell = collectionView.dequeueReusableCell(for: indexPath)
+        let cell: FileItemCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(title: item.name)
         return cell
       }
@@ -117,7 +110,7 @@ class StorageViewController: UIViewController {
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(UsageSpaceCell.self, forCellWithReuseIdentifier: "\(UsageSpaceCell.self)")
-    collectionView.register(ModifiedItemCell.self, forCellWithReuseIdentifier: "\(ModifiedItemCell.self)")
+    collectionView.register(FileItemCell.self, forCellWithReuseIdentifier: "\(FileItemCell.self)")
 
     collectionView.register(
       SectionHeaderBaseView.self,
@@ -175,7 +168,7 @@ extension StorageViewController: SortButtonDelegate {
   
   func sortButtonTapped() {
     inverse.toggle()
-    updateListFiles(files: listFoldersViewModel.value?.filteredByDateModified(inverse: inverse))
+//    updateListFiles(files: filesViewModel.value?.filteredByDateModified(inverse: inverse))
   }
   
 }

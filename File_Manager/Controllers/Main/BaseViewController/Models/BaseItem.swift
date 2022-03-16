@@ -7,12 +7,13 @@
 
 import UIKit
 
-enum BaseItem: Hashable
-{
+enum BaseItem: Hashable {
   case title
   case category(Category?)
   case recents(ImageIdContainer?)
-  
+}
+
+extension BaseItem {
   var id: String? {
     switch self {
     case .recents(let optional): return optional?.imageId
@@ -26,6 +27,5 @@ enum BaseItem: Hashable
     default: return nil
     }
   }
-
 }
 
