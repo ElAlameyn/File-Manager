@@ -23,6 +23,11 @@ final class FilesViewModel: ObservableObject, ViewModelProtocol {
     return value.entries.filter({ $0.tag == "file" })
   }
   
+  var allFiles: [ListFoldersResponse.File] {
+    guard let value = value else { return [] }
+    return value.entries
+  }
+  
   var images: [ListFoldersResponse.File] {
     files.compactMap {
       if let fileExtension = NSURL(fileURLWithPath: $0.name).pathExtension {

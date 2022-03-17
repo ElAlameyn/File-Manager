@@ -6,6 +6,9 @@
 //
 
 import UIKit
+
+typealias Empty = (() -> Void)
+
 class Style {
   
  static let baseLabelStyle: (UILabel) -> Void = {

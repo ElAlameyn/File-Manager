@@ -29,7 +29,7 @@ class FilesViewController: UIViewController {
     view.backgroundColor = .white
     title = "Files"
     
-    configureUI()
+    configureCollectionView()
     bindViewModels()
     initSnaphot()
     
@@ -37,6 +37,8 @@ class FilesViewController: UIViewController {
     navigationItem.searchController = searchController
     searchController.searchResultsUpdater = self
   }
+  
+  // MARK: - Private
   
   private func bindViewModels() {
     filesViewModel.update = { [weak self] in
@@ -58,8 +60,10 @@ class FilesViewController: UIViewController {
       self.dataSource.apply(snapshot, to: .lastModified, animatingDifferences: true)
     }
   }
-  
-  private func configureUI() {
+}
+
+extension FilesViewController {
+  private func configureCollectionView() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createFilesViewLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
@@ -95,7 +99,6 @@ class FilesViewController: UIViewController {
     }
     return dataSource
   }
-  
 }
 
 extension FilesViewController: UISearchResultsUpdating {
@@ -106,12 +109,15 @@ extension FilesViewController: UISearchResultsUpdating {
     )
       .map { $0.object as? UISearchTextField }
       .map { $0?.text }
-      .sink { text in
-        DropboxAPI.shared.fetchSearch(q: text ?? "")?
+      .sink { [weak self] text in
+        guard let text = text, let self = self else { return }
+        if text.isEmpty { self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles) }
+        DropboxAPI.shared.fetchSearch(q: text)?
           .sink(receiveCompletion: {_ in}, receiveValue: { data in
-            print("DATA \(String(describing: data?.matches.first?.metadata.metadata.name))")
+            let files = data?.matches.compactMap { $0.metadata.metadata }
+            self.update(files: files)
         })
-        print("[SEARCH] - \(String(describing: text))")
+          .store(in: &self.cancellables)
       }
   }
 }

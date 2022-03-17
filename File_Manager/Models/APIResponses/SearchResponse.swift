@@ -16,28 +16,12 @@ struct SearchResponse {
   }
   
   struct FileMetadata: Decodable & Hashable {
-    let metadata: File
+    let metadata: ListFoldersResponse.File
     let tag: String
     
     enum CodingKeys: String, CodingKey {
       case tag = ".tag"
       case metadata
-    }
-  }
-
-  struct File: Decodable, Hashable {
-    let tag: String
-    let name: String
-    let id: String
-    let clientModified: String?
-    let pathDisplay: String?
-    
-    enum CodingKeys: String, CodingKey {
-      case tag = ".tag"
-      case name = "name"
-      case clientModified = "client_modified"
-      case pathDisplay = "path_display"
-      case id
     }
   }
 }

@@ -40,15 +40,12 @@ class BaseViewController: UIViewController {
   private func bindViewModels() {
     
     filesViewModel.failedRequest = { [weak self] in
-      DispatchQueue.main.async {
-        let authVC = AuthViewController()
-        authVC.modalPresentationStyle = .fullScreen
-        self?.navigationController?.present(authVC, animated: true, completion: {
-          self?.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
-        })
+      guard let self = self else { return }
+      self.filesViewModel.handleFail(on: self) {
+        self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
       }
     }
-    
+
     filesViewModel.update = { [weak self] in
       guard let self = self else { return }
       self.updateFilesAmount(
@@ -81,27 +78,7 @@ class BaseViewController: UIViewController {
   
 
   // MARK: - Collection View Setup
-  private func configureCollectionView() {
-    addLeftBarButtonItem()
-    addRightBarButtonItem()
-    
-    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createBaseViewControllerLayout())
-    collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-    collectionView.backgroundColor = Colors.baseBackground
-    collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
-    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
-    collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
-    
-    collectionView.register(
-      SectionHeaderBaseView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
-    )
-    
-    collectionView.delegate = self
-    view.addSubview(collectionView)
-  }
-  
+
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: BaseItem) -> UICollectionViewCell? in
@@ -189,6 +166,29 @@ class BaseViewController: UIViewController {
   
   @objc func rightBarButtonItemTapped() {
     print("Left button tapped")
+  }
+}
+
+extension BaseViewController {
+  private func configureCollectionView() {
+    addLeftBarButtonItem()
+    addRightBarButtonItem()
+    
+    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createBaseViewControllerLayout())
+    collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+    collectionView.backgroundColor = Colors.baseBackground
+    collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
+    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
+    collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
+    
+    collectionView.register(
+      SectionHeaderBaseView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
+    )
+    
+    collectionView.delegate = self
+    view.addSubview(collectionView)
   }
 }
 

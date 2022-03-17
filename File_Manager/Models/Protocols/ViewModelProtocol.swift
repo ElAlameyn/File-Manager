@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import UIKit
 
 protocol BaseProtocol: AnyObject{}
 
@@ -51,6 +52,19 @@ extension ViewModelProtocol {
         self.value = value
       })
       .store(in: &cancellables)
+  }
+  
+  /// Run Authorization after expiring token
+  func handleFail(on viewController: UIViewController,
+                  completionHandler: @escaping Empty) {
+    DispatchQueue.main.async {
+      let authVC = AuthViewController()
+      authVC.modalPresentationStyle = .fullScreen
+      viewController.navigationController?.present(AuthViewController(), animated: true)
+      authVC.dismissed = {
+        completionHandler()
+      }
+    }
   }
 }
 

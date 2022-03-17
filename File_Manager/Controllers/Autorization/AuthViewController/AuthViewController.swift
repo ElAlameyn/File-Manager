@@ -14,7 +14,10 @@ class AuthViewController: UIViewController, WKNavigationDelegate
 {
   
   private var webView = WKWebView()
-  private var cancellables = Set<AnyCancellable>()
+//  private var cancellables = Set<AnyCancellable>()
+  private var subscriber: AnyCancellable?
+  
+  var dismissed: Empty? = nil
   
   private struct DropboxURL {
     static let authURL = "https://www.dropbox.com/oauth2/authorize?"
@@ -57,8 +60,13 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     guard let code = getCodeFrom(url: url) else { return }
     guard let request = RequestConfigurator.token(code).setRequest() else { return }
     
-    URLSession.shared.dataTaskPublisher(for: request)
+    subscriber = URLSession.shared.dataTaskPublisher(for: request)
       .map { $0.data }
+      .map {
+        let object = try? JSONSerialization.jsonObject(with: $0, options: .fragmentsAllowed)
+        print("Token response \(object)")
+        return $0
+      }
       .decode(type: TokenResponse.self, decoder: JSONDecoder())
       .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
@@ -72,9 +80,10 @@ class AuthViewController: UIViewController, WKNavigationDelegate
         if let data = try? JSONEncoder().encode(tokenResponse) {
           KeychainSwift().set(data, forKey: "\(DropboxAPI.tokenKey)", withAccess: .accessibleWhenUnlocked)
         }
-       self?.dismiss(animated: true)
+        self?.dismiss(animated: true, completion: { 
+          self?.dismissed?()
+        })
       }
-      .store(in: &cancellables)
   }
   
   private func getCodeFrom(url: URL) -> String? {
