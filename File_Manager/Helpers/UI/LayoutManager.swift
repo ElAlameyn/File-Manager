@@ -32,21 +32,45 @@ final class LayoutManager {
     let sectionProvider = {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
       -> NSCollectionLayoutSection? in
-      let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(60))
-      let item = NSCollectionLayoutItem(layoutSize: size)
-      
-      let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
-      
-      let section = NSCollectionLayoutSection(group: group)
-      section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
-      section.interGroupSpacing = 15
-      
-      let sectionHeader = LayoutManager.createSectionHeader(
-        wD: .fractionalWidth(1.0),
-        hD: .estimated(30))
-      section.boundarySupplementaryItems = [sectionHeader]
-      
-      return section
+      switch shared.filesSectons[sectionIndex] {
+      case .lastModified:
+        let item = LayoutManager.createItem(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(110))
+          
+        let group = LayoutManager.createHorizontalGroup(
+          wD: .estimated(120),
+          hD: .estimated(110),
+          item: item)
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 10)
+        section.interGroupSpacing = 17
+        
+        // Supplementary header view setup
+        let sectionHeader = LayoutManager.createSectionHeader(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(30))
+        
+        section.boundarySupplementaryItems = [sectionHeader]
+        return section
+      case .main:
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(60))
+        let item = NSCollectionLayoutItem(layoutSize: size)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
+        section.interGroupSpacing = 15
+        
+        let sectionHeader = LayoutManager.createSectionHeader(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(30))
+        section.boundarySupplementaryItems = [sectionHeader]
+        
+        return section
+      }
     }
     return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
   }

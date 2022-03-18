@@ -80,9 +80,9 @@ class AuthViewController: UIViewController, WKNavigationDelegate
         if let data = try? JSONEncoder().encode(tokenResponse) {
           KeychainSwift().set(data, forKey: "\(DropboxAPI.tokenKey)", withAccess: .accessibleWhenUnlocked)
         }
-        self?.dismiss(animated: true, completion: { 
-          self?.dismissed?()
-        })
+        self?.dismissed?()
+//        self?.dismiss(animated: true, completion: {
+//        })
       }
   }
   

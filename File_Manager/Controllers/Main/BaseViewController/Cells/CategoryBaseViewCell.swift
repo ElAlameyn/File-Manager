@@ -25,7 +25,7 @@ class CategoryBaseViewCell: UICollectionViewCell {
   func configure(title: String? = nil, amount: Int? = nil ) {
     guard let title = title, let amount = amount else { return }
     titleLabel.text = "\(title) \(amount)"
-    imageView.setImageForCategory(name: title)
+    imageView.setCategoryFor(name: title)
   }
   
   override init(frame: CGRect) {

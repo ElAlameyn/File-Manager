@@ -36,6 +36,12 @@ struct Images
     UIImage(named: "video_category")
   }
   
+  static var categoryFolder: UIImage? {
+    UIImage(named: "folder_category")?
+      .withTintColor(UIColor(red: 48 / 255, green: 48 / 255, blue: 48 / 255, alpha: 1))
+  }
+  
+  
   // MARK: - Meet Screen Image
   
   static var blueLock: UIImage? {

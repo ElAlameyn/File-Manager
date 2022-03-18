@@ -36,7 +36,7 @@ class StorageViewController: UIViewController {
     bindViewModels()
     applySnapshot()
     usageSpaceViewModel.fetch(f: DropboxAPI.shared.fetchUsageSpace)
-    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
+    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
   }
   
   private func bindViewModels() {

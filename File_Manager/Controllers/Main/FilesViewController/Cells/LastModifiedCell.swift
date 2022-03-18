@@ -1,19 +1,18 @@
 //
-//  ModifiedItemCollectionViewCell.swift
+//  LastModifiedCell.swift
 //  File_Manager
 //
-//  Created by Артем Калинкин on 31.01.2022.
+//  Created by Артем Калинкин on 18.03.2022.
 //
 
 import UIKit
-import UniformTypeIdentifiers
 
-class FileItemCell: UICollectionViewCell {
+class LastModifiedCell: UICollectionViewCell {
   
   private let titleLabel = UILabel.withStyle(
     f: Style.baseLabelStyle <>
     Style.appearanceLabelStyle(
-      withFont: Fonts.robotoRegular.withSize(18),
+      withFont: Fonts.robotoRegular.withSize(16),
       color: Colors.labelGrayColor,
       text: "???")
     <> { $0.textAlignment = .left })
@@ -59,45 +58,43 @@ class FileItemCell: UICollectionViewCell {
     }
   }
   
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-}
-
-extension FileItemCell {
-  
   private func setUpUI() {
     setUpContentView()
     contentView.addSubview(imageView)
     contentView.addSubview(descrButton)
     contentView.addSubview(titleLabel)
+    
+    descrButton.transform = CGAffineTransform(rotationAngle: -.pi / 2)
     descrButton.addTarget(self, action: #selector(descrButtonTapped), for: .touchUpInside)
   }
-
-  private func setUpContentView() {
+  
+   func setUpContentView() {
     backgroundColor = .white
     layer.cornerRadius = 10
     layer.shadowOffset = CGSize(width: 1, height: 5)
     layer.shadowRadius = 2
     layer.shadowOpacity = 0.1
   }
-
+  
   func setUpLayout() {
+    imageView.removeConstraints(imageView.constraints)
     descrButton.removeConstraints(descrButton.constraints)
     titleLabel.removeConstraints(titleLabel.constraints)
     
-    imageView.addCenterConstraints(exclude: .axisX)
-    imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
+    imageView.addEdgeContstraints(exclude: .bottom, .right, offset: UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 0))
     imageView.addHeightWeightConstraints(values: CGPoint(x: 40, y: 40))
     
-    descrButton.addCenterConstraints(exclude: .axisX)
-    descrButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20).isActive = true
-    descrButton.addHeightWeightConstraints(values: CGPoint(x: 25, y: 25))
+    titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 7).isActive = true
+    titleLabel.addEdgeContstraints(exclude: .top, offset: UIEdgeInsets(top: 0, left: 10, bottom: -10, right: -10))
 
-    titleLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 10).isActive = true
-    titleLabel.rightAnchor.constraint(equalTo: descrButton.leftAnchor,constant: -10).isActive = true
-    titleLabel.addEdgeContstraints(exclude: .left, .right, offset: UIEdgeInsets(top: 20, left: 0, bottom: -20, right: 0))
+    descrButton.topAnchor.constraint(equalTo: imageView.topAnchor).isActive = true
+    descrButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10).isActive = true
+    descrButton.leftAnchor.constraint(greaterThanOrEqualTo: imageView.leftAnchor, constant: 10).isActive = true
+    descrButton.addHeightWeightConstraints(values: CGPoint(x: 25, y: 25))
   }
   
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 }
+

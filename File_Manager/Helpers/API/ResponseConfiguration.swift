@@ -30,7 +30,7 @@ enum RequestConfigurator {
   
   case token(String)
   case users(Users)
-  case listFolder(path: String? = nil)
+  case listFolder(path: String, recursive: Bool)
   case thumbnail(String)
   case download(String)
   case check
@@ -78,9 +78,9 @@ enum RequestConfigurator {
               "code_verifier": KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? ""
       ]
     case .users: return nil
-    case .listFolder:
-        return ["path": "",
-                "recursive": true,
+    case .listFolder(let path, let recursive):
+        return ["path": path,
+                "recursive": recursive,
                 "limit": 10 ]
     case .thumbnail(let path):
       return [ "path": path,

@@ -35,7 +35,7 @@ class ImagesCollectionController: UIViewController
     configureUI()
     bindViewModels()
     applySnapshot()
-    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
+    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
   }
   
   private func bindViewModels() {

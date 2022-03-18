@@ -34,7 +34,7 @@ class BaseViewController: UIViewController {
     configureCollectionView()
     bindViewModels()
     applyInitSnapshot()
-    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
+    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
   }
   
   private func bindViewModels() {
@@ -42,7 +42,7 @@ class BaseViewController: UIViewController {
     filesViewModel.failedRequest = { [weak self] in
       guard let self = self else { return }
       self.filesViewModel.handleFail(on: self) {
-        self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles)
+        self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
       }
     }
 
@@ -58,6 +58,7 @@ class BaseViewController: UIViewController {
         )))
       }
     }
+    
   }
   
   private func updateFilesAmount(files: (images: Int, videos: Int, files: Int)) {

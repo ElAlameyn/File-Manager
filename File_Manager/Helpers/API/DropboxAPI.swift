@@ -20,8 +20,8 @@ final class DropboxAPI {
     return getPublisher(request: request)
   }
   
-  func fetchAllFiles() -> AnyPublisher<ListFoldersResponse?, Error>? {
-    guard let request = RequestConfigurator.listFolder(path: nil).setRequest() else { return nil }
+  func fetchAllFiles(path: String = "", recursive: Bool = true) -> AnyPublisher<ListFoldersResponse?, Error>? {
+    guard let request = RequestConfigurator.listFolder(path: path, recursive: recursive).setRequest() else { return nil }
     return getPublisher(request: request)
   }
   

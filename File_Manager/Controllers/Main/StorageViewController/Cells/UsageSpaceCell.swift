@@ -8,20 +8,20 @@
 import UIKit
 
 class UsageSpaceCell: UICollectionViewCell {
-
+  
   private let statisticLabelStyle =
-    Style.baseLabelStyle <> Style.mask <>
-    Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMedium.withSize(24),
-      color: Colors.labelStatisticColor,
-      text: "?")
-
+  Style.baseLabelStyle <> Style.mask <>
+  Style.appearanceLabelStyle(
+    withFont: Fonts.robotoMedium.withSize(24),
+    color: Colors.labelStatisticColor,
+    text: "?")
+  
   private let statisticDescriptionLabelStyle =
-    Style.baseLabelStyle <> Style.mask <>
-    Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMediumForCategories.withSize(18),
-      color: Colors.labelGrayColor,
-      text: "?")
+  Style.baseLabelStyle <> Style.mask <>
+  Style.appearanceLabelStyle(
+    withFont: Fonts.robotoMediumForCategories.withSize(18),
+    color: Colors.labelGrayColor,
+    text: "?")
   
   lazy private var usedLabel = UILabel.withStyle(f: statisticLabelStyle)
   lazy private var totalLabel = UILabel.withStyle(f: statisticLabelStyle)
@@ -29,7 +29,7 @@ class UsageSpaceCell: UICollectionViewCell {
     f: statisticLabelStyle <>
     { $0.font = UIFontMetrics.default.scaledFont(
       for: Fonts.robotoMedium.withSize(32))})
-
+  
   lazy private var usedDescriptionLabel = UILabel.withStyle(
     f: statisticDescriptionLabelStyle <>
     { $0.text = "Used"})
@@ -39,13 +39,13 @@ class UsageSpaceCell: UICollectionViewCell {
   lazy private var availableDescriptionLabel = UILabel.withStyle(
     f: statisticDescriptionLabelStyle <>
     { $0.text = "Available"})
-
+  
   private func getValueOf(percent: Double) -> CGFloat {
     let endAngle = (4 * CGFloat.pi / 2)
     let startAngle = (3 * CGFloat.pi / 2)
     return CGFloat(startAngle + (endAngle * CGFloat(percent)) / 100)
   }
-
+  
   let shape: CAShapeLayer = {
     let shape = CAShapeLayer()
     shape.lineWidth = 35
@@ -105,7 +105,7 @@ class UsageSpaceCell: UICollectionViewCell {
       clockwise: true)
     
     addTrackShape(at: circlePath)
-
+    
     let shapePath = UIBezierPath(
       arcCenter: circleCenter,
       radius: circleRadius,

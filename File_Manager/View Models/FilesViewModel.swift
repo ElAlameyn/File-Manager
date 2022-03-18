@@ -37,7 +37,7 @@ final class FilesViewModel: ObservableObject, ViewModelProtocol {
       return nil
     }
   }
-
+  
   func countFilesAmount() -> (images: Int, videos: Int, files: Int) {
     var images = 0
     var videos = 0

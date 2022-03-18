@@ -62,7 +62,9 @@ extension ViewModelProtocol {
       authVC.modalPresentationStyle = .fullScreen
       viewController.navigationController?.present(AuthViewController(), animated: true)
       authVC.dismissed = {
-        completionHandler()
+        authVC.dismiss(animated: true) {
+          completionHandler()
+        }
       }
     }
   }
