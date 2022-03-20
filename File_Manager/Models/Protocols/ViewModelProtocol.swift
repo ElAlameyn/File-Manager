@@ -60,7 +60,7 @@ extension ViewModelProtocol {
     DispatchQueue.main.async {
       let authVC = AuthViewController()
       authVC.modalPresentationStyle = .fullScreen
-      viewController.navigationController?.present(AuthViewController(), animated: true)
+      viewController.navigationController?.present(authVC, animated: true)
       authVC.dismissed = {
         authVC.dismiss(animated: true) {
           completionHandler()

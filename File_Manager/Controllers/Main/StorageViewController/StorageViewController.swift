@@ -72,7 +72,7 @@ class StorageViewController: UIViewController {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-      view.descrButton.isHidden = false
+      view.downArrowButton.isHidden = false
       view.delegate = self
       
       switch Section(rawValue: indexPath.section) {

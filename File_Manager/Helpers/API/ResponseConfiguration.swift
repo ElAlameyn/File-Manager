@@ -79,9 +79,9 @@ enum RequestConfigurator {
       ]
     case .users: return nil
     case .listFolder(let path, let recursive):
-        return ["path": path,
-                "recursive": recursive,
-                "limit": 10 ]
+      return ["path": path,
+              "recursive": recursive,
+              "limit": 10 ]
     case .thumbnail(let path):
       return [ "path": path,
                "format": "jpeg",
@@ -108,16 +108,21 @@ enum RequestConfigurator {
   private var jsonData: Data? {
     try? JSONSerialization.data(withJSONObject: components as Any, options: .fragmentsAllowed)
   }
-
+  
   func setRequest() -> URLRequest? {
     guard let url = URL(string: configuredURL) else { return nil }
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
-    guard let tokenResponse = KeychainSwift()
-            .getData(DropboxAPI.tokenKey) else { return nil }
-    guard let token = try? JSONDecoder()
-            .decode(AuthViewController.TokenResponse.self,
-                    from: tokenResponse) else { return nil }
+    
+    var token = ""
+    
+    if let tokenResponse = KeychainSwift()
+      .getData(DropboxAPI.tokenKey),
+       let get = try? JSONDecoder()
+      .decode(AuthViewController.TokenResponse.self,
+              from: tokenResponse) {
+      token = get.accessToken
+    }
     
     switch self {
     case .token:
@@ -128,22 +133,22 @@ enum RequestConfigurator {
       
       request.httpBody = requestComponents.query?.data(using: .utf8)
     case .users:
-      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     case .listFolder:
-      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = jsonData
     case .thumbnail(let path):
-      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue(path, forHTTPHeaderField: "Dropbox-API-Arg")
     case .download(let id):
-      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue(id, forHTTPHeaderField: "Dropbox-API-Arg")
     case .check:
-      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     case .search:
-      request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = jsonData
     }
@@ -152,9 +157,9 @@ enum RequestConfigurator {
   }
 }
 
-  // MARK: - PCKE extension
+// MARK: - PCKE extension
 extension RequestConfigurator {
-
+  
   static func createCodeVerifier() -> String {
     var buffer = [UInt8](repeating: 0, count: 32)
     _ = SecRandomCopyBytes(kSecRandomDefault, buffer.count, &buffer)

@@ -15,7 +15,7 @@ class SectionHeaderBaseView: UICollectionReusableView
 {
   var delegate: SortButtonDelegate?
   
-  lazy var descrButton: UIButton = {
+  lazy var downArrowButton: UIButton = {
     let button = UIButton()
     button.translatesAutoresizingMaskIntoConstraints = false
     button.setImage(UIImage(
@@ -34,25 +34,47 @@ class SectionHeaderBaseView: UICollectionReusableView
       withFont: Fonts.robotoMedium.withSize(24),
       color: .darkGray,
       text: "")
+    <> { $0.textAlignment = .left }
   )
+  
+  lazy var currentPathLabel = UILabel.withStyle(
+    f: Style.baseLabelStyle <> Style.mask <>
+    Style.appearanceLabelStyle(
+      withFont: Fonts.robotoMedium.withSize(18),
+      color: .darkGray,
+      text: "Current Path: Root")
+    <> { $0.isHidden = false }
+  ) 
 
   override init(frame: CGRect) {
     super.init(frame: frame)
     
     backgroundColor = Colors.baseBackground
 
-    self.addSubview(titleLabel)
-    titleLabel.addEdgeContstraints(exclude: .right, offset: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: 0))
-    
-    self.addSubview(descrButton)
-    
+    addSubview(titleLabel)
+    titleLabel.addEdgeContstraints(exclude: .right, .bottom, offset: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: 0))
+
+    addSubview(currentPathLabel)
     NSLayoutConstraint.activate([
-      descrButton.leftAnchor.constraint(equalTo: titleLabel.rightAnchor, constant: 10),
-      descrButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-      descrButton.topAnchor.constraint(equalTo: topAnchor)
+      currentPathLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
+      currentPathLabel.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
+      currentPathLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
+      currentPathLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
     ])
     
-    descrButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+    addSubview(downArrowButton)
+    
+    NSLayoutConstraint.activate([
+      downArrowButton.leftAnchor.constraint(equalTo: titleLabel.rightAnchor, constant: 10),
+      downArrowButton.topAnchor.constraint(equalTo: titleLabel.topAnchor)
+    ])
+    
+    downArrowButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+  }
+  
+  func removeCurrentPathLabel() {
+    titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+    currentPathLabel.removeFromSuperview()
   }
   
   @objc func sortButtonTapped() {

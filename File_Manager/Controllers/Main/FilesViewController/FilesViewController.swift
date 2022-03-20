@@ -15,15 +15,17 @@ class FilesViewController: UIViewController {
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, FileItem>
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<FileItem>
   
+  private let sections = Section.allCases
   private let filesViewModel = FilesViewModel()
   private var collectionView: UICollectionView! = nil
   private lazy var dataSource = configureDataSource()
+  
   private var cancellables: Set<AnyCancellable> = []
-  private let sections = Section.allCases
-  private let searchController = UISearchController()
   private var subscriber: AnyCancellable?
   
-
+  private let searchController = UISearchController()
+  private var path = Path()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.prefersLargeTitles = true
@@ -46,6 +48,13 @@ class FilesViewController: UIViewController {
       guard let self = self else { return }
       self.update(files: self.filesViewModel.allFiles)
     }
+    
+    filesViewModel.failedRequest = { [weak self] in
+      guard let self = self else { return }
+      self.filesViewModel.handleFail(on: self) {
+        self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
+      }
+    }
   }
   
   private func initSnaphot() {
@@ -58,7 +67,9 @@ class FilesViewController: UIViewController {
     var mainSnapshot = SectionSnapshot()
     var modifiedSnapshot = SectionSnapshot()
     if let storages = files?.compactMap({ FileItem(file: $0) }) {
-      mainSnapshot.append(storages)
+      var updated = [FileItem()]
+      updated += storages
+      mainSnapshot.append(updated)
       self.dataSource.apply(mainSnapshot, to: .main, animatingDifferences: true)
     }
     
@@ -102,6 +113,11 @@ extension FilesViewController {
         cell.configure(title: item.file?.name, tag: item.file?.tag)
         return cell
       case .main:
+        if indexPath.row == 0 && indexPath.section == 1 {
+          let cell: FileItemCell = collectionView.dequeueReusableCell(for: indexPath)
+          cell.configureBackCell()
+          return cell
+        }
         let cell: FileItemCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(title: item.file?.name, tag: item.file?.tag)
         return cell
@@ -113,10 +129,13 @@ extension FilesViewController {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-      view.descrButton.isHidden = false
+      view.downArrowButton.isHidden = false
       switch Section(rawValue: indexPath.section) {
-      case .lastModified: view.titleLabel.text = "Last Modified"
-      case .main: view.titleLabel.text = "All Files"
+      case .lastModified:
+        view.titleLabel.text = "Last Modified"
+        view.removeCurrentPathLabel()
+      case .main:
+        view.titleLabel.text = "All Files"
       default: break
       }
       return view
@@ -127,9 +146,18 @@ extension FilesViewController {
 
 extension FilesViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let selected = filesViewModel.allFiles[indexPath.row]
+    if indexPath.row == 0 && indexPath.section == 1 {
+      filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: self.path.getPrevious ?? "", recursive: false))
+      let view: SectionHeaderBaseView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
+      view.currentPathLabel.text = self.path.previous
+      return
+    }
+    let selected = filesViewModel.allFiles[indexPath.row - 1]
     if selected.tag == "folder" {
       guard let path = selected.pathDisplay else { return }
+      self.path.current = path
+      let view: SectionHeaderBaseView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
+      view.currentPathLabel.text = self.path.current
       filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: path, recursive: false))
     }
   }
@@ -141,19 +169,50 @@ extension FilesViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
     subscriber = NotificationCenter.default.publisher(
       for: UISearchTextField.textDidChangeNotification,
-         object: searchController.searchBar.searchTextField
+      object: searchController.searchBar.searchTextField
     )
-      .map { $0.object as? UISearchTextField }
-      .map { $0?.text }
-      .sink { [weak self] text in
-        guard let text = text, let self = self else { return }
-        if text.isEmpty { self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles()) }
-        DropboxAPI.shared.fetchSearch(q: text)?
-          .sink(receiveCompletion: {_ in}, receiveValue: { data in
-            let files = data?.matches.compactMap { $0.metadata.metadata }
-            self.update(files: files)
+    .map { $0.object as? UISearchTextField }
+    .map { $0?.text }
+    .sink { [weak self] text in
+      guard let text = text, let self = self else { return }
+      if text.isEmpty { self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles()) }
+      DropboxAPI.shared.fetchSearch(q: text)?
+        .sink(receiveCompletion: {_ in}, receiveValue: { data in
+          let files = data?.matches.compactMap { $0.metadata.metadata }
+          self.update(files: files)
         })
-          .store(in: &self.cancellables)
-      }
+        .store(in: &self.cancellables)
+    }
   }
+}
+
+extension FilesViewController {
+  
+  private struct Path {
+    
+    var current: String {
+      get {
+        all.last ?? ""
+      }
+      set {
+        previous = current
+        all.append(newValue)
+      }
+    }
+    
+    var previous: String?
+    
+    var getPrevious: String? {
+      mutating get {
+        all.removeLast()
+        previous = all.last
+        return previous
+      }
+      set {
+        previous = newValue
+      }
+    }
+    var all = [String]()
+  }
+
 }

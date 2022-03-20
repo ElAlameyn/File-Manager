@@ -59,6 +59,12 @@ class FileItemCell: UICollectionViewCell {
     }
   }
   
+  func configureBackCell() {
+    titleLabel.text = ""
+    descrButton.isHidden = true
+    imageView.image = UIImage(systemName: "arrow.backward")?.withPointSize(30).withTintColor(.black)
+  }
+  
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")

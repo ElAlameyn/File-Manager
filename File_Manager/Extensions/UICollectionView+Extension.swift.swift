@@ -8,8 +8,7 @@
 import Foundation
 import UIKit
 
-extension UICollectionView
-{
+extension UICollectionView {
   func dequeueReusableCell<T: UICollectionViewCell>(for indexPath: IndexPath) -> T {
     
     guard let cell = dequeueReusableCell(withReuseIdentifier: "\(T.self)", for: indexPath) as? T else { fatalError("Can't create a cell for collection view") }
@@ -25,4 +24,12 @@ extension UICollectionView
           for: indexPath) as? T else { fatalError("Can't create reusable view for collection view")}
         return view
       }
+  
+  func getSupplementaryView<T: UICollectionReusableView>(at indexPath: IndexPath) -> T {
+    guard let view = self.supplementaryView(
+      forElementKind: "UICollectionElementKindSectionHeader",
+      at: indexPath
+    ) as? T else { fatalError("Can't create supplementary view") }
+    return view
+  }
 }
