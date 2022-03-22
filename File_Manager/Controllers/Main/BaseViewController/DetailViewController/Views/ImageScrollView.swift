@@ -11,6 +11,11 @@ class ImageScrollView: UIScrollView, UIScrollViewDelegate {
   
   private var imageView: UIImageView!
   
+  var didEndZooming: Empty?
+  var didStartZooming: Empty?
+  
+  private var currentScale: CGFloat = 0
+  
   private lazy var zoomingTap: UITapGestureRecognizer = {
     let zoomingTap = UITapGestureRecognizer(target: self, action: #selector(handleZoomingTap))
     zoomingTap.numberOfTapsRequired = 2
@@ -44,10 +49,20 @@ class ImageScrollView: UIScrollView, UIScrollViewDelegate {
     imageView = nil
     
     imageView = UIImageView(image: image)
-    imageView.contentMode = .scaleAspectFill
     addSubview(imageView)
     
+    currentScale = zoomScale
     configure(imageSize: image?.size)
+  }
+  
+  private func configure(imageSize: CGSize?) {
+    guard let imageSize = imageSize else { return }
+    contentSize = imageSize
+    setCurrentZoomScale()
+    zoomScale = minimumZoomScale
+    
+    imageView.addGestureRecognizer(zoomingTap)
+    imageView.isUserInteractionEnabled = true
   }
   
   // MARK: - PRIVATE
@@ -76,16 +91,7 @@ class ImageScrollView: UIScrollView, UIScrollViewDelegate {
     return zoomRect
   }
 
-  private func configure(imageSize: CGSize?) {
-    guard let imageSize = imageSize else { return }
-    contentSize = imageSize
-    setCurrentZoomScale()
-    zoomScale = minimumZoomScale
-    
-    imageView.addGestureRecognizer(zoomingTap)
-    imageView.isUserInteractionEnabled = true
-  }
-  
+
   private func setCurrentZoomScale() {
     let boundsSize = bounds.size
     let imageSize = imageView.bounds.size
@@ -136,4 +142,16 @@ class ImageScrollView: UIScrollView, UIScrollViewDelegate {
   func scrollViewDidZoom(_ scrollView: UIScrollView) {
     centerImage()
   }
+  
+  func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    if zoomScale == minimumZoomScale {
+      didEndZooming?()
+    }
+  }
+  
+  func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+    didStartZooming?()
+  }
+  
+
 }

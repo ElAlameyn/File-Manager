@@ -132,8 +132,8 @@ class ImagesCollectionController: UIViewController
 
 extension ImagesCollectionController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    let detailVC = DetailImageController(imageName: images[indexPath.row].imageName ?? "")
-    detailVC.modalPresentationStyle = .fullScreen
+    let detailVC = DetailImageController()
+    detailVC.title = images[indexPath.row].imageName
     guard let item = collectionView.cellForItem(at: indexPath) as? ImageBaseViewCell else { return }
     if item.isFethed {
       present(detailVC, animated: true) {

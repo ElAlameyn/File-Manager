@@ -17,8 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     window = UIWindow(frame: windowScene.coordinateSpace.bounds)
     window?.windowScene = windowScene
     
-    let navVC = UINavigationController(rootViewController: FilesViewController())
+    let navVC = UINavigationController(rootViewController: BaseViewController())
     navVC.navigationBar.prefersLargeTitles = false
+    navVC.navigationBar.tintColor = .black
+    navVC.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: Fonts.robotoRegular.withSize(20)]
 
     window?.rootViewController = navVC
     window?.makeKeyAndVisible()
@@ -51,7 +53,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // Use this method to save data, release shared resources, and store enough scene-specific state information
     // to restore the scene back to its current state.
   }
-
-
 }
 

@@ -141,22 +141,16 @@ class BaseViewController: UIViewController {
   private func addLeftBarButtonItem() {
     let button = UIButton(type: .custom)
     button.setImage(Images.baseLeftItem, for: .normal)
-    button.setImage(UIImage(
-      systemName: "circle.grid.2x2.fill",
-      withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
-                      .withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
-    button.sizeToFit()
+    button.setImage(UIImage(systemName: "circle.grid.2x2.fill")?
+      .withTintColor(.black).withPointSize(25), for: .normal)
     button.addTarget(self, action: #selector(leftBarButtonItemTapped), for: .touchUpInside)
     navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
   }
   
   private func addRightBarButtonItem() {
     let button = UIButton(type: .custom)
-    
-    button.setImage(UIImage(
-      systemName: "magnifyingglass",
-      withConfiguration: UIImage.SymbolConfiguration(pointSize: 25))?
-                      .withTintColor(.black, renderingMode: .alwaysOriginal), for: .normal)
+    button.setImage(UIImage(systemName: "magnifyingglass")?
+      .withTintColor(.black).withPointSize(25), for: .normal)
     button.addTarget(self, action: #selector(rightBarButtonItemTapped), for: .touchUpInside)
     navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
   }
@@ -210,13 +204,13 @@ extension BaseViewController: UICollectionViewDelegate {
     case .recentFiles:
       switch images[indexPath.row] {
       case .recents:
-        let detailVC = DetailImageController(imageName: images[indexPath.row].name ?? "")
-        detailVC.modalPresentationStyle = .fullScreen
+        let detailVC = DetailImageController()
+        detailVC.title = images[indexPath.row].name
         guard let item = collectionView.cellForItem(at: indexPath) as? ImageBaseViewCell else { return }
         if item.isFethed {
-          present(detailVC, animated: true) {
+          navigationController?.pushViewController(detailVC, animated: true, completion: {
             detailVC.change(image: item.mainImageView.image)
-          }
+          })
         }
       default: break
       }

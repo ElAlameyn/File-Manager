@@ -64,6 +64,7 @@ class FoldersHeaderView: UICollectionReusableView {
     backgroundColor = Colors.baseBackground
     self.isUserInteractionEnabled = true
         
+    setUpUI()
     setUpLayout()
   }
   
@@ -74,8 +75,12 @@ class FoldersHeaderView: UICollectionReusableView {
     addSubview(currentPathLabel)
     addSubview(downArrowButton)
     
-    fileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapAddFile)))
-    folderImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapAddFolder)))
+    fileImageView.addGestureRecognizer(
+      UITapGestureRecognizer(target: self, action: #selector(didTapAddFile))
+    )
+    folderImageView.addGestureRecognizer(
+      UITapGestureRecognizer(target: self, action: #selector(didTapAddFolder))
+    )
   }
   
   func setUpLayout() {
@@ -105,7 +110,6 @@ class FoldersHeaderView: UICollectionReusableView {
       currentPathLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
       currentPathLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
     ])
-    
 
     // sort button
     NSLayoutConstraint.activate([
