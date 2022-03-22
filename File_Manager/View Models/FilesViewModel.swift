@@ -17,7 +17,7 @@ final class FilesViewModel: ObservableObject, ViewModelProtocol {
   @Published var value: ListFoldersResponse? {
     didSet { update?() }
   }
-
+  
   var files: [ListFoldersResponse.File] {
     guard let value = value else { return [] }
     return value.entries.filter({ $0.tag == "file" })

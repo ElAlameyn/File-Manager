@@ -73,8 +73,7 @@ class StorageViewController: UIViewController {
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
       view.downArrowButton.isHidden = false
-      view.delegate = self
-      
+
       switch Section(rawValue: indexPath.section) {
       case .usageSpace: break
       case .lastModified: view.titleLabel.text = "Last Modified"
@@ -164,11 +163,3 @@ class StorageViewController: UIViewController {
   }
 }
 
-extension StorageViewController: SortButtonDelegate {
-  
-  func sortButtonTapped() {
-    inverse.toggle()
-//    updateListFiles(files: filesViewModel.value?.filteredByDateModified(inverse: inverse))
-  }
-  
-}

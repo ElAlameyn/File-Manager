@@ -11,6 +11,15 @@ import UIKit
 struct Images
 {
   
+  // MARK: - Header View Images
+  
+  static var addFileImage: UIImage? {
+    UIImage(named: "add_file")
+  }
+  
+  static var addFolderImage: UIImage? {
+    UIImage(named: "add_folder")
+  }
 
   // MARK: - Recent Images
   

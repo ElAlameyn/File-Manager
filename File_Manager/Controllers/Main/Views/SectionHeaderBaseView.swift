@@ -7,14 +7,9 @@
 
 import UIKit
 
-protocol SortButtonDelegate {
-  func sortButtonTapped()
-}
 
-class SectionHeaderBaseView: UICollectionReusableView
-{
-  var delegate: SortButtonDelegate?
-  
+class SectionHeaderBaseView: UICollectionReusableView {
+
   lazy var downArrowButton: UIButton = {
     let button = UIButton()
     button.translatesAutoresizingMaskIntoConstraints = false
@@ -53,14 +48,7 @@ class SectionHeaderBaseView: UICollectionReusableView
 
     addSubview(titleLabel)
     titleLabel.addEdgeContstraints(exclude: .right, .bottom, offset: UIEdgeInsets(top: 10, left: 0, bottom: -10, right: 0))
-
-    addSubview(currentPathLabel)
-    NSLayoutConstraint.activate([
-      currentPathLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
-      currentPathLabel.rightAnchor.constraint(equalTo: titleLabel.rightAnchor),
-      currentPathLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
-      currentPathLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
-    ])
+    titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
     
     addSubview(downArrowButton)
     
@@ -69,18 +57,8 @@ class SectionHeaderBaseView: UICollectionReusableView
       downArrowButton.topAnchor.constraint(equalTo: titleLabel.topAnchor)
     ])
     
-    downArrowButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
   }
   
-  func removeCurrentPathLabel() {
-    titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
-    currentPathLabel.removeFromSuperview()
-  }
-  
-  @objc func sortButtonTapped() {
-    delegate?.sortButtonTapped()
-  }
-
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B508201C27BBA52800102539 /* UsageSpaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */; };
 		B508201F27BBA89B00102539 /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B508201E27BBA89B00102539 /* ViewModelProtocol.swift */; };
+		B5109D3527E77D70000F919A /* ReturnFileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5109D3427E77D70000F919A /* ReturnFileCell.swift */; };
 		B515C21F27BFE07A008EAF28 /* Pods_File_Manager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B515C21E27BFE07A008EAF28 /* Pods_File_Manager.framework */; };
 		B515C22227BFE5D1008EAF28 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B515C22127BFE5D1008EAF28 /* KeychainSwift */; };
 		B515C22427C027E9008EAF28 /* FilesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B515C22327C027E9008EAF28 /* FilesViewModel.swift */; };
@@ -19,6 +20,7 @@
 		B524895227AD45110064C08C /* CustomTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895127AD45110064C08C /* CustomTabItem.swift */; };
 		B524895627AD4CC90064C08C /* CustomTabItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895527AD4CC90064C08C /* CustomTabItemView.swift */; };
 		B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895727AD4FA70064C08C /* CustomTabBar.swift */; };
+		B526843627E8D78200A864C8 /* FoldersHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526843527E8D78200A864C8 /* FoldersHeaderView.swift */; };
 		B535379C27B28B1A003A7C6A /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B535379B27B28B1A003A7C6A /* AuthViewController.swift */; };
 		B539670927B3CA2B009125E5 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B539670827B3CA2B009125E5 /* String+Extension.swift */; };
 		B5487B9A27B9894F00258B58 /* DropboxAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9927B9894F00258B58 /* DropboxAPI.swift */; };
@@ -88,6 +90,7 @@
 		5040F9BB037954F1BF629001 /* Pods-File_Manager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.release.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.release.xcconfig"; sourceTree = "<group>"; };
 		B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceViewModel.swift; sourceTree = "<group>"; };
 		B508201E27BBA89B00102539 /* ViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
+		B5109D3427E77D70000F919A /* ReturnFileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnFileCell.swift; sourceTree = "<group>"; };
 		B515C21E27BFE07A008EAF28 /* Pods_File_Manager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_File_Manager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B515C22327C027E9008EAF28 /* FilesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesViewModel.swift; sourceTree = "<group>"; };
 		B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFoldersResponse.swift; sourceTree = "<group>"; };
@@ -97,6 +100,7 @@
 		B524895127AD45110064C08C /* CustomTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItem.swift; sourceTree = "<group>"; };
 		B524895527AD4CC90064C08C /* CustomTabItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItemView.swift; sourceTree = "<group>"; };
 		B524895727AD4FA70064C08C /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		B526843527E8D78200A864C8 /* FoldersHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersHeaderView.swift; sourceTree = "<group>"; };
 		B535379B27B28B1A003A7C6A /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		B539670827B3CA2B009125E5 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		B5487B9927B9894F00258B58 /* DropboxAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxAPI.swift; sourceTree = "<group>"; };
@@ -255,6 +259,7 @@
 			isa = PBXGroup;
 			children = (
 				B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseView.swift */,
+				B526843527E8D78200A864C8 /* FoldersHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -406,6 +411,7 @@
 			isa = PBXGroup;
 			children = (
 				B5BEA7C827E4DD9100EE9587 /* LastModifiedCell.swift */,
+				B5109D3427E77D70000F919A /* ReturnFileCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -758,6 +764,7 @@
 				B56D267E27E1FE6F00853B95 /* FileItem.swift in Sources */,
 				B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */,
 				B5DBAE6527DE6C1F00BE2485 /* URlRequest+Extension.swift in Sources */,
+				B526843627E8D78200A864C8 /* FoldersHeaderView.swift in Sources */,
 				B535379C27B28B1A003A7C6A /* AuthViewController.swift in Sources */,
 				B56D267A27E0EBF500853B95 /* Limited.swift in Sources */,
 				B5DFB8E127A2A8C600196251 /* Images.swift in Sources */,
@@ -789,6 +796,7 @@
 				B524895227AD45110064C08C /* CustomTabItem.swift in Sources */,
 				B57A971A27C6197500DDA6D8 /* UIImageView+Extension.swift in Sources */,
 				B508201F27BBA89B00102539 /* ViewModelProtocol.swift in Sources */,
+				B5109D3527E77D70000F919A /* ReturnFileCell.swift in Sources */,
 				B5DFB8CA27A286A900196251 /* SceneDelegate.swift in Sources */,
 				B55F515127D920570010D0E7 /* DetailImageController.swift in Sources */,
 				B524895827AD4FA70064C08C /* CustomTabBar.swift in Sources */,

@@ -25,6 +25,11 @@ class FilesViewController: UIViewController {
   
   private let searchController = UISearchController()
   private var path = Path()
+
+  private var isFirstLoaded = true
+  private var isRootFolder: Bool {
+    path.current == ""
+  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -46,7 +51,8 @@ class FilesViewController: UIViewController {
   private func bindViewModels() {
     filesViewModel.update = { [weak self] in
       guard let self = self else { return }
-      self.update(files: self.filesViewModel.allFiles)
+      self.update(files: self.filesViewModel.allFiles, updateLastModified: self.isFirstLoaded)
+      self.isFirstLoaded = false
     }
     
     filesViewModel.failedRequest = { [weak self] in
@@ -63,15 +69,21 @@ class FilesViewController: UIViewController {
     self.dataSource.apply(snapshot, animatingDifferences: true)
   }
   
-  private func update(files: [ListFoldersResponse.File]?) {
+  private func update(files: [ListFoldersResponse.File]?, updateLastModified: Bool? = false) {
     var mainSnapshot = SectionSnapshot()
     var modifiedSnapshot = SectionSnapshot()
     if let storages = files?.compactMap({ FileItem(file: $0) }) {
-      var updated = [FileItem()]
-      updated += storages
-      mainSnapshot.append(updated)
+      if !isRootFolder {
+        var updated = [FileItem()]
+        updated += storages
+        mainSnapshot.append(updated)
+      } else {
+        mainSnapshot.append(storages)
+      }
       self.dataSource.apply(mainSnapshot, to: .main, animatingDifferences: true)
     }
+    
+    guard updateLastModified! else { return }
     
     @Limited<FileItem>(limit: 4) var modified
     self.filesViewModel.filteredByDateModified().forEach {
@@ -92,18 +104,24 @@ extension FilesViewController {
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(FileItemCell.self, forCellWithReuseIdentifier: "\(FileItemCell.self)")
     collectionView.register(LastModifiedCell.self, forCellWithReuseIdentifier: "\(LastModifiedCell.self)")
+    collectionView.register(ReturnFileCell.self, forCellWithReuseIdentifier: "\(ReturnFileCell.self)")
     
     collectionView.register(
       SectionHeaderBaseView.self,
       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
       withReuseIdentifier: "\(SectionHeaderBaseView.self)")
     
+    collectionView.register(
+      FoldersHeaderView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(FoldersHeaderView.self)")
+    
     collectionView.delegate = self
     view.addSubview(collectionView)
   }
   
   private func configureDataSource() -> DataSource {
-    let dataSource = DataSource(collectionView: collectionView) {
+    let dataSource = DataSource(collectionView: collectionView) { [self]
       (collectionView: UICollectionView, indexPath: IndexPath, item: FileItem) -> UICollectionViewCell? in
       
       guard let section = Section(rawValue: indexPath.section) else { return nil }
@@ -113,10 +131,11 @@ extension FilesViewController {
         cell.configure(title: item.file?.name, tag: item.file?.tag)
         return cell
       case .main:
-        if indexPath.row == 0 && indexPath.section == 1 {
-          let cell: FileItemCell = collectionView.dequeueReusableCell(for: indexPath)
-          cell.configureBackCell()
-          return cell
+        if !isRootFolder {
+          if indexPath.row == 0 && indexPath.section == 1 {
+            let cell: ReturnFileCell = collectionView.dequeueReusableCell(for: indexPath)
+            return cell
+          }
         }
         let cell: FileItemCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(title: item.file?.name, tag: item.file?.tag)
@@ -128,17 +147,17 @@ extension FilesViewController {
     dataSource.supplementaryViewProvider = {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
-      let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-      view.downArrowButton.isHidden = false
       switch Section(rawValue: indexPath.section) {
       case .lastModified:
+        let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
         view.titleLabel.text = "Last Modified"
-        view.removeCurrentPathLabel()
+        return view
       case .main:
+        let view: FoldersHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
         view.titleLabel.text = "All Files"
-      default: break
+        return view
+      default: return nil
       }
-      return view
     }
     return dataSource
   }
@@ -146,19 +165,24 @@ extension FilesViewController {
 
 extension FilesViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    if indexPath.row == 0 && indexPath.section == 1 {
-      filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: self.path.getPrevious ?? "", recursive: false))
-      let view: SectionHeaderBaseView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
-      view.currentPathLabel.text = self.path.previous
-      return
-    }
-    let selected = filesViewModel.allFiles[indexPath.row - 1]
-    if selected.tag == "folder" {
-      guard let path = selected.pathDisplay else { return }
-      self.path.current = path
-      let view: SectionHeaderBaseView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
-      view.currentPathLabel.text = self.path.current
-      filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: path, recursive: false))
+    switch LayoutManager.FilesSections.allCases[indexPath.section] {
+    case .lastModified:
+      break
+    case .main:
+      if indexPath.row == 0 && indexPath.section == 1  && !isRootFolder {
+        filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: self.path.getPrevious ?? "", recursive: false))
+        let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
+        view.currentPathLabel.text = self.path.previous
+        return
+      }
+      let selected = isRootFolder ? filesViewModel.allFiles[indexPath.row] : filesViewModel.allFiles[indexPath.row - 1]
+      if selected.tag == "folder" {
+        guard let path = selected.pathDisplay else { return }
+        self.path.current = path
+        let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
+        view.currentPathLabel.text = self.path.current
+        filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: path, recursive: false))
+      }
     }
   }
 }
@@ -188,8 +212,9 @@ extension FilesViewController: UISearchResultsUpdating {
 
 extension FilesViewController {
   
+  /// Struct for displaing folder path
   private struct Path {
-    
+
     var current: String {
       get {
         all.last ?? ""
