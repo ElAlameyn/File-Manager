@@ -10,19 +10,15 @@ import Combine
 
 final class ImageViewModel: ObservableObject, ViewModelProtocol {
   var failedRequest: (() -> Void)?
-  
   var cancellables = Set<AnyCancellable>()
+  var value = CurrentValueSubject<Data?, APIError>(nil)
   
-  var update: ((UIImage) -> Void?)?
-  
-  var value: Data? {
-    didSet {
-      if let value = value, let image = UIImage(data: value) {
-        update?(image)
-      }
-    }
+  var image: UIImage? {
+    var image: UIImage?
+    value.sink(receiveCompletion: {_ in}) {
+      if let data = $0 { image = UIImage(data: data) }
+    }.store(in: &cancellables)
+    return image
   }
-  
-
 }
 

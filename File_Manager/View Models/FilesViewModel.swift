@@ -10,12 +10,14 @@ import Combine
 import UniformTypeIdentifiers
 
 final class FilesViewModel: ObservableObject, ViewModelProtocol {
-  var failedRequest: (() -> Void)?
-  
+
   var cancellables = Set<AnyCancellable>()
   var update: (() -> Void)?
-  @Published var value: ListFoldersResponse? {
-    didSet { update?() }
+  
+  var subject = CurrentValueSubject<ListFoldersResponse?, APIError>(nil)
+  
+  var value: ListFoldersResponse? {
+    subject.value
   }
   
   var files: [ListFoldersResponse.File] {

@@ -10,7 +10,7 @@ import Foundation
 struct Texts
 {
   // Base Controller
-  static let baseTitleLabelText = "Manager Dropbox"
+  static let baseTitleLabelText = "Welcome"
   static let baseDescriptionLabelText = "Let’s manage your files conveniently"
   static let baseCategorySectionName = "Category"
   static let baseRecentsSectionName = "Recent Files"

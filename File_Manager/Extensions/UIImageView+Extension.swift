@@ -9,7 +9,6 @@ import UIKit
 import UniformTypeIdentifiers
 
 extension UIImageView {
-  
 
   func setCategoryFor(name: String? = nil) {
     guard let name = name else { return }

@@ -6,16 +6,22 @@
 //
 
 import UIKit
+import Combine
 
 class ImageBaseViewCell: UICollectionViewCell {
-  private var leftUpperImageView = UIImageView(image: UIImage(systemName: "heart"))
-  private var bottomRightView = UIImageView(image: UIImage(systemName: "photo.fill"))
+  private var leftUpperImageView = UIImageView(
+    image: UIImage(systemName: "heart")
+  )
+  private var bottomRightView = UIImageView(
+    image: UIImage(systemName: "photo.fill")
+  )
   private var activityView: UIActivityIndicatorView?
+  private var cancellables = Set<AnyCancellable>()
   
   private var imageViewModel = ImageViewModel()
   private var isLiked = false
   var isFethed = false
-
+  
   var mainImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
@@ -40,13 +46,25 @@ class ImageBaseViewCell: UICollectionViewCell {
   
   func fetch(id: String) {
     showActivityIndicator()
-    imageViewModel.fetch(f: DropboxAPI.shared.fetchDownload(id: id))
-    imageViewModel.update = { [weak self] image in
-      self?.hideActivityIndicator()
-      self?.mainImageView.image = image
-      self?.isFethed = true
-      return nil
-    }
+    
+    DropboxAPI.shared.fetchDownload(id: id)?
+      .sink(receiveCompletion: {
+        switch $0 {
+        case .finished: break
+        case .failure(let error):
+          print("Image failed to load due to", error)
+        }
+      }, receiveValue: {
+        self.imageViewModel.value.send($0)
+      }).store(in: &cancellables)
+    
+    imageViewModel.value.sink(receiveCompletion: {_ in}, receiveValue: { [weak self] value in
+      if value != nil {
+        self?.hideActivityIndicator()
+        self?.mainImageView.image = self?.imageViewModel.image
+        self?.isFethed = true
+      }
+    }).store(in: &cancellables)
   }
   
   @objc func likedTapped(_ sender: UITapGestureRecognizer) {

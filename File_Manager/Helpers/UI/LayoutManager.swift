@@ -36,7 +36,7 @@ final class LayoutManager {
       case .lastModified:
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),
-          hD: .estimated(110))
+          hD: .absolute(120))
           
         let group = LayoutManager.createHorizontalGroup(
           wD: .estimated(120),

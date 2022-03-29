@@ -37,30 +37,43 @@ class FilesViewController: UIViewController {
     view.backgroundColor = .white
     title = "Files"
     
-    configureCollectionView()
-    bindViewModels()
-    initSnaphot()
-    
-    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(recursive: false))
     navigationItem.searchController = searchController
     searchController.searchResultsUpdater = self
+    
+    configureCollectionView()
+    fetch()
+    bindViewModels()
+    initSnaphot()
   }
   
   // MARK: - Update
   
+  private func fetch() {
+    DropboxAPI.shared.fetchAllFiles()?
+      .sink(receiveCompletion: {
+        switch $0 {
+        case .finished: print("Successfully finished fetch")
+        case .failure(let error):
+          print("Failed fetch due to \(error)")
+          self.filesViewModel.handleFail(on: self) {
+            DropboxAPI.shared.fetchAllFiles()?
+              .sink(receiveCompletion: {_ in}, receiveValue: {
+                self.filesViewModel.subject.send($0)
+              }).store(in: &self.cancellables)
+          }
+        }
+      }, receiveValue: { value in
+        self.filesViewModel.subject.send(value)
+      })
+      .store(in: &cancellables)
+  }
+  
   private func bindViewModels() {
-    filesViewModel.update = { [weak self] in
-      guard let self = self else { return }
-      self.update(files: self.filesViewModel.allFiles, updateLastModified: self.isFirstLoaded)
-      self.isFirstLoaded = false
-    }
-    
-    filesViewModel.failedRequest = { [weak self] in
-      guard let self = self else { return }
-      self.filesViewModel.handleFail(on: self) {
-        self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
+    filesViewModel.subject
+      .sink(receiveCompletion: {_ in}) { files in
+        self.update(files: files?.entries, updateLastModified: true)
       }
-    }
+      .store(in: &cancellables)
   }
   
   private func initSnaphot() {
@@ -170,9 +183,13 @@ extension FilesViewController: UICollectionViewDelegate {
       break
     case .main:
       if indexPath.row == 0 && indexPath.section == 1  && !isRootFolder {
-        filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: self.path.getPrevious ?? "", recursive: false))
+        // Fetch current folder
+        DropboxAPI.shared.fetchAllFiles(path: self.path.getPrevious ?? "", recursive: false)?
+          .sink(receiveCompletion: {_ in}, receiveValue: {
+            self.filesViewModel.subject.send($0)
+          }).store(in: &cancellables)
         let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
-        view.currentPathLabel.text = self.path.previous
+        view.currentPathLabel.text = self.path.wasPrevious
         return
       }
       let selected = isRootFolder ? filesViewModel.allFiles[indexPath.row] : filesViewModel.allFiles[indexPath.row - 1]
@@ -181,7 +198,11 @@ extension FilesViewController: UICollectionViewDelegate {
         self.path.current = path
         let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
         view.currentPathLabel.text = self.path.current
-        filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles(path: path, recursive: false))
+        // Fetch current folder
+        DropboxAPI.shared.fetchAllFiles(path: self.path.current, recursive: false)?
+          .sink(receiveCompletion: {_ in}, receiveValue: {
+            self.filesViewModel.subject.send($0)
+          }).store(in: &cancellables)
       }
     }
   }
@@ -199,45 +220,15 @@ extension FilesViewController: UISearchResultsUpdating {
     .map { $0?.text }
     .sink { [weak self] text in
       guard let text = text, let self = self else { return }
-      if text.isEmpty { self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles()) }
-      DropboxAPI.shared.fetchSearch(q: text)?
-        .sink(receiveCompletion: {_ in}, receiveValue: { data in
-          let files = data?.matches.compactMap { $0.metadata.metadata }
-          self.update(files: files)
-        })
-        .store(in: &self.cancellables)
+      if !text.isEmpty {
+        DropboxAPI.shared.fetchSearch(q: text)?
+          .sink(receiveCompletion: {_ in}, receiveValue: { data in
+            let files = data?.matches.compactMap { $0.metadata.metadata }
+            self.update(files: files)
+          })
+          .store(in: &self.cancellables)
+      }
     }
   }
 }
 
-extension FilesViewController {
-  
-  /// Struct for displaing folder path
-  private struct Path {
-
-    var current: String {
-      get {
-        all.last ?? ""
-      }
-      set {
-        previous = current
-        all.append(newValue)
-      }
-    }
-    
-    var previous: String?
-    
-    var getPrevious: String? {
-      mutating get {
-        all.removeLast()
-        previous = all.last
-        return previous
-      }
-      set {
-        previous = newValue
-      }
-    }
-    var all = [String]()
-  }
-
-}

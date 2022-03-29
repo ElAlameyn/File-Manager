@@ -20,6 +20,7 @@ enum RequestConfigurator {
   
   enum Users: String {
     case usageSpace = "/get_space_usage"
+    case currentAccount = "/get_current_account"
   }
   
   private struct TokenCredentials {
@@ -44,11 +45,8 @@ enum RequestConfigurator {
     case .token:
       return baseURL + "/oauth2/token"
     case .users(let user):
-      let startPoint = baseURL + "/2/users"
-      switch user {
-      case .usageSpace:
-        return startPoint + user.rawValue
-      }
+      let startPoint = baseURL + "/2/users" + user.rawValue
+      return startPoint
     case .listFolder:
       let startPoint = baseURL + "/2/files"
       return startPoint + "/list_folder"

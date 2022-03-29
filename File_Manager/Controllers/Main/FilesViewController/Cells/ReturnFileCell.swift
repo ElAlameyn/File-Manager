@@ -27,6 +27,13 @@ class ReturnFileCell: UICollectionViewCell {
 }
 
 extension ReturnFileCell {
+  private func setUpContentView() {
+    backgroundColor = .white
+    layer.cornerRadius = 10
+    layer.shadowOffset = CGSize(width: 1, height: 5)
+    layer.shadowRadius = 2
+    layer.shadowOpacity = 0.1
+  }
   
   private func setUpUI() {
     imageView.image = UIImage(systemName: "arrow.backward")?
@@ -36,15 +43,7 @@ extension ReturnFileCell {
     setUpContentView()
     contentView.addSubview(imageView)
   }
-  
-  private func setUpContentView() {
-    backgroundColor = .white
-    layer.cornerRadius = 10
-    layer.shadowOffset = CGSize(width: 1, height: 5)
-    layer.shadowRadius = 2
-    layer.shadowOpacity = 0.1
-  }
-  
+
   func setUpLayout() {
     imageView.addCenterConstraints(exclude: .axisX)
     imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true

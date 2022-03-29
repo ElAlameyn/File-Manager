@@ -32,22 +32,46 @@ class ImagesCollectionController: UIViewController
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    navigationController?.navigationBar.isHidden  = false
+    
     configureUI()
+    fetch()
     bindViewModels()
     applySnapshot()
-    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
   }
   
+  private func fetch() {
+    DropboxAPI.shared.fetchAllFiles()?
+      .sink(receiveCompletion: {
+        switch $0 {
+        case .finished: print("Successfully finished fetch")
+        case .failure(let error):
+          print("Failed fetch due to \(error)")
+          self.filesViewModel.handleFail(on: self) {
+            DropboxAPI.shared.fetchAllFiles()?
+              .sink(receiveCompletion: {_ in}, receiveValue: {
+                self.filesViewModel.subject.send($0)
+              }).store(in: &self.cancellables)
+          }
+        }
+      }, receiveValue: { value in
+        self.filesViewModel.subject.send(value)
+      })
+      .store(in: &cancellables)
+  }
+  
+  
   private func bindViewModels() {
-    filesViewModel.update = { [weak self] in
-      guard let self = self else { return }
-      self.filesViewModel.images.forEach { [weak self] in
-        self?.images.append(ImageIdContainer(
-          imageId: $0.id,
-          imageName: $0.name
-        ))
+    filesViewModel.subject
+      .sink(receiveCompletion: {_ in}) { _ in
+        self.filesViewModel.images.forEach { [weak self] in
+          self?.images.append(ImageIdContainer(
+            imageId: $0.id,
+            imageName: $0.name
+          ))
+        }
       }
-    }
+      .store(in: &cancellables)
   }
   
   private func applySnapshot() {

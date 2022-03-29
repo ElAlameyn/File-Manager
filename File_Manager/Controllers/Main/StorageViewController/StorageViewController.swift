@@ -33,23 +33,38 @@ class StorageViewController: UIViewController {
     view.backgroundColor = Colors.baseBackground
     
     configureUI()
+    fetch()
     bindViewModels()
     applySnapshot()
-    usageSpaceViewModel.fetch(f: DropboxAPI.shared.fetchUsageSpace)
-    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
+  }
+  
+  private func fetch() {
+    // Fetch and store usage space
+    DropboxAPI.shared.fetchUsageSpace()?
+      .sink(receiveCompletion: {
+        switch $0 {
+        case .finished: print("SUCCESS USAGE SPACE FETCH")
+        case .failure(let error):
+          print("Failed fetch due to \(error)")
+          self.usageSpaceViewModel.handleFail(on: self) {
+            DropboxAPI.shared.fetchUsageSpace()?
+              .sink(receiveCompletion: {_ in}, receiveValue: {
+                self.usageSpaceViewModel.subject.send($0)
+              }).store(in: &self.cancellables)
+          }
+        }
+      }, receiveValue: {
+        self.usageSpaceViewModel.subject.send($0)
+      }
+      ).store(in: &cancellables)
   }
   
   private func bindViewModels() {
-    usageSpaceViewModel.$value
-      .sink(receiveValue: {[weak self] value in
-        self?.updateUsageSpace(usageSpaceResponse: value)
-      })
-      .store(in: &cancellables)
-    
-    filesViewModel.update = { [weak self] in
-      guard let self = self else { return }
-      self.updateListFiles(files: self.filesViewModel.filteredByDateModified())
-    }
+    // Update usage space
+    usageSpaceViewModel.subject
+      .sink(receiveCompletion: {_ in}, receiveValue: { response in
+        self.updateUsageSpace(usageSpaceResponse: response)
+      }).store(in: &cancellables)
   }
   
   private func configureDataSource() -> DataSource {
@@ -73,10 +88,10 @@ class StorageViewController: UIViewController {
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
       view.downArrowButton.isHidden = false
-
+      
       switch Section(rawValue: indexPath.section) {
       case .usageSpace: break
-      case .lastModified: view.titleLabel.text = "Last Modified"
+      case .lastModified: view.titleLabel.text = "File Requests"
       case .none: break
       }
       return view
@@ -103,19 +118,19 @@ class StorageViewController: UIViewController {
       self.dataSource.apply(snapshot, to: .lastModified, animatingDifferences: true)
     }
   }
-
+  
   private func configureUI() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(UsageSpaceCell.self, forCellWithReuseIdentifier: "\(UsageSpaceCell.self)")
     collectionView.register(FileItemCell.self, forCellWithReuseIdentifier: "\(FileItemCell.self)")
-
+    
     collectionView.register(
       SectionHeaderBaseView.self,
       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
       withReuseIdentifier: "\(SectionHeaderBaseView.self)")
-
+    
     view.addSubview(collectionView)
   }
   
@@ -146,7 +161,7 @@ class StorageViewController: UIViewController {
         let item = NSCollectionLayoutItem(layoutSize: size)
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
-
+        
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
         section.interGroupSpacing = 15
@@ -155,7 +170,7 @@ class StorageViewController: UIViewController {
           wD: .fractionalWidth(1.0),
           hD: .estimated(30))
         section.boundarySupplementaryItems = [sectionHeader]
-
+        
         return section
       }
     }

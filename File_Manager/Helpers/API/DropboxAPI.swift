@@ -13,7 +13,10 @@ final class DropboxAPI {
   static let shared = DropboxAPI()
   static let tokenKey = "token_key"
   
-  var presentAuth: (() -> Void)?
+  func fetchCurrentAccount() -> AnyPublisher<CurrentAccountResponse?, Error>? {
+    guard let request = RequestConfigurator.users(.currentAccount).setRequest() else { return nil }
+    return getPublisher(request: request)
+  }
   
   func fetchUsageSpace() -> AnyPublisher<UsageSpaceResponse?, Error>? {
     guard let request = RequestConfigurator.users(.usageSpace).setRequest() else { return nil }
@@ -27,7 +30,6 @@ final class DropboxAPI {
   
   func fetchSearch(q: String = "") -> AnyPublisher<SearchResponse?, Error>? {
     guard let request = RequestConfigurator.search(query: q).setRequest() else { return nil }
-    print("REQUEST: \(request.url)")
     return getPublisher(request: request)
   }
   

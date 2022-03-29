@@ -14,51 +14,108 @@ class BaseViewController: UIViewController {
   typealias DataSource = UICollectionViewDiffableDataSource<Section, BaseItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, BaseItem>
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<BaseItem>
-
+  
   private let sections = Section.allCases
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
   private var cancellables: Set<AnyCancellable> = []
   
   private let filesViewModel = FilesViewModel()
+  private let accountViewModel = CurrentAccountViewModel()
   
   @Limited<BaseItem>(limit: 4) private var images {
     didSet {
       updateImages()
     }
   }
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
+    #warning("Fix navigation bar thing")
+    navigationController?.navigationBar.isHidden = true
+    
     configureCollectionView()
+    fetch()
     bindViewModels()
     applyInitSnapshot()
-    filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
+  }
+  
+  private func fetch() {
+    // Fetch and store dropbox files
+    DropboxAPI.shared.fetchAllFiles()?
+      .sink(receiveCompletion: {
+        switch $0 {
+        case .finished: print("Successfully finished fetch")
+        case .failure(let error):
+          print("Failed fetch due to \(error)")
+          self.filesViewModel.handleFail(on: self) {
+            DropboxAPI.shared.fetchAllFiles()?
+              .sink(receiveCompletion: {_ in}, receiveValue: {
+                self.filesViewModel.subject.send($0)
+              }).store(in: &self.cancellables)
+          }
+        }
+      }, receiveValue: { value in
+        self.filesViewModel.subject.send(value)
+      })
+      .store(in: &cancellables)
+    
+    // Fetch and store account info
+    DropboxAPI.shared.fetchCurrentAccount()?
+      .sink(receiveCompletion: {
+        switch $0 {
+        case .finished: print("SUCCESS ACCOUNT FETCH")
+        case .failure(let error):
+          print("FAIL ACCOUNT FETCH ", error)
+          self.filesViewModel.handleFail(on: self) {
+            DropboxAPI.shared.fetchCurrentAccount()?
+              .sink(receiveCompletion: {_ in}, receiveValue: {
+                self.accountViewModel.subject.send($0)
+              }).store(in: &self.cancellables)
+          }
+        }
+      }, receiveValue: {
+        self.accountViewModel.subject.send($0)
+      })
+      .store(in: &cancellables)
   }
   
   private func bindViewModels() {
-    
-    filesViewModel.failedRequest = { [weak self] in
-      guard let self = self else { return }
-      self.filesViewModel.handleFail(on: self) {
-        self.filesViewModel.fetch(f: DropboxAPI.shared.fetchAllFiles())
+    // Update files
+    filesViewModel.subject
+      .sink(receiveCompletion: {_ in}) { _ in
+        self.updateFilesAmount(
+          files: self.filesViewModel.countFilesAmount()
+        )
+        self.filesViewModel.images.forEach { [weak self] in
+          self?.images.append(BaseItem.recents(ImageIdContainer(
+            imageId: $0.id,
+            imageName: $0.name
+          )))
+        }
       }
-    }
-
-    filesViewModel.update = { [weak self] in
-      guard let self = self else { return }
-      self.updateFilesAmount(
-        files: self.filesViewModel.countFilesAmount()
-      )
-      self.filesViewModel.images.forEach { [weak self] in
-        self?.images.append(BaseItem.recents(ImageIdContainer(
-          imageId: $0.id,
-          imageName: $0.name
-        )))
-      }
-    }
+      .store(in: &cancellables)
     
+    // Update user account
+    accountViewModel.subject.sink(receiveCompletion: {_ in}) {
+      print("ACCOUNT RESPONSE ", $0.debugDescription)
+      guard let value = $0, let url = URL(string: value.profilePhotoURL ?? "") else { return }
+      if let data = try? Data(contentsOf: url) {
+        if let image = UIImage(data: data) {
+          self.updateAccount(
+            image: image,
+            title:"Welcome, " + ($0?.name.displayName ?? "User")
+          )
+        }
+      }
+    }.store(in: &cancellables)
+  }
+  
+  private func updateAccount(image: UIImage? = nil, title: String? = nil) {
+    var snapshot = SectionSnapshot()
+    snapshot.append([.title(image: image, text: title)])
+    dataSource.apply(snapshot, to: .title, animatingDifferences: true)
   }
   
   private func updateFilesAmount(files: (images: Int, videos: Int, files: Int)) {
@@ -77,16 +134,17 @@ class BaseViewController: UIViewController {
     dataSource.apply(snapshot, to: .recentFiles, animatingDifferences: true)
   }
   
-
+  
   // MARK: - Collection View Setup
-
+  
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
       (collectionView: UICollectionView, indexPath: IndexPath, item: BaseItem) -> UICollectionViewCell? in
       
       switch item {
-      case .title:
+      case .title(let image, let text):
         let cell: TitleBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.configure(image: image, text: text)
         return cell
       case .category(let category):
         let cell: CategoryBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
@@ -121,12 +179,12 @@ class BaseViewController: UIViewController {
   private func applyInitSnapshot() {
     var snapshot = Snapshot()
     snapshot.appendSections([.title, .category, .recentFiles])
-    snapshot.appendItems( [.title] , toSection: .title)
+    snapshot.appendItems( [.title(image: nil, text: nil)] , toSection: .title)
     snapshot.appendItems([
       .category(Category(title: "Images", amount: 0)),
       .category(Category(title: "Videos", amount: 0)),
       .category(Category(title: "Files", amount: 0))
-], toSection: .category)
+    ], toSection: .category)
     self.dataSource.apply(snapshot, animatingDifferences: false)
     
     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -135,7 +193,7 @@ class BaseViewController: UIViewController {
     }
   }
   
-
+  
   // MARK: - Navigation Buttons
   
   private func addLeftBarButtonItem() {

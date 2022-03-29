@@ -8,9 +8,8 @@
 import Foundation
 import Combine
 
-
 final class UsageSpaceViewModel: ObservableObject, ViewModelProtocol {
   var failedRequest: (() -> Void)?
   var cancellables = Set<AnyCancellable>()
-  @Published var value: UsageSpaceResponse?
+  var subject = CurrentValueSubject<UsageSpaceResponse?, APIError>(nil)
 }

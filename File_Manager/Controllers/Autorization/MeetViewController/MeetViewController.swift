@@ -46,10 +46,12 @@ class MeetViewController: UIViewController {
           } else {
             DispatchQueue.main.async { [weak self] in
               print("Access token expired")
-              self?.navigationController?.present(authVC, animated: true, completion: { [weak self] in
-                guard let self = self else { return }
-                self.navigationController?.pushViewController(TabBarViewController(), animated: true)
-              })
+              #warning("Doen't work")
+              self?.navigationController?.present(authVC, animated: true)
+              authVC.dismissed = {
+                authVC.dismiss(animated: true)
+                self?.navigationController?.pushViewController(TabBarViewController(), animated: true)
+              }
             }
           }
         }

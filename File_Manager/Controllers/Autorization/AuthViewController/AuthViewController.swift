@@ -10,13 +10,11 @@ import WebKit
 import Combine
 import KeychainSwift
 
-class AuthViewController: UIViewController, WKNavigationDelegate
-{
+class AuthViewController: UIViewController, WKNavigationDelegate {
   
   private var webView = WKWebView()
-//  private var cancellables = Set<AnyCancellable>()
-  private var subscriber: AnyCancellable?
-  
+  private var cancellables = Set<AnyCancellable>()
+
   var dismissed: Empty? = nil
   
   private struct DropboxURL {
@@ -24,7 +22,6 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     static let clientID = "688rvrlb7upz9jb"
     static let redirectURI = "http://localhost"
   }
-  
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -32,6 +29,10 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     webView.navigationDelegate = self
     view.addSubview(webView)
     
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
     let codeVerifier = RequestConfigurator.createCodeVerifier()
     let codeChallenge = RequestConfigurator.createCodeChallenge(
       for: codeVerifier)
@@ -60,9 +61,10 @@ class AuthViewController: UIViewController, WKNavigationDelegate
     guard let code = getCodeFrom(url: url) else { return }
     guard let request = RequestConfigurator.token(code).setRequest() else { return }
     
-    subscriber = URLSession.shared.dataTaskPublisher(for: request)
+    URLSession.shared.dataTaskPublisher(for: request)
       .map { $0.data }
       .map {
+        #warning("For test")
         let object = try? JSONSerialization.jsonObject(with: $0, options: .fragmentsAllowed)
         print("Token response \(object)")
         return $0
@@ -81,9 +83,8 @@ class AuthViewController: UIViewController, WKNavigationDelegate
           KeychainSwift().set(data, forKey: "\(DropboxAPI.tokenKey)", withAccess: .accessibleWhenUnlocked)
         }
         self?.dismissed?()
-//        self?.dismiss(animated: true, completion: {
-//        })
       }
+      .store(in: &cancellables)
   }
   
   private func getCodeFrom(url: URL) -> String? {

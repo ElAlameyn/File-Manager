@@ -8,7 +8,7 @@
 import UIKit
 
 enum BaseItem: Hashable {
-  case title
+  case title(image: UIImage?, text: String? = "")
   case category(Category?)
   case recents(ImageIdContainer?)
 }
