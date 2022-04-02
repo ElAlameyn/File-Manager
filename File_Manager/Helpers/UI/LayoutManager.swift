@@ -23,8 +23,8 @@ final class LayoutManager {
     case lastModified, main
   }
   
-  private let baseSections: [BaseSections] = [.title, .category, .recentFiles]
-  private let filesSectons: [FilesSections] = [.lastModified, .main]
+  private let baseSections = BaseSections.allCases
+  private let filesSectons = FilesSections.allCases
   
   // MARK: - [FilesViewController]: Layout
   

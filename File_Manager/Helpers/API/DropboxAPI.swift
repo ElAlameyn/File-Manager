@@ -13,6 +13,11 @@ final class DropboxAPI {
   static let shared = DropboxAPI()
   static let tokenKey = "token_key"
   
+  func deleteFile(at id: String) -> AnyPublisher<Data?, Error>? {
+    guard let request = RequestConfigurator.deleteFile(id: id).setRequest() else { return nil }
+    return getDataPublisher(request: request)
+  }
+  
   func fetchCurrentAccount() -> AnyPublisher<CurrentAccountResponse?, Error>? {
     guard let request = RequestConfigurator.users(.currentAccount).setRequest() else { return nil }
     return getPublisher(request: request)
@@ -79,7 +84,11 @@ final class DropboxAPI {
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
           throw APIError.statusCode(httpResponse.statusCode)
         }
-        print("DATA IMAGE: \(data)")
+        let string = String(data: data, encoding: .utf8)
+        print(string)
+        print("HTTP CODE", (response as? HTTPURLResponse)?.statusCode )
+        let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+        print("Object: \(object)")
         return data
       }
       .receive(on: RunLoop.main)

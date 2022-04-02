@@ -265,13 +265,13 @@
 			path = APIResponses;
 			sourceTree = "<group>";
 		};
-		B51A715E27AEAD1A0026040E /* Views */ = {
+		B51A715E27AEAD1A0026040E /* Reusable */ = {
 			isa = PBXGroup;
 			children = (
 				B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseView.swift */,
 				B526843527E8D78200A864C8 /* FoldersHeaderView.swift */,
 			);
-			path = Views;
+			path = Reusable;
 			sourceTree = "<group>";
 		};
 		B51A715F27AEBAD90026040E /* OptionsViewController */ = {
@@ -329,7 +329,7 @@
 		B535379827B28A83003A7C6A /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				B51A715E27AEAD1A0026040E /* Views */,
+				B51A715E27AEAD1A0026040E /* Reusable */,
 				B51A716227AEBB250026040E /* FilesViewController */,
 				B51A715F27AEBAD90026040E /* OptionsViewController */,
 				B5FB3F7627A84686007A0495 /* StorageViewController */,

@@ -15,7 +15,6 @@ class FilesViewController: UIViewController {
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, FileItem>
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<FileItem>
   
-  private let sections = Section.allCases
   private let filesViewModel = FilesViewModel()
   private var collectionView: UICollectionView! = nil
   private lazy var dataSource = configureDataSource()
@@ -26,7 +25,6 @@ class FilesViewController: UIViewController {
   private let searchController = UISearchController()
   private var path = Path()
 
-  private var isFirstLoaded = true
   private var isRootFolder: Bool {
     path.current == ""
   }
@@ -46,8 +44,8 @@ class FilesViewController: UIViewController {
     initSnaphot()
   }
   
-  // MARK: - Update
-  
+  // MARK: - Fetch & Update Collection View
+
   private func fetch() {
     DropboxAPI.shared.fetchAllFiles()?
       .sink(receiveCompletion: {
@@ -140,7 +138,7 @@ extension FilesViewController {
       guard let section = Section(rawValue: indexPath.section) else { return nil }
       switch section {
       case .lastModified:
-        let cell:LastModifiedCell = collectionView.dequeueReusableCell(for: indexPath)
+        let cell: LastModifiedCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(title: item.file?.name, tag: item.file?.tag)
         return cell
       case .main:
@@ -151,10 +149,11 @@ extension FilesViewController {
           }
         }
         let cell: FileItemCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.handleMenu = self
+        cell.indexPath = indexPath
         cell.configure(title: item.file?.name, tag: item.file?.tag)
         return cell
       }
-      
     }
     
     dataSource.supplementaryViewProvider = {
@@ -179,11 +178,11 @@ extension FilesViewController {
 extension FilesViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     switch LayoutManager.FilesSections.allCases[indexPath.section] {
-    case .lastModified:
-      break
+    case .lastModified: break
     case .main:
+      // Handle back arrow tap
       if indexPath.row == 0 && indexPath.section == 1  && !isRootFolder {
-        // Fetch current folder
+        // Fetch previous folder
         DropboxAPI.shared.fetchAllFiles(path: self.path.getPrevious ?? "", recursive: false)?
           .sink(receiveCompletion: {_ in}, receiveValue: {
             self.filesViewModel.subject.send($0)
@@ -192,6 +191,7 @@ extension FilesViewController: UICollectionViewDelegate {
         view.currentPathLabel.text = self.path.wasPrevious
         return
       }
+      // Handle tap on folder
       let selected = isRootFolder ? filesViewModel.allFiles[indexPath.row] : filesViewModel.allFiles[indexPath.row - 1]
       if selected.tag == "folder" {
         guard let path = selected.pathDisplay else { return }
@@ -229,6 +229,32 @@ extension FilesViewController: UISearchResultsUpdating {
           .store(in: &self.cancellables)
       }
     }
+  }
+}
+
+extension FilesViewController: HandlingFileMenuOperations {
+  func didShareTapped(for indexPath: IndexPath) {
+  }
+  
+  func didShowPreviewTapped(for indexPath: IndexPath) {
+  }
+  
+  func didDownloadTapped(for indexPath: IndexPath) {
+  }
+  
+  func didDeleteTapped(for indexPath: IndexPath) {
+    DropboxAPI.shared.deleteFile(
+      at: filesViewModel.allFiles[indexPath.row].pathDisplay ?? ""
+    )?
+      .sink(receiveCompletion: {
+      switch $0 {
+      case .finished:
+        print("DELETE FILE SUCCESSFUL")
+      case .failure(let error):
+        print("DELETE FILE FAILED DUE TO", error)
+      }
+      }, receiveValue: {_ in})
+      .store(in: &cancellables)
   }
 }
 

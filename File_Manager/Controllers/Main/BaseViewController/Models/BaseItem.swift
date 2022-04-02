@@ -14,6 +14,9 @@ enum BaseItem: Hashable {
 }
 
 extension BaseItem {
+  
+  // Access properties for recents section
+  
   var id: String? {
     switch self {
     case .recents(let optional): return optional?.imageId

@@ -200,7 +200,7 @@ class BaseViewController: UIViewController {
     let button = UIButton(type: .custom)
     button.setImage(Images.baseLeftItem, for: .normal)
     button.setImage(UIImage(systemName: "circle.grid.2x2.fill")?
-      .withTintColor(.black).withPointSize(25), for: .normal)
+      .withTintColor(.black).withPointSize(70), for: .normal)
     button.addTarget(self, action: #selector(leftBarButtonItemTapped), for: .touchUpInside)
     navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
   }
@@ -242,6 +242,7 @@ extension BaseViewController {
     
     collectionView.delegate = self
     view.addSubview(collectionView)
+    
   }
 }
 
@@ -256,12 +257,14 @@ extension BaseViewController: UICollectionViewDelegate {
       case .images:
         let imageVC = ImagesCollectionController()
         navigationController?.pushViewController(imageVC, animated: true)
+        #warning("Make screens for videous and files")
       case .videos: break
       case .files: break
       }
     case .recentFiles:
       switch images[indexPath.row] {
       case .recents:
+        // Handle tap on image
         let detailVC = DetailImageController()
         detailVC.title = images[indexPath.row].name
         guard let item = collectionView.cellForItem(at: indexPath) as? ImageBaseViewCell else { return }

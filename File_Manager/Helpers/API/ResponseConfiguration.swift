@@ -36,32 +36,21 @@ enum RequestConfigurator {
   case download(String)
   case check
   case search(query: String)
-  
+  case deleteFile(id: String)
+
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
   
   var configuredURL: String {
     switch self {
-    case .token:
-      return baseURL + "/oauth2/token"
-    case .users(let user):
-      let startPoint = baseURL + "/2/users" + user.rawValue
-      return startPoint
-    case .listFolder:
-      let startPoint = baseURL + "/2/files"
-      return startPoint + "/list_folder"
-    case .thumbnail(_):
-      let startPoint = contentURL + "/2/files"
-      return startPoint + "/get_thumbnail"
-    case .download(_):
-      let startPoint = contentURL + "/2/files"
-      return startPoint + "/download"
-    case .check:
-      let startPoint = baseURL + "/2/check"
-      return startPoint + "/user"
-    case .search:
-      let startPoint = baseURL + "/2/files"
-      return startPoint + "/search_v2"
+    case .token: return baseURL + "/oauth2/token"
+    case .users(let user): return  baseURL + "/2/users" + user.rawValue
+    case .listFolder: return baseURL + "/2/files" + "/list_folder"
+    case .thumbnail(_): return contentURL + "/2/files" + "/get_thumbnail"
+    case .download(_): return contentURL + "/2/files" + "/download"
+    case .check: return baseURL + "/2/check" + "/user"
+    case .search: return baseURL + "/2/files" + "/search_v2"
+    case .deleteFile: return baseURL + "/2/files" + "/delete_v2"
     }
   }
   
@@ -91,6 +80,8 @@ enum RequestConfigurator {
       return ["query": "foo"]
     case .search(query: let query):
       return ["query": query]
+    case .deleteFile(id: let id):
+      return ["path": id]
     }
   }
   
@@ -149,6 +140,10 @@ enum RequestConfigurator {
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = jsonData
+    case .deleteFile:
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+      request.httpBody = jsonData
     }
     request.timeoutInterval = 60
     return request
@@ -156,6 +151,7 @@ enum RequestConfigurator {
 }
 
 // MARK: - PCKE extension
+
 extension RequestConfigurator {
   
   static func createCodeVerifier() -> String {

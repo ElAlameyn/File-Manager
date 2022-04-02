@@ -120,11 +120,11 @@ class FoldersHeaderView: UICollectionReusableView {
   }
   
   @objc func didTapAddFolder() {
-    // TODO: Add folder
+    #warning("Add folder")
   }
     
   @objc func didTapAddFile() {
-    // TODO: Add file(paper)
+    #warning("Add paper")
   }
 
   required init?(coder: NSCoder) {

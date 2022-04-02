@@ -8,7 +8,17 @@
 import UIKit
 import UniformTypeIdentifiers
 
+protocol HandlingFileMenuOperations {
+  func didShareTapped(for indexPath: IndexPath)
+  func didShowPreviewTapped(for indexPath: IndexPath)
+  func didDownloadTapped(for indexPath: IndexPath)
+  func didDeleteTapped(for indexPath: IndexPath)
+}
+
 class FileItemCell: UICollectionViewCell {
+  
+  var handleMenu: HandlingFileMenuOperations?
+  var indexPath: IndexPath?
   
   private let titleLabel = UILabel.withStyle(
     f: Style.baseLabelStyle <>
@@ -29,13 +39,11 @@ class FileItemCell: UICollectionViewCell {
     button.setImage(UIImage(
       systemName: "ellipsis",
       withConfiguration: UIImage.SymbolConfiguration(pointSize: 20))?
-                      .withTintColor(.black, renderingMode: .alwaysOriginal),
+      .withTintColor(.black, renderingMode: .alwaysOriginal),
                     for: .normal)
     button.setTitle("", for: .normal)
-    
-    button.menu = FileMenu()
+    button.menu = addFileMenu()
     button.showsMenuAsPrimaryAction = true
-    
     return button
   }()
   
@@ -45,18 +53,51 @@ class FileItemCell: UICollectionViewCell {
     setUpUI()
     setUpLayout()
   }
-
-  func configure(title: String? = nil,
-                 image: UIImage? = nil,
-                 tag: String? = nil
-  ) {
-    guard let title = title else { return }
-    titleLabel.text = title
-    if tag == "folder" {
-      imageView.image = Images.categoryFolder
-    } else {
-      imageView.setCategoryFor(file: title)
+  
+  func configure(
+    title: String? = nil,
+    image: UIImage? = nil,
+    tag: String? = nil) {
+      guard let title = title else { return }
+      titleLabel.text = title
+      if tag == "folder" {
+        imageView.image = Images.categoryFolder
+      } else {
+        imageView.setCategoryFor(file: title)
+      }
     }
+  
+  private func addFileMenu() -> UIMenu {
+    UIMenu(title: "What to do with file", image: nil, identifier: .file, options: [], children:[
+      UIAction(
+        title: "Share",
+        image: UIImage(systemName: "square.and.arrow.up"),
+        handler: { [weak self] _ in
+          guard let self = self, let indexPath = self.indexPath else { return }
+          self.handleMenu?.didShareTapped(for: indexPath)
+        }),
+      UIAction(
+        title: "Show Preview",
+        image: UIImage(systemName: "eye"),
+        handler: { [weak self] _ in
+          guard let self = self, let indexPath = self.indexPath else { return }
+          self.handleMenu?.didShowPreviewTapped(for: indexPath)
+        }),
+      UIAction(
+        title: "Download",
+        image: UIImage(systemName: "square.and.arrow.down"),
+        handler: { [weak self] _ in
+          guard let self = self, let indexPath = self.indexPath else { return }
+          self.handleMenu?.didDownloadTapped(for: indexPath)
+        }),
+      UIAction(
+        title: "Delete",
+        image: UIImage(systemName: "trash"),
+        attributes: [.destructive],  handler: { [weak self] _ in
+          guard let self = self, let indexPath = self.indexPath else { return }
+          self.handleMenu?.didDeleteTapped(for: indexPath)
+        })
+    ])
   }
   
   required init?(coder: NSCoder) {
@@ -65,14 +106,13 @@ class FileItemCell: UICollectionViewCell {
 }
 
 extension FileItemCell {
-  
   private func setUpUI() {
     setUpContentView()
     contentView.addSubview(imageView)
     contentView.addSubview(descrButton)
     contentView.addSubview(titleLabel)
   }
-
+  
   private func setUpContentView() {
     backgroundColor = .white
     layer.cornerRadius = 10
@@ -80,7 +120,7 @@ extension FileItemCell {
     layer.shadowRadius = 2
     layer.shadowOpacity = 0.1
   }
-
+  
   private func setUpLayout() {
     imageView.addCenterConstraints(exclude: .axisX)
     imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20).isActive = true
@@ -90,35 +130,12 @@ extension FileItemCell {
     descrButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20).isActive = true
     descrButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     descrButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
-
+    
     titleLabel.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 10).isActive = true
     titleLabel.rightAnchor.constraint(equalTo: descrButton.leftAnchor,constant: -10).isActive = true
     titleLabel.addEdgeContstraints(exclude: .left, .right, offset: UIEdgeInsets(top: 20, left: 0, bottom: -20, right: 0))
   }
 }
 
-extension FileItemCell {
-  final class FileMenu: UIMenu {
-    
-    override var title: String {
-      "What to do with file"
-    }
-    
-    override var children: [UIMenuElement] {
-      [
-      UIAction(title: "Share",  image: UIImage(systemName: "square.and.arrow.up"), handler: {_ in}),
-      UIAction(title: "Show Preview", image: UIImage(systemName: "eye"), handler: {_ in}),
-      UIAction(title: "Download",  image: UIImage(systemName: "square.and.arrow.down"), handler: {_ in}),
-      UIAction(title: "Delete",  image: UIImage(systemName: "trash"), attributes: [.destructive],  handler: {_ in})
-      ]
-    }
-    
-    override var identifier: UIMenu.Identifier {
-      .file
-    }
-    
-    required init?(coder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
-    }
-  }
-}
+
+

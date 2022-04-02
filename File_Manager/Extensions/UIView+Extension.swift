@@ -7,8 +7,7 @@
 
 import UIKit
 
-extension UIView
-{
+extension UIView {
   // MARK: - Layout
   
   enum AnchorType {

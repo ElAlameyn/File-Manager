@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct Texts
-{
+struct Texts {
   // Base Controller
   static let baseTitleLabelText = "Welcome"
   static let baseDescriptionLabelText = "Let’s manage your files conveniently"
@@ -21,5 +20,4 @@ struct Texts
   static let meetTitleLabelText = "Manage your Dropbox files with best way"
   static let meetDescriptionLabelText = "Keep your cloud files organized more easily"
   static let meetButtonTitle = "Get Started"
-  
 }
