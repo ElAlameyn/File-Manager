@@ -24,7 +24,7 @@ class FilesViewController: UIViewController {
   
   private let searchController = UISearchController()
   private var path = Path()
-
+  
   private var isRootFolder: Bool {
     path.current == ""
   }
@@ -39,32 +39,12 @@ class FilesViewController: UIViewController {
     searchController.searchResultsUpdater = self
     
     configureCollectionView()
-    fetch()
+    reloadViewWithFiles(at: path.current)
     bindViewModels()
     initSnaphot()
   }
   
-  // MARK: - Fetch & Update Collection View
-
-  private func fetch() {
-    DropboxAPI.shared.fetchAllFiles()?
-      .sink(receiveCompletion: {
-        switch $0 {
-        case .finished: print("Successfully finished fetch")
-        case .failure(let error):
-          print("Failed fetch due to \(error)")
-          self.filesViewModel.handleFail(on: self) {
-            DropboxAPI.shared.fetchAllFiles()?
-              .sink(receiveCompletion: {_ in}, receiveValue: {
-                self.filesViewModel.subject.send($0)
-              }).store(in: &self.cancellables)
-          }
-        }
-      }, receiveValue: { value in
-        self.filesViewModel.subject.send(value)
-      })
-      .store(in: &cancellables)
-  }
+  // MARK: - Fetch & Update Data
   
   private func bindViewModels() {
     filesViewModel.subject
@@ -72,6 +52,23 @@ class FilesViewController: UIViewController {
         self.update(files: files?.entries, updateLastModified: true)
       }
       .store(in: &cancellables)
+  }
+  
+  private func reloadViewWithFiles(at path: String) {
+    DropboxAPI.shared.fetchAllFiles(path: path, recursive: false)?
+      .sink(receiveCompletion: {
+        switch $0 {
+        case .finished: break
+        case .failure(let error):
+          print("Failed fetch due to \(error)")
+          self.filesViewModel.handleFail(on: self) {
+            self.reloadViewWithFiles(at: self.path.current)
+          }
+        }
+        
+      }, receiveValue: {
+        self.filesViewModel.subject.send($0)
+      }).store(in: &cancellables)
   }
   
   private func initSnaphot() {
@@ -162,18 +159,22 @@ extension FilesViewController {
       switch Section(rawValue: indexPath.section) {
       case .lastModified:
         let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-        view.titleLabel.text = "Last Modified"
+        view.titleLabel.text = Texts.fileSectionLastModified
         return view
       case .main:
         let view: FoldersHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-        view.titleLabel.text = "All Files"
+        view.titleLabel.text = Texts.fileSectionAllFiles
+        view.delegate = self
         return view
       default: return nil
       }
     }
     return dataSource
   }
+  
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension FilesViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -182,15 +183,14 @@ extension FilesViewController: UICollectionViewDelegate {
     case .main:
       // Handle back arrow tap
       if indexPath.row == 0 && indexPath.section == 1  && !isRootFolder {
-        // Fetch previous folder
-        DropboxAPI.shared.fetchAllFiles(path: self.path.getPrevious ?? "", recursive: false)?
-          .sink(receiveCompletion: {_ in}, receiveValue: {
-            self.filesViewModel.subject.send($0)
-          }).store(in: &cancellables)
+        reloadViewWithFiles(at: self.path.getPrevious ?? "")
+        
+        // Change show path label
         let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
         view.currentPathLabel.text = self.path.wasPrevious
         return
       }
+      
       // Handle tap on folder
       let selected = isRootFolder ? filesViewModel.allFiles[indexPath.row] : filesViewModel.allFiles[indexPath.row - 1]
       if selected.tag == "folder" {
@@ -198,17 +198,14 @@ extension FilesViewController: UICollectionViewDelegate {
         self.path.current = path
         let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
         view.currentPathLabel.text = self.path.current
-        // Fetch current folder
-        DropboxAPI.shared.fetchAllFiles(path: self.path.current, recursive: false)?
-          .sink(receiveCompletion: {_ in}, receiveValue: {
-            self.filesViewModel.subject.send($0)
-          }).store(in: &cancellables)
+        reloadViewWithFiles(at: self.path.current)
       }
     }
   }
 }
 
-// MARK: - Search
+
+// MARK: - UISearchResultsUpdating
 
 extension FilesViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
@@ -232,6 +229,8 @@ extension FilesViewController: UISearchResultsUpdating {
   }
 }
 
+// MARK: - HandlingFileMenuOperations
+
 extension FilesViewController: HandlingFileMenuOperations {
   func didShareTapped(for indexPath: IndexPath) {
   }
@@ -239,22 +238,50 @@ extension FilesViewController: HandlingFileMenuOperations {
   func didShowPreviewTapped(for indexPath: IndexPath) {
   }
   
-  func didDownloadTapped(for indexPath: IndexPath) {
+  func didRenameTapped(for indexPath: IndexPath) {
   }
   
   func didDeleteTapped(for indexPath: IndexPath) {
-    DropboxAPI.shared.deleteFile(
+    DropboxAPI.shared.fetchDeleteFile(
       at: filesViewModel.allFiles[indexPath.row].pathDisplay ?? ""
     )?
       .sink(receiveCompletion: {
-      switch $0 {
-      case .finished:
-        print("DELETE FILE SUCCESSFUL")
-      case .failure(let error):
-        print("DELETE FILE FAILED DUE TO", error)
-      }
-      }, receiveValue: {_ in})
+        switch $0 {
+        case .finished: print("[API SUCCESSFUL] - Delete file")
+        case .failure(let error): print("[API FAIL] - Delete file:", error)
+        }
+      }, receiveValue: {_ in
+        self.reloadViewWithFiles(at: self.path.current)
+      })
       .store(in: &cancellables)
+  }
+}
+
+// MARK: - HandlingFolderView
+
+extension FilesViewController: HandlingFolderView {
+  func addFolder() {
+    let manager = BulletinManager()
+    manager.presentOn(viewController: self)
+    manager.textFieldItem.textPublisher()
+      .sink { text in
+        DropboxAPI.shared.fetchCreateFolder(with: text, at: self.path.current)?
+          .sink(receiveCompletion: {
+            switch $0 {
+            case .finished: print("[API SUCCESSFUL] - Create folder:")
+            case .failure(let error): print("[API FAIL] - Create folder:", error)
+            }
+          }, receiveValue: {_ in
+            self.reloadViewWithFiles(at: self.path.current)
+          })
+          .store(in: &self.cancellables)
+        
+        manager.dismiss()
+      }
+      .store(in: &self.cancellables)
+  }
+  
+  func addPaper() {
   }
 }
 

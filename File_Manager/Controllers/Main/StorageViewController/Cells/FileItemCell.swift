@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 protocol HandlingFileMenuOperations {
   func didShareTapped(for indexPath: IndexPath)
   func didShowPreviewTapped(for indexPath: IndexPath)
-  func didDownloadTapped(for indexPath: IndexPath)
+  func didRenameTapped(for indexPath: IndexPath)
   func didDeleteTapped(for indexPath: IndexPath)
 }
 
@@ -57,47 +57,49 @@ class FileItemCell: UICollectionViewCell {
   func configure(
     title: String? = nil,
     image: UIImage? = nil,
-    tag: String? = nil) {
-      guard let title = title else { return }
-      titleLabel.text = title
-      if tag == "folder" {
-        imageView.image = Images.categoryFolder
-      } else {
-        imageView.setCategoryFor(file: title)
-      }
-    }
+    tag: String? = nil
+  ) {
+    guard let title = title else { return }
+    titleLabel.text = title
+    tag == "folder" ? imageView.image = Images.categoryFolder : imageView.setCategoryFor(file: title)
+  }
   
   private func addFileMenu() -> UIMenu {
-    UIMenu(title: "What to do with file", image: nil, identifier: .file, options: [], children:[
-      UIAction(
-        title: "Share",
-        image: UIImage(systemName: "square.and.arrow.up"),
-        handler: { [weak self] _ in
-          guard let self = self, let indexPath = self.indexPath else { return }
-          self.handleMenu?.didShareTapped(for: indexPath)
-        }),
-      UIAction(
-        title: "Show Preview",
-        image: UIImage(systemName: "eye"),
-        handler: { [weak self] _ in
-          guard let self = self, let indexPath = self.indexPath else { return }
-          self.handleMenu?.didShowPreviewTapped(for: indexPath)
-        }),
-      UIAction(
-        title: "Download",
-        image: UIImage(systemName: "square.and.arrow.down"),
-        handler: { [weak self] _ in
-          guard let self = self, let indexPath = self.indexPath else { return }
-          self.handleMenu?.didDownloadTapped(for: indexPath)
-        }),
-      UIAction(
-        title: "Delete",
-        image: UIImage(systemName: "trash"),
-        attributes: [.destructive],  handler: { [weak self] _ in
-          guard let self = self, let indexPath = self.indexPath else { return }
-          self.handleMenu?.didDeleteTapped(for: indexPath)
-        })
-    ])
+    UIMenu(
+      title: "What to do with file",
+      image: nil,
+      identifier: .file,
+      options: [],
+      children:[
+        UIAction(
+          title: "Share",
+          image: UIImage(systemName: "square.and.arrow.up"),
+          handler: { [weak self] _ in
+            guard let self = self, let indexPath = self.indexPath else { return }
+            self.handleMenu?.didShareTapped(for: indexPath)
+          }),
+        UIAction(
+          title: "Show Preview",
+          image: UIImage(systemName: "eye"),
+          handler: { [weak self] _ in
+            guard let self = self, let indexPath = self.indexPath else { return }
+            self.handleMenu?.didShowPreviewTapped(for: indexPath)
+          }),
+        UIAction(
+          title: "Rename",
+          image: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"),
+          handler: { [weak self] _ in
+            guard let self = self, let indexPath = self.indexPath else { return }
+            self.handleMenu?.didRenameTapped(for: indexPath)
+          }),
+        UIAction(
+          title: "Delete",
+          image: UIImage(systemName: "trash"),
+          attributes: [.destructive],  handler: { [weak self] _ in
+            guard let self = self, let indexPath = self.indexPath else { return }
+            self.handleMenu?.didDeleteTapped(for: indexPath)
+          })
+      ])
   }
   
   required init?(coder: NSCoder) {

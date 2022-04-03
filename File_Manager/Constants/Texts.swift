@@ -8,6 +8,15 @@
 import Foundation
 
 struct Texts {
+  
+  // BulletinManager
+  static let bulletinTextFieldTitle = "Create"
+  static let bulletinTitle = "Enter Folder Name"
+
+  // Files Controller
+  static let fileSectionLastModified = "Last Modified"
+  static let fileSectionAllFiles = "All Files"
+  
   // Base Controller
   static let baseTitleLabelText = "Welcome"
   static let baseDescriptionLabelText = "Let’s manage your files conveniently"

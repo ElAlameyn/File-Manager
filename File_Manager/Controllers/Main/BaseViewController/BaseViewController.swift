@@ -41,6 +41,8 @@ class BaseViewController: UIViewController {
     applyInitSnapshot()
   }
   
+  // MARK: - Fetch & Update
+  
   private func fetch() {
     // Fetch and store dropbox files
     DropboxAPI.shared.fetchAllFiles()?
@@ -99,7 +101,6 @@ class BaseViewController: UIViewController {
     
     // Update user account
     accountViewModel.subject.sink(receiveCompletion: {_ in}) {
-      print("ACCOUNT RESPONSE ", $0.debugDescription)
       guard let value = $0, let url = URL(string: value.profilePhotoURL ?? "") else { return }
       if let data = try? Data(contentsOf: url) {
         if let image = UIImage(data: data) {
@@ -136,6 +137,28 @@ class BaseViewController: UIViewController {
   
   
   // MARK: - Collection View Setup
+  
+  private func configureCollectionView() {
+    addLeftBarButtonItem()
+    addRightBarButtonItem()
+    
+    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createBaseViewControllerLayout())
+    collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+    collectionView.backgroundColor = Colors.baseBackground
+    collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
+    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
+    collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
+    
+    collectionView.register(
+      SectionHeaderBaseView.self,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
+    )
+    
+    collectionView.delegate = self
+    view.addSubview(collectionView)
+    
+  }
   
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
@@ -222,29 +245,7 @@ class BaseViewController: UIViewController {
   }
 }
 
-extension BaseViewController {
-  private func configureCollectionView() {
-    addLeftBarButtonItem()
-    addRightBarButtonItem()
-    
-    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createBaseViewControllerLayout())
-    collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-    collectionView.backgroundColor = Colors.baseBackground
-    collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
-    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
-    collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
-    
-    collectionView.register(
-      SectionHeaderBaseView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
-    )
-    
-    collectionView.delegate = self
-    view.addSubview(collectionView)
-    
-  }
-}
+// MARK: - UICollectionViewDelegate
 
 extension BaseViewController: UICollectionViewDelegate {
   

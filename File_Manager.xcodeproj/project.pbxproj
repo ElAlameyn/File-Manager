@@ -24,6 +24,9 @@
 		B526843827E9C00F00A864C8 /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526843727E9C00F00A864C8 /* UINavigationController+Extension.swift */; };
 		B526843A27E9F0DC00A864C8 /* CurrentAccountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526843927E9F0DC00A864C8 /* CurrentAccountResponse.swift */; };
 		B526843C27E9F43300A864C8 /* CurrentAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B526843B27E9F43300A864C8 /* CurrentAccountViewModel.swift */; };
+		B5286DA027F9EA40007C5C89 /* BLTNBoard in Frameworks */ = {isa = PBXBuildFile; productRef = B5286D9F27F9EA40007C5C89 /* BLTNBoard */; };
+		B5286DA227F9EA6A007C5C89 /* BulletinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5286DA127F9EA6A007C5C89 /* BulletinManager.swift */; };
+		B5286DA427F9EAC8007C5C89 /* TextFieldBulletinPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5286DA327F9EAC8007C5C89 /* TextFieldBulletinPage.swift */; };
 		B535379C27B28B1A003A7C6A /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B535379B27B28B1A003A7C6A /* AuthViewController.swift */; };
 		B539670927B3CA2B009125E5 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B539670827B3CA2B009125E5 /* String+Extension.swift */; };
 		B5487B9A27B9894F00258B58 /* DropboxAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9927B9894F00258B58 /* DropboxAPI.swift */; };
@@ -108,6 +111,8 @@
 		B526843727E9C00F00A864C8 /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
 		B526843927E9F0DC00A864C8 /* CurrentAccountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentAccountResponse.swift; sourceTree = "<group>"; };
 		B526843B27E9F43300A864C8 /* CurrentAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentAccountViewModel.swift; sourceTree = "<group>"; };
+		B5286DA127F9EA6A007C5C89 /* BulletinManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BulletinManager.swift; sourceTree = "<group>"; };
+		B5286DA327F9EAC8007C5C89 /* TextFieldBulletinPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldBulletinPage.swift; sourceTree = "<group>"; };
 		B535379B27B28B1A003A7C6A /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		B539670827B3CA2B009125E5 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		B5487B9927B9894F00258B58 /* DropboxAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxAPI.swift; sourceTree = "<group>"; };
@@ -182,6 +187,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B515C22227BFE5D1008EAF28 /* KeychainSwift in Frameworks */,
+				B5286DA027F9EA40007C5C89 /* BLTNBoard in Frameworks */,
 				B515C21F27BFE07A008EAF28 /* Pods_File_Manager.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -223,6 +229,8 @@
 				B54FAEFD27AFD55A000E81BB /* Style.swift */,
 				B5FB3F7427A8313E007A0495 /* LayoutManager.swift */,
 				B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */,
+				B5286DA127F9EA6A007C5C89 /* BulletinManager.swift */,
+				B5286DA327F9EAC8007C5C89 /* TextFieldBulletinPage.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -643,6 +651,7 @@
 			name = File_Manager;
 			packageProductDependencies = (
 				B515C22127BFE5D1008EAF28 /* KeychainSwift */,
+				B5286D9F27F9EA40007C5C89 /* BLTNBoard */,
 			);
 			productName = File_Manager;
 			productReference = B5DFB8C427A286A900196251 /* File_Manager.app */;
@@ -674,6 +683,7 @@
 			mainGroup = B5DFB8BB27A286A900196251;
 			packageReferences = (
 				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */,
 			);
 			productRefGroup = B5DFB8C527A286A900196251 /* Products */;
 			projectDirPath = "";
@@ -777,6 +787,7 @@
 				B56D267E27E1FE6F00853B95 /* FileItem.swift in Sources */,
 				B54FAF0327AFE602000E81BB /* FishOperator.swift in Sources */,
 				B5DBAE6527DE6C1F00BE2485 /* URlRequest+Extension.swift in Sources */,
+				B5286DA427F9EAC8007C5C89 /* TextFieldBulletinPage.swift in Sources */,
 				B526843627E8D78200A864C8 /* FoldersHeaderView.swift in Sources */,
 				B535379C27B28B1A003A7C6A /* AuthViewController.swift in Sources */,
 				B56D267A27E0EBF500853B95 /* Limited.swift in Sources */,
@@ -798,6 +809,7 @@
 				B56D268327E257D500853B95 /* SearchResponse.swift in Sources */,
 				B54B1BC927A6A60F00AF1D84 /* BaseItem.swift in Sources */,
 				B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */,
+				B5286DA227F9EA6A007C5C89 /* BulletinManager.swift in Sources */,
 				B5FB3F7E27A84D97007A0495 /* UsageSpaceCell.swift in Sources */,
 				B5D2B0DE27F3074B00704679 /* FilePath.swift in Sources */,
 				B54B1BCB27A6A6A100AF1D84 /* Recents.swift in Sources */,
@@ -1040,6 +1052,14 @@
 				kind = branch;
 			};
 		};
+		B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alexaubry/BulletinBoard.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1047,6 +1067,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		B5286D9F27F9EA40007C5C89 /* BLTNBoard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */;
+			productName = BLTNBoard;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

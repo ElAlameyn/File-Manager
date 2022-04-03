@@ -6,9 +6,18 @@
 //
 
 import UIKit
+import Combine
+
+protocol HandlingFolderView {
+  func addFolder()
+  func addPaper()
+}
 
 class FoldersHeaderView: UICollectionReusableView {
   
+  var delegate: HandlingFolderView?
+  
+
   private lazy var downArrowButton: UIButton = {
     let button = UIButton()
     button.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +45,7 @@ class FoldersHeaderView: UICollectionReusableView {
     Style.appearanceLabelStyle(
       withFont: Fonts.robotoMedium.withSize(18),
       color: .darkGray,
-      text: "Current Path: Root")
+      text: "")
     <> {
       $0.isHidden = false
       $0.textAlignment = .left
@@ -120,11 +129,11 @@ class FoldersHeaderView: UICollectionReusableView {
   }
   
   @objc func didTapAddFolder() {
-    #warning("Add folder")
+    delegate?.addFolder()
   }
     
   @objc func didTapAddFile() {
-    #warning("Add paper")
+    delegate?.addPaper()
   }
 
   required init?(coder: NSCoder) {

@@ -46,7 +46,6 @@ class MeetViewController: UIViewController {
           } else {
             DispatchQueue.main.async { [weak self] in
               print("Access token expired")
-              #warning("Doen't work")
               self?.navigationController?.present(authVC, animated: true)
               authVC.dismissed = {
                 authVC.dismiss(animated: true)

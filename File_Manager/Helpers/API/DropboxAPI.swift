@@ -13,7 +13,13 @@ final class DropboxAPI {
   static let shared = DropboxAPI()
   static let tokenKey = "token_key"
   
-  func deleteFile(at id: String) -> AnyPublisher<Data?, Error>? {
+  func fetchCreateFolder(with name: String, at path: String) -> AnyPublisher<Data?, Error>? {
+    let configuredPath = path + "/\(name)"
+    guard let request = RequestConfigurator.createFolder(path: configuredPath).setRequest()  else { return nil }
+    return getDataPublisher(request: request)
+  }
+  
+  func fetchDeleteFile(at id: String) -> AnyPublisher<Data?, Error>? {
     guard let request = RequestConfigurator.deleteFile(id: id).setRequest() else { return nil }
     return getDataPublisher(request: request)
   }
@@ -67,8 +73,9 @@ final class DropboxAPI {
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
           throw APIError.statusCode(httpResponse.statusCode)
         }
+        #warning("FOR TEST")
         let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-        print("Object: \(object)")
+        print("Object: \(String(describing: object))")
         return data
       }
       .decode(type: T.self,
@@ -84,6 +91,7 @@ final class DropboxAPI {
         if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
           throw APIError.statusCode(httpResponse.statusCode)
         }
+        #warning("FOR TEST")
         let string = String(data: data, encoding: .utf8)
         print(string)
         print("HTTP CODE", (response as? HTTPURLResponse)?.statusCode )

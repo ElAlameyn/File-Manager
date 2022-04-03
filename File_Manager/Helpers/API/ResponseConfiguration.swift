@@ -37,6 +37,7 @@ enum RequestConfigurator {
   case check
   case search(query: String)
   case deleteFile(id: String)
+  case createFolder(path: String)
 
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
@@ -51,6 +52,7 @@ enum RequestConfigurator {
     case .check: return baseURL + "/2/check" + "/user"
     case .search: return baseURL + "/2/files" + "/search_v2"
     case .deleteFile: return baseURL + "/2/files" + "/delete_v2"
+    case .createFolder: return baseURL + "/2/files" + "/create_folder_v2"
     }
   }
   
@@ -61,7 +63,6 @@ enum RequestConfigurator {
       return ["grant_type": "authorization_code",
               "code": code,
               "redirect_uri": TokenCredentials.redirectURI,
-              //              "client_id": TokenCredentials.clientID,
               "code_verifier": KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? ""
       ]
     case .users: return nil
@@ -82,6 +83,10 @@ enum RequestConfigurator {
       return ["query": query]
     case .deleteFile(id: let id):
       return ["path": id]
+    case .createFolder(path: let path):
+      return ["path": path,
+              "autorename": true
+      ]
     }
   }
   
@@ -112,7 +117,7 @@ enum RequestConfigurator {
               from: tokenResponse) {
       token = get.accessToken
     }
-    
+
     switch self {
     case .token:
       request.setValue("Basic \("\(TokenCredentials.clientID):\(TokenCredentials.clientSecret)".toBase64())",
@@ -123,10 +128,6 @@ enum RequestConfigurator {
       request.httpBody = requestComponents.query?.data(using: .utf8)
     case .users:
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-    case .listFolder:
-      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      request.httpBody = jsonData
     case .thumbnail(let path):
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue(path, forHTTPHeaderField: "Dropbox-API-Arg")
@@ -136,11 +137,7 @@ enum RequestConfigurator {
     case .check:
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    case .search:
-      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-      request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      request.httpBody = jsonData
-    case .deleteFile:
+    case .listFolder, .search, .deleteFile, .createFolder:
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = jsonData
