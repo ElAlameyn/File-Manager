@@ -32,12 +32,13 @@ enum RequestConfigurator {
   case token(String)
   case users(Users)
   case listFolder(path: String, recursive: Bool)
-  case thumbnail(String)
-  case download(String)
+  case thumbnail(fullPath: String)
+  case download(fullPath: String)
   case check
   case search(query: String)
   case deleteFile(id: String)
   case createFolder(path: String)
+  case createPaper(fullPath: String)
 
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
@@ -47,12 +48,13 @@ enum RequestConfigurator {
     case .token: return baseURL + "/oauth2/token"
     case .users(let user): return  baseURL + "/2/users" + user.rawValue
     case .listFolder: return baseURL + "/2/files" + "/list_folder"
-    case .thumbnail(_): return contentURL + "/2/files" + "/get_thumbnail"
-    case .download(_): return contentURL + "/2/files" + "/download"
+    case .thumbnail: return contentURL + "/2/files" + "/get_thumbnail"
+    case .download: return contentURL + "/2/files" + "/download"
     case .check: return baseURL + "/2/check" + "/user"
     case .search: return baseURL + "/2/files" + "/search_v2"
     case .deleteFile: return baseURL + "/2/files" + "/delete_v2"
     case .createFolder: return baseURL + "/2/files" + "/create_folder_v2"
+    case .createPaper: return baseURL + "/2/files" + "/paper/create"
     }
   }
   
@@ -87,6 +89,7 @@ enum RequestConfigurator {
       return ["path": path,
               "autorename": true
       ]
+    case .createPaper: return nil
     }
   }
   
@@ -141,6 +144,10 @@ enum RequestConfigurator {
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = jsonData
+    case .createPaper(fullPath: let fullPath):
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+      request.setValue(fullPath, forHTTPHeaderField: "Dropbox-API-Arg")
+      request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
     }
     request.timeoutInterval = 60
     return request

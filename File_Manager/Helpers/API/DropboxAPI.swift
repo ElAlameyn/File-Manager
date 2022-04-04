@@ -13,6 +13,19 @@ final class DropboxAPI {
   static let shared = DropboxAPI()
   static let tokenKey = "token_key"
   
+
+  func fetchCreatePaper(with name: String, at path: String) ->
+  AnyPublisher<PaperResponse?, Error>? {
+    let configuredPath = path + "/\(name)"
+    guard let request = RequestConfigurator.createPaper(
+      fullPath:
+        """
+        {"path":"\(configuredPath).paper", "import_format": "html"}
+        """
+    ).setRequest()  else { return nil }
+    return getPublisher(request: request)
+  }
+  
   func fetchCreateFolder(with name: String, at path: String) -> AnyPublisher<Data?, Error>? {
     let configuredPath = path + "/\(name)"
     guard let request = RequestConfigurator.createFolder(path: configuredPath).setRequest()  else { return nil }
@@ -46,7 +59,7 @@ final class DropboxAPI {
   
   func fetchDownload(id: String? = nil) -> AnyPublisher<Data?, Error>? {
     guard let id = id else { return nil }
-    guard let request = RequestConfigurator.download(
+    guard let request = RequestConfigurator.download(fullPath:
     """
       {"path":"\(id)"}
     """
@@ -56,7 +69,7 @@ final class DropboxAPI {
   
   func fetchThumbnail(path: String? = nil) -> AnyPublisher<Data?, Error>? {
     guard let path = path else { return nil }
-    guard let request = RequestConfigurator.thumbnail(
+    guard let request = RequestConfigurator.thumbnail(fullPath:
     """
       {"path":"\(path)", "format":"jpeg"}
     """
@@ -74,12 +87,13 @@ final class DropboxAPI {
           throw APIError.statusCode(httpResponse.statusCode)
         }
         #warning("FOR TEST")
+        let string = String(data: data, encoding: .utf8)
+        print(string)
         let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
         print("Object: \(String(describing: object))")
         return data
       }
-      .decode(type: T.self,
-              decoder: JSONDecoder())
+      .decode(type: T.self, decoder: JSONDecoder())
       .receive(on: RunLoop.main)
       .eraseToAnyPublisher()
   }

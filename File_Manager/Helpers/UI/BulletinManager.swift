@@ -5,25 +5,28 @@
 //  Created by Артем Калинкин on 03.04.2022.
 //
 
-import Foundation
 import BLTNBoard
 import UIKit
+import Combine
 
 #warning("Customize appearance")
 final class BulletinManager {
   
-  lazy var textFieldItem = makeTextFieldPage()
+  private var textFieldItem: TextFieldBulletinPage!
   private lazy var manager = BLTNItemManager(rootItem: textFieldItem)
-
-  func makeTextFieldPage() -> TextFieldBulletinPage {
-    let page = TextFieldBulletinPage(title: Texts.bulletinTitle)
-    page.appearance.titleFontSize = 24
-    page.isDismissable = true
-    page.descriptionText = nil
-    page.actionButtonTitle = Texts.bulletinTextFieldTitle
-    return page
+  
+  init(title: String, actionButton: String? = "Rename") {
+    textFieldItem = TextFieldBulletinPage(title: title)
+    textFieldItem.appearance.titleFontSize = 24
+    textFieldItem.isDismissable = true
+    textFieldItem.descriptionText = nil
+    textFieldItem.actionButtonTitle = Texts.bulletinTextFieldTitle
   }
   
+  func publishText() -> AnyPublisher<String, Never> {
+    textFieldItem.textPublisher()
+  }
+
   func dismiss() {
     manager.dismissBulletin(animated: true)
   }
@@ -31,6 +34,5 @@ final class BulletinManager {
   func presentOn(viewController: UIViewController) {
     manager.showBulletin(above: viewController)
   }
-  
   
 }

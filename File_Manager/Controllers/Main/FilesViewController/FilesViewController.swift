@@ -29,6 +29,8 @@ class FilesViewController: UIViewController {
     path.current == ""
   }
   
+//  private var authorizeAgain:
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.prefersLargeTitles = true
@@ -261,9 +263,9 @@ extension FilesViewController: HandlingFileMenuOperations {
 
 extension FilesViewController: HandlingFolderView {
   func addFolder() {
-    let manager = BulletinManager()
+    let manager = BulletinManager(title: "Folder name:")
     manager.presentOn(viewController: self)
-    manager.textFieldItem.textPublisher()
+    manager.publishText()
       .sink { text in
         DropboxAPI.shared.fetchCreateFolder(with: text, at: self.path.current)?
           .sink(receiveCompletion: {
@@ -282,6 +284,24 @@ extension FilesViewController: HandlingFolderView {
   }
   
   func addPaper() {
+    let manager = BulletinManager(title: "Paper Name: ")
+    manager.presentOn(viewController: self)
+    manager.publishText()
+      .sink { text in
+        DropboxAPI.shared.fetchCreatePaper(with: text, at: self.path.current)?
+          .sink(receiveCompletion: {
+            switch $0 {
+            case .finished: print("[API SUCCESSFUL] - Create paper:")
+            case .failure(let error): print("[API FAIL] - Create paper:", error)
+            }
+          }, receiveValue: { value in
+            self.reloadViewWithFiles(at: self.path.current)
+          })
+          .store(in: &self.cancellables)
+        
+        manager.dismiss()
+      }
+      .store(in: &self.cancellables)
   }
 }
 

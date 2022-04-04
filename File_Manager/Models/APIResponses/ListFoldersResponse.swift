@@ -8,7 +8,7 @@
 import Foundation
 
 struct ListFoldersResponse {
-  var entries: [File]
+  let entries: [File]
 
   struct File: Decodable, Hashable {
     let tag: String
