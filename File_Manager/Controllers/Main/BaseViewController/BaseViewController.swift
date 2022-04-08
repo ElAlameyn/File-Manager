@@ -23,6 +23,8 @@ class BaseViewController: UIViewController {
   private let filesViewModel = FilesViewModel()
   private let accountViewModel = CurrentAccountViewModel()
   
+  private var authorizeAgain = PassthroughSubject<Void, Never>()
+  
   @Limited<BaseItem>(limit: 4) private var images {
     didSet {
       updateImages()
@@ -51,12 +53,7 @@ class BaseViewController: UIViewController {
         case .finished: print("Successfully finished fetch")
         case .failure(let error):
           print("Failed fetch due to \(error)")
-          self.filesViewModel.handleFail(on: self) {
-            DropboxAPI.shared.fetchAllFiles()?
-              .sink(receiveCompletion: {_ in}, receiveValue: {
-                self.filesViewModel.subject.send($0)
-              }).store(in: &self.cancellables)
-          }
+          if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
         }
       }, receiveValue: { value in
         self.filesViewModel.subject.send(value)
@@ -70,12 +67,7 @@ class BaseViewController: UIViewController {
         case .finished: print("SUCCESS ACCOUNT FETCH")
         case .failure(let error):
           print("FAIL ACCOUNT FETCH ", error)
-          self.filesViewModel.handleFail(on: self) {
-            DropboxAPI.shared.fetchCurrentAccount()?
-              .sink(receiveCompletion: {_ in}, receiveValue: {
-                self.accountViewModel.subject.send($0)
-              }).store(in: &self.cancellables)
-          }
+          if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
         }
       }, receiveValue: {
         self.accountViewModel.subject.send($0)
@@ -111,6 +103,17 @@ class BaseViewController: UIViewController {
         }
       }
     }.store(in: &cancellables)
+    
+    authorizeAgain.sink { _ in
+      let authVC = AuthViewController()
+      authVC.modalPresentationStyle = .fullScreen
+      self.present(authVC, animated: true)
+      authVC.dismissed = {
+        authVC.dismiss(animated: true)
+        self.fetch()
+      }
+    }.store(in: &cancellables)
+
   }
   
   private func updateAccount(image: UIImage? = nil, title: String? = nil) {

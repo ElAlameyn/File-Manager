@@ -29,15 +29,19 @@ class FilesViewController: UIViewController {
     path.current == ""
   }
   
-//  private var authorizeAgain:
+  private var authorizeAgain = PassthroughSubject<Void, Never>()
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    navigationController?.navigationBar.prefersLargeTitles = true
     view.backgroundColor = .white
     title = "Files"
     
-    navigationItem.searchController = searchController
+    searchController.searchBar.sizeToFit()
+    searchController.searchBar.delegate = self
+    navigationItem.titleView = searchController.searchBar
+
+    searchController.searchBar.placeholder = "Find files you want"
+    searchController.hidesNavigationBarDuringPresentation = false
     searchController.searchResultsUpdater = self
     
     configureCollectionView()
@@ -49,11 +53,24 @@ class FilesViewController: UIViewController {
   // MARK: - Fetch & Update Data
   
   private func bindViewModels() {
+    // Observe files changes and call update
     filesViewModel.subject
       .sink(receiveCompletion: {_ in}) { files in
         self.update(files: files?.entries, updateLastModified: true)
       }
       .store(in: &cancellables)
+    
+    // Handle token expiration
+    authorizeAgain.sink { _ in
+      let authVC = AuthViewController()
+      authVC.modalPresentationStyle = .fullScreen
+      self.present(authVC, animated: true)
+      authVC.dismissed = {
+        authVC.dismiss(animated: true)
+        self.reloadViewWithFiles(at: self.path.current)
+      }
+    }
+    .store(in: &cancellables)
   }
   
   private func reloadViewWithFiles(at path: String) {
@@ -63,9 +80,7 @@ class FilesViewController: UIViewController {
         case .finished: break
         case .failure(let error):
           print("Failed fetch due to \(error)")
-          self.filesViewModel.handleFail(on: self) {
-            self.reloadViewWithFiles(at: self.path.current)
-          }
+          if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
         }
         
       }, receiveValue: {
@@ -207,9 +222,17 @@ extension FilesViewController: UICollectionViewDelegate {
 }
 
 
-// MARK: - UISearchResultsUpdating
+// MARK: - UISearchResultsUpdating & UISearchBarDelegate
 
-extension FilesViewController: UISearchResultsUpdating {
+extension FilesViewController: UISearchResultsUpdating, UISearchBarDelegate {
+  
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    searchBar.showsCancelButton = false
+    searchBar.text = ""
+    searchBar.resignFirstResponder()
+    reloadViewWithFiles(at: "")
+  }
+  
   func updateSearchResults(for searchController: UISearchController) {
     subscriber = NotificationCenter.default.publisher(
       for: UISearchTextField.textDidChangeNotification,
@@ -221,7 +244,14 @@ extension FilesViewController: UISearchResultsUpdating {
       guard let text = text, let self = self else { return }
       if !text.isEmpty {
         DropboxAPI.shared.fetchSearch(q: text)?
-          .sink(receiveCompletion: {_ in}, receiveValue: { data in
+          .sink(receiveCompletion: {
+            switch $0 {
+            case .finished: break
+            case .failure(let error):
+              print("[API FAIL] - Search file:", error)
+              if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
+            }
+          }, receiveValue: { data in
             let files = data?.matches.compactMap { $0.metadata.metadata }
             self.update(files: files)
           })
@@ -237,20 +267,23 @@ extension FilesViewController: HandlingFileMenuOperations {
   func didShareTapped(for indexPath: IndexPath) {
   }
   
-  func didShowPreviewTapped(for indexPath: IndexPath) {
+  func didMoveToTapped(for indexPath: IndexPath) {
   }
   
-  func didRenameTapped(for indexPath: IndexPath) {
+  func didCopyToTapped(for indexPath: IndexPath) {
   }
   
   func didDeleteTapped(for indexPath: IndexPath) {
+    let currentIndex = isRootFolder ? indexPath.row : indexPath.row - 1
     DropboxAPI.shared.fetchDeleteFile(
-      at: filesViewModel.allFiles[indexPath.row].pathDisplay ?? ""
+      at: filesViewModel.allFiles[currentIndex].pathDisplay ?? ""
     )?
       .sink(receiveCompletion: {
         switch $0 {
         case .finished: print("[API SUCCESSFUL] - Delete file")
-        case .failure(let error): print("[API FAIL] - Delete file:", error)
+        case .failure(let error):
+          print("[API FAIL] - Delete file:", error)
+          if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
         }
       }, receiveValue: {_ in
         self.reloadViewWithFiles(at: self.path.current)
@@ -271,7 +304,9 @@ extension FilesViewController: HandlingFolderView {
           .sink(receiveCompletion: {
             switch $0 {
             case .finished: print("[API SUCCESSFUL] - Create folder:")
-            case .failure(let error): print("[API FAIL] - Create folder:", error)
+            case .failure(let error):
+              print("[API FAIL] - Create folder:", error)
+              if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
             }
           }, receiveValue: {_ in
             self.reloadViewWithFiles(at: self.path.current)
@@ -292,7 +327,9 @@ extension FilesViewController: HandlingFolderView {
           .sink(receiveCompletion: {
             switch $0 {
             case .finished: print("[API SUCCESSFUL] - Create paper:")
-            case .failure(let error): print("[API FAIL] - Create paper:", error)
+            case .failure(let error):
+              print("[API FAIL] - Create paper:", error)
+              if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
             }
           }, receiveValue: { value in
             self.reloadViewWithFiles(at: self.path.current)

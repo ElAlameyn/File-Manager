@@ -10,8 +10,8 @@ import UniformTypeIdentifiers
 
 protocol HandlingFileMenuOperations {
   func didShareTapped(for indexPath: IndexPath)
-  func didShowPreviewTapped(for indexPath: IndexPath)
-  func didRenameTapped(for indexPath: IndexPath)
+  func didMoveToTapped(for indexPath: IndexPath)
+  func didCopyToTapped(for indexPath: IndexPath)
   func didDeleteTapped(for indexPath: IndexPath)
 }
 
@@ -79,18 +79,18 @@ class FileItemCell: UICollectionViewCell {
             self.handleMenu?.didShareTapped(for: indexPath)
           }),
         UIAction(
-          title: "Show Preview",
-          image: UIImage(systemName: "eye"),
+          title: "Move to",
+          image: UIImage(systemName: "arrow.up.and.down.and.arrow.left.and.right"),
           handler: { [weak self] _ in
             guard let self = self, let indexPath = self.indexPath else { return }
-            self.handleMenu?.didShowPreviewTapped(for: indexPath)
+            self.handleMenu?.didMoveToTapped(for: indexPath)
           }),
         UIAction(
-          title: "Rename",
+          title: "Copy to",
           image: UIImage(systemName: "rectangle.and.pencil.and.ellipsis"),
           handler: { [weak self] _ in
             guard let self = self, let indexPath = self.indexPath else { return }
-            self.handleMenu?.didRenameTapped(for: indexPath)
+            self.handleMenu?.didCopyToTapped(for: indexPath)
           }),
         UIAction(
           title: "Delete",
