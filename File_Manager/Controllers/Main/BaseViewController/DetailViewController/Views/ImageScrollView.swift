@@ -14,6 +14,10 @@ class ImageScrollView: UIScrollView, UIScrollViewDelegate {
   var didEndZooming: Empty?
   var didStartZooming: Empty?
   
+  var getImage: UIImage? {
+    imageView != nil && imageView.image != nil ? imageView.image : nil
+  }
+  
   private var currentScale: CGFloat = 0
   
   private lazy var zoomingTap: UITapGestureRecognizer = {

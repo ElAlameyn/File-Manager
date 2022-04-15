@@ -23,11 +23,9 @@ final class BulletinManager {
     textFieldItem.actionButtonTitle = Texts.bulletinTextFieldTitle
   }
   
-  func publishText() -> AnyPublisher<String, Never> {
-    textFieldItem.textPublisher()
-  }
 
-  func dismiss() {
+
+  func dismissing() {
     manager.dismissBulletin(animated: true)
   }
   

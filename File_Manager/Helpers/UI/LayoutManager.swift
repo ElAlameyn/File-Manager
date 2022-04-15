@@ -23,16 +23,70 @@ final class LayoutManager {
     case lastModified, main
   }
   
-  private let baseSections = BaseSections.allCases
-  private let filesSectons = FilesSections.allCases
+  enum StorageSections: Int, CaseIterable {
+    case usageSpace, uploadButton, recentlyUpload
+  }
   
+  // MARK: - [StorageViewController]: Layout
+  
+  static func createStorageViewControllerLayout() -> UICollectionViewLayout {
+    let sectionProvider = {
+      (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
+      -> NSCollectionLayoutSection? in
+      switch StorageSections.allCases[sectionIndex] {
+      case .usageSpace:
+        let item = LayoutManager.createItem(
+          wD: .estimated(330),
+          hD: .estimated(420))
+        
+        let group = LayoutManager.createHorizontalGroup(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(420),
+          item: item)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .none
+        section.contentInsets = NSDirectionalEdgeInsets(top: 40, leading: 30, bottom: 40, trailing: 30)
+        
+        return section
+      case .uploadButton:
+        let item = LayoutManager.createItem(
+          wD: .fractionalWidth(1.0),
+          hD: .fractionalHeight(1.0))
+        let group = LayoutManager.createHorizontalGroup(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(68),
+          item: item)
+        return NSCollectionLayoutSection(group: group)
+      case .recentlyUpload:
+        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(60))
+        let item = NSCollectionLayoutItem(layoutSize: size)
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
+        section.interGroupSpacing = 15
+        
+        let sectionHeader = LayoutManager.createSectionHeader(
+          wD: .fractionalWidth(1.0),
+          hD: .estimated(30))
+        section.boundarySupplementaryItems = [sectionHeader]
+        
+        return section
+      }
+    }
+    return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
+  }
+  
+
   // MARK: - [FilesViewController]: Layout
   
   static func createFilesViewLayout() -> UICollectionViewLayout {
     let sectionProvider = {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
       -> NSCollectionLayoutSection? in
-      switch shared.filesSectons[sectionIndex] {
+      switch FilesSections.allCases[sectionIndex] {
       case .lastModified:
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),
@@ -80,7 +134,7 @@ final class LayoutManager {
     let sectionProvider = {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
       -> NSCollectionLayoutSection? in
-      switch shared.baseSections[sectionIndex] {
+      switch BaseSections.allCases[sectionIndex] {
       case .title:
         let item = LayoutManager.createItem(
           wD: .fractionalWidth(1.0),
@@ -139,6 +193,8 @@ final class LayoutManager {
   }
   
 }
+
+// MARK: - Helper
 
 extension LayoutManager {
   static func createItem(

@@ -27,10 +27,27 @@ class DetailImageController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    navigationController?.navigationBar.isHidden = false
+    
     view.backgroundColor = Colors.baseBackground
+    setVisible()
     setUpToolBar()
     setUpLayout()
     
+    
+
+    bindZoom()
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    navigationController?.setNavigationBarHidden(true, animated: true)
+    navigationController?.setToolbarHidden(true, animated: true)
+    navigationController?.setToolbarItems(nil, animated: true)
+  }
+  
+  private func bindZoom() {
     imageScrollView.didStartZooming = { [weak self] in
       self?.setUnvisible()
     }
@@ -39,6 +56,8 @@ class DetailImageController: UIViewController {
     }
   }
   
+
+
   fileprivate func setVisible() {
     UIView.animate(withDuration: 0.15) {
       self.view.backgroundColor = Colors.baseBackground
@@ -71,8 +90,15 @@ class DetailImageController: UIViewController {
   }
   
   @objc func didTapSave() {
-    // TODO: Add save logic
+    if let image = imageScrollView.getImage {
+      UIImageWriteToSavedPhotosAlbum(image, self, #selector(didSaved), nil)
+    }
   }
+  
+  @objc func didSaved() {
+    print("Saved succesful")
+  }
+
 
   @objc func didTapShare() {
     // TODO: Add share logic
@@ -81,6 +107,7 @@ class DetailImageController: UIViewController {
     // TODO: Add delete logic
   }
   
+
   private func setUpLayout() {
     view.addSubview(imageScrollView)
     imageScrollView.addEdgeContstraints()

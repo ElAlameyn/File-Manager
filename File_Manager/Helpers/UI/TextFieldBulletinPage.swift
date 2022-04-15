@@ -14,7 +14,7 @@ class TextFieldBulletinPage: BLTNPageItem {
     textField.borderStyle = .roundedRect
     return [textField]
   }
-  
+
   override public func tearDown() {
     super.tearDown()
     textField?.delegate = nil
@@ -25,18 +25,19 @@ class TextFieldBulletinPage: BLTNPageItem {
     super.actionButtonTapped(sender: sender)
   }
   
+
   override func alternativeButtonTapped(sender: UIButton) {
     textField.resignFirstResponder()
     super.alternativeButtonTapped(sender: sender)
   }
   
-  func textPublisher() -> AnyPublisher<String, Never> {
-    NotificationCenter.default
-      .publisher(for: UITextField.textDidEndEditingNotification, object: textField)
-      .map { $0.object as? UITextField }
-      .map { $0?.text ?? "" }
-      .eraseToAnyPublisher()
-  }
+//  func textPublisher() -> AnyPublisher<String, Never> {
+//    NotificationCenter.default
+//      .publisher(for: UITextField.textDidEndEditingNotification, object: textField)
+//      .map { $0.object as? UITextField }
+//      .map { $0?.text ?? "" }
+//      .eraseToAnyPublisher()
+//  }
 }
 
 // MARK: - UITextFieldDelegate
@@ -65,4 +66,15 @@ extension TextFieldBulletinPage: UITextFieldDelegate {
     }
   }
   
+}
+
+extension TextFieldBulletinPage {
+  static func cretateTextFieldBulletin() -> TextFieldBulletinPage {
+    let paper = TextFieldBulletinPage(title: "Add paper")
+    paper.appearance.titleFontSize = 24
+    paper.isDismissable = true
+    paper.descriptionText = nil
+    paper.actionButtonTitle = Texts.bulletinTextFieldTitle
+    return paper
+  }
 }

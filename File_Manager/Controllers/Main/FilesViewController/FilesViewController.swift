@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import BLTNBoard
 
 class FilesViewController: UIViewController {
   
@@ -20,7 +21,6 @@ class FilesViewController: UIViewController {
   private lazy var dataSource = configureDataSource()
   
   private var cancellables: Set<AnyCancellable> = []
-  private var subscriber: AnyCancellable?
   
   private let searchController = UISearchController()
   private var path = Path()
@@ -39,7 +39,7 @@ class FilesViewController: UIViewController {
     searchController.searchBar.sizeToFit()
     searchController.searchBar.delegate = self
     navigationItem.titleView = searchController.searchBar
-
+    
     searchController.searchBar.placeholder = "Find files you want"
     searchController.hidesNavigationBarDuringPresentation = false
     searchController.searchResultsUpdater = self
@@ -234,30 +234,28 @@ extension FilesViewController: UISearchResultsUpdating, UISearchBarDelegate {
   }
   
   func updateSearchResults(for searchController: UISearchController) {
-    subscriber = NotificationCenter.default.publisher(
-      for: UISearchTextField.textDidChangeNotification,
-      object: searchController.searchBar.searchTextField
-    )
-    .map { $0.object as? UISearchTextField }
-    .map { $0?.text }
-    .sink { [weak self] text in
-      guard let text = text, let self = self else { return }
-      if !text.isEmpty {
-        DropboxAPI.shared.fetchSearch(q: text)?
-          .sink(receiveCompletion: {
-            switch $0 {
-            case .finished: break
-            case .failure(let error):
-              print("[API FAIL] - Search file:", error)
-              if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
-            }
-          }, receiveValue: { data in
-            let files = data?.matches.compactMap { $0.metadata.metadata }
-            self.update(files: files)
-          })
-          .store(in: &self.cancellables)
+    let textField = searchController.searchBar.searchTextField
+    
+    textField.publisher(for: .editingChanged)
+      .map { textField.text ?? "" }
+      .sink { text in
+        if !text.isEmpty {
+          DropboxAPI.shared.fetchSearch(q: text)?
+            .sink(receiveCompletion: {
+              switch $0 {
+              case .finished: break
+              case .failure(let error):
+                print("[API FAIL] - Search file:", error)
+                if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
+              }
+            }, receiveValue: { data in
+              let files = data?.matches.compactMap { $0.metadata.metadata }
+              self.update(files: files)
+            })
+            .store(in: &self.cancellables)
+        }
       }
-    }
+      .store(in: &cancellables)
   }
 }
 
@@ -296,49 +294,57 @@ extension FilesViewController: HandlingFileMenuOperations {
 
 extension FilesViewController: HandlingFolderView {
   func addFolder() {
-    let manager = BulletinManager(title: "Folder name:")
-    manager.presentOn(viewController: self)
-    manager.publishText()
-      .sink { text in
-        DropboxAPI.shared.fetchCreateFolder(with: text, at: self.path.current)?
-          .sink(receiveCompletion: {
-            switch $0 {
-            case .finished: print("[API SUCCESSFUL] - Create folder:")
-            case .failure(let error):
-              print("[API FAIL] - Create folder:", error)
-              if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
-            }
-          }, receiveValue: {_ in
-            self.reloadViewWithFiles(at: self.path.current)
-          })
-          .store(in: &self.cancellables)
-        
-        manager.dismiss()
-      }
-      .store(in: &self.cancellables)
+    let paper = TextFieldBulletinPage.cretateTextFieldBulletin()
+    let manager = BLTNItemManager(
+      rootItem: paper
+    )
+    manager.showBulletin(above: self)
+    
+    paper.actionHandler = { _ in
+      guard let text = paper.textField.text else { return }
+      DropboxAPI.shared.fetchCreateFolder(with: text, at: self.path.current)?
+        .sink(receiveCompletion: {
+          switch $0 {
+          case .finished: print("[API SUCCESSFUL] - Create folder:")
+          case .failure(let error):
+            print("[API FAIL] - Create folder:", error)
+            if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
+          }
+        }, receiveValue: {_ in
+          self.reloadViewWithFiles(at: self.path.current)
+        })
+        .store(in: &self.cancellables)
+      
+      manager.dismissBulletin()
+    }
+    
   }
   
   func addPaper() {
-    let manager = BulletinManager(title: "Paper Name: ")
-    manager.presentOn(viewController: self)
-    manager.publishText()
-      .sink { text in
-        DropboxAPI.shared.fetchCreatePaper(with: text, at: self.path.current)?
-          .sink(receiveCompletion: {
-            switch $0 {
-            case .finished: print("[API SUCCESSFUL] - Create paper:")
-            case .failure(let error):
-              print("[API FAIL] - Create paper:", error)
-              if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
-            }
-          }, receiveValue: { value in
-            self.reloadViewWithFiles(at: self.path.current)
-          })
-          .store(in: &self.cancellables)
-        
-        manager.dismiss()
-      }
-      .store(in: &self.cancellables)
+    let paper = TextFieldBulletinPage.cretateTextFieldBulletin()
+    let manager = BLTNItemManager(
+      rootItem: paper
+    )
+    manager.showBulletin(above: self)
+    
+    paper.actionHandler = { _ in
+      guard let text = paper.textField.text else { return }
+      DropboxAPI.shared.fetchCreatePaper(with: text, at: self.path.current)?
+        .sink(receiveCompletion: {
+          switch $0 {
+          case .finished: print("[API SUCCESSFUL] - Create paper:")
+          case .failure(let error):
+            print("[API FAIL] - Create paper:", error)
+            if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
+          }
+        }, receiveValue: { value in
+          self.reloadViewWithFiles(at: self.path.current)
+        })
+        .store(in: &self.cancellables)
+      
+      manager.dismissBulletin()
+    }
+    
   }
 }
 

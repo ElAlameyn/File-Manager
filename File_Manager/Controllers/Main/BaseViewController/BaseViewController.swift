@@ -26,9 +26,7 @@ class BaseViewController: UIViewController {
   private var authorizeAgain = PassthroughSubject<Void, Never>()
   
   @Limited<BaseItem>(limit: 4) private var images {
-    didSet {
-      updateImages()
-    }
+    didSet { updateImages() }
   }
   
   override func viewDidLoad() {
@@ -142,9 +140,6 @@ class BaseViewController: UIViewController {
   // MARK: - Collection View Setup
   
   private func configureCollectionView() {
-    addLeftBarButtonItem()
-    addRightBarButtonItem()
-    
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createBaseViewControllerLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
@@ -218,34 +213,7 @@ class BaseViewController: UIViewController {
       self?.dataSource.apply(snapshot, animatingDifferences: false)
     }
   }
-  
-  
-  // MARK: - Navigation Buttons
-  
-  private func addLeftBarButtonItem() {
-    let button = UIButton(type: .custom)
-    button.setImage(Images.baseLeftItem, for: .normal)
-    button.setImage(UIImage(systemName: "circle.grid.2x2.fill")?
-      .withTintColor(.black).withPointSize(70), for: .normal)
-    button.addTarget(self, action: #selector(leftBarButtonItemTapped), for: .touchUpInside)
-    navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
-  }
-  
-  private func addRightBarButtonItem() {
-    let button = UIButton(type: .custom)
-    button.setImage(UIImage(systemName: "magnifyingglass")?
-      .withTintColor(.black).withPointSize(25), for: .normal)
-    button.addTarget(self, action: #selector(rightBarButtonItemTapped), for: .touchUpInside)
-    navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
-  }
-  
-  @objc func leftBarButtonItemTapped() {
-    print("Left button tapped")
-  }
-  
-  @objc func rightBarButtonItemTapped() {
-    print("Left button tapped")
-  }
+
 }
 
 // MARK: - UICollectionViewDelegate
@@ -253,7 +221,7 @@ class BaseViewController: UIViewController {
 extension BaseViewController: UICollectionViewDelegate {
   
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    switch sections[indexPath.section] {
+    switch Section.allCases[indexPath.section] {
     case .title: break
     case .category:
       guard let category = Section.Category(rawValue: indexPath.row) else { return }

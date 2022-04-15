@@ -9,16 +9,12 @@ import UIKit
 import Combine
 
 class StorageViewController: UIViewController {
-  enum Section: Int {
-    case usageSpace, lastModified
-  }
   
+  typealias Section = LayoutManager.StorageSections
   typealias DataSource = UICollectionViewDiffableDataSource<Section, StorageItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, StorageItem>
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<StorageItem>
-  
-  private let sections: [Section] = [.usageSpace, .lastModified]
-  
+
   private let usageSpaceViewModel = UsageSpaceViewModel()
   private let filesViewModel = FilesViewModel()
   
@@ -32,7 +28,7 @@ class StorageViewController: UIViewController {
     title = "Storage"
     view.backgroundColor = Colors.baseBackground
     
-    configureUI()
+    configureCollectionView()
     fetch()
     bindViewModels()
     applySnapshot()
@@ -76,9 +72,12 @@ class StorageViewController: UIViewController {
         let cell: UsageSpaceCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(usageSpace: info)
         return cell
-      case .lastModified(let item):
+      case .recentlyUploaded(let item):
         let cell: FileItemCell = collectionView.dequeueReusableCell(for: indexPath)
         cell.configure(title: item.name)
+        return cell
+      case .uploadButton:
+        let cell: ButtonViewCell = collectionView.dequeueReusableCell(for: indexPath)
         return cell
       }
     }
@@ -91,8 +90,9 @@ class StorageViewController: UIViewController {
       
       switch Section(rawValue: indexPath.section) {
       case .usageSpace: break
-      case .lastModified: view.titleLabel.text = "File Requests"
-      case .none: break
+      case .uploadButton: view.titleLabel.text = "Upload button"
+      case .recentlyUpload: view.titleLabel.text = "Recently uploaded"
+      default: break
       }
       return view
     }
@@ -101,8 +101,12 @@ class StorageViewController: UIViewController {
   
   private func applySnapshot() {
     var snapshot = Snapshot()
-    snapshot.appendSections([.usageSpace, .lastModified])
+    snapshot.appendSections(Section.allCases)
     self.dataSource.apply(snapshot, animatingDifferences: true)
+    
+    var button = SectionSnapshot()
+    button.append([.uploadButton])
+    self.dataSource.apply(button, to: .uploadButton)
   }
   
   private func updateUsageSpace(usageSpaceResponse: UsageSpaceResponse?) {
@@ -113,18 +117,20 @@ class StorageViewController: UIViewController {
   
   private func updateListFiles(files: [ListFoldersResponse.File]?) {
     var snapshot = SectionSnapshot()
-    if let storages = files?.compactMap({ StorageItem.lastModified($0)}) {
+    if let storages = files?.compactMap({ StorageItem.recentlyUploaded($0)}) {
       snapshot.append(storages)
-      self.dataSource.apply(snapshot, to: .lastModified, animatingDifferences: true)
+      self.dataSource.apply(snapshot, to: .recentlyUpload, animatingDifferences: true)
     }
   }
   
-  private func configureUI() {
-    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
+  private func configureCollectionView() {
+    
+    collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createStorageViewControllerLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(UsageSpaceCell.self, forCellWithReuseIdentifier: "\(UsageSpaceCell.self)")
     collectionView.register(FileItemCell.self, forCellWithReuseIdentifier: "\(FileItemCell.self)")
+    collectionView.register(ButtonViewCell.self, forCellWithReuseIdentifier: "\(ButtonViewCell.self)")
     
     collectionView.register(
       SectionHeaderBaseView.self,
@@ -134,47 +140,5 @@ class StorageViewController: UIViewController {
     view.addSubview(collectionView)
   }
   
-  private func createLayout() -> UICollectionViewLayout {
-    let sectionProvider = {
-      (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
-      -> NSCollectionLayoutSection? in
-      switch self.sections[sectionIndex] {
-      case .usageSpace:
-        
-        let item = LayoutManager.createItem(
-          wD: .estimated(330),
-          hD: .estimated(420))
-        
-        let group = LayoutManager.createHorizontalGroup(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(420),
-          item: item)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .none
-        section.contentInsets = NSDirectionalEdgeInsets(top: 40, leading: 30, bottom: 40, trailing: 30)
-        
-        return section
-        
-      case .lastModified:
-        let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(60))
-        let item = NSCollectionLayoutItem(layoutSize: size)
-        
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 30, bottom: 80, trailing: 30)
-        section.interGroupSpacing = 15
-        
-        let sectionHeader = LayoutManager.createSectionHeader(
-          wD: .fractionalWidth(1.0),
-          hD: .estimated(30))
-        section.boundarySupplementaryItems = [sectionHeader]
-        
-        return section
-      }
-    }
-    return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
-  }
 }
 

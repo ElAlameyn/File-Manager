@@ -9,7 +9,9 @@ import UIKit
 
 enum StorageItem: Hashable {
   case usageSpace(UsageSpaceResponse?)
-  case lastModified(ListFoldersResponse.File)
+  case uploadButton
+  case recentlyUploaded(ListFoldersResponse.File)
+  
 }
 
 
