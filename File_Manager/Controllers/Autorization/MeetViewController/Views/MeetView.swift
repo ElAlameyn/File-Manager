@@ -19,27 +19,9 @@ class MeetView: UIView {
     setUpLayout()
   }
   
-  private var titleLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <>
-    Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMedium.withSize(26),
-      color: Colors.labelBlueColor,
-      text: Texts.meetTitleLabelText))
-  
-  private var descriptionLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <>
-    Style.appearanceLabelStyle(
-      withFont: Fonts.robotoRegular.withSize(20),
-      color: .systemGray,
-      text: Texts.meetDescriptionLabelText)
-                                                   )
-  private var submitButton = UIButton.withStyle(
-    f: Style.rounded(radius: 20) <>
-    Style.configureButtonTitle(withTitle: Texts.meetButtonTitle, color: .white)
-    <> {
-      $0.backgroundColor = Colors.buttonBlueColor
-      $0.titleLabel?.font = Fonts.robotoBold
-    })
+  private var titleLabel = UILabel.withStyle(Style.label.blueLargeTitle)
+  private var descriptionLabel = UILabel.withStyle(Style.label.desriptionGray)
+  private var submitButton = UIButton.withStyle(Style.button.blueButton)
 
   private func setUpUI() {
     self.addSubview(titleLabel)

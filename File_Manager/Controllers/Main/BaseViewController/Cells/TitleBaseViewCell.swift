@@ -10,7 +10,7 @@ import UIKit
 class TitleBaseViewCell: UICollectionViewCell {
   
   var titleLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <>
+    Style.baseLabelStyle <>
     Style.appearanceLabelStyle(
       withFont: Fonts.robotoMedium.withSize(26),
       color: .darkGray,

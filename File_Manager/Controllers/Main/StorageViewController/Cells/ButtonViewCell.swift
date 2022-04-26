@@ -13,7 +13,7 @@ class ButtonViewCell: UICollectionViewCell {
   private var subscriber: AnyCancellable?
   
   private var submitButton = UIButton.withStyle(
-    f: Style.rounded(radius: 20) <>
+    Style.rounded(radius: 20) <>
     Style.configureButtonTitle(withTitle: "Upload", color: .white)
     <> {
       $0.backgroundColor = Colors.buttonBlueColor

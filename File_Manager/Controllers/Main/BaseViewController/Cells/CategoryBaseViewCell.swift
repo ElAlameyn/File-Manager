@@ -16,7 +16,7 @@ class CategoryBaseViewCell: UICollectionViewCell {
   }()
 
   private var titleLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <>
+    Style.baseLabelStyle <>
     Style.appearanceLabelStyle(
       withFont: Fonts.robotoMediumForCategories,
       color: .darkGray,

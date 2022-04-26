@@ -24,7 +24,7 @@ class SectionHeaderBaseView: UICollectionReusableView {
   }()
   
   lazy var titleLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <> Style.mask <>
+    Style.baseLabelStyle <> Style.mask <>
     Style.appearanceLabelStyle(
       withFont: Fonts.robotoMedium.withSize(24),
       color: .darkGray,
@@ -33,7 +33,7 @@ class SectionHeaderBaseView: UICollectionReusableView {
   )
   
   lazy var currentPathLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <> Style.mask <>
+    Style.baseLabelStyle <> Style.mask <>
     Style.appearanceLabelStyle(
       withFont: Fonts.robotoMedium.withSize(18),
       color: .darkGray,

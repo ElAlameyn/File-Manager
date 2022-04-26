@@ -32,4 +32,12 @@ extension UICollectionView {
     ) as? T else { fatalError("Can't create supplementary view") }
     return view
   }
+  
+  func getCellFor<T: UICollectionViewCell>(indexPath: IndexPath) -> T {
+    guard let cell = self.cellForItem(at: indexPath) as? T else {
+      fatalError("[Collection View: \(Self.self) can't find a cell of index: \(indexPath)")
+    }
+    return cell
+  }
+  
 }

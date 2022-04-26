@@ -78,7 +78,7 @@ final class DropboxAPI {
   }
   
   // MARK: - Private
-  
+
   private func getPublisher<T: Decodable>(request: URLRequest) -> AnyPublisher<T, Error> {
     URLSession.shared.dataTaskPublisher(for: request)
       .subscribe(on: DispatchQueue.global())

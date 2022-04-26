@@ -23,21 +23,21 @@ class UsageSpaceCell: UICollectionViewCell {
     color: Colors.labelGrayColor,
     text: "?")
   
-  lazy private var usedLabel = UILabel.withStyle(f: statisticLabelStyle)
-  lazy private var totalLabel = UILabel.withStyle(f: statisticLabelStyle)
+  lazy private var usedLabel = UILabel.withStyle(statisticLabelStyle)
+  lazy private var totalLabel = UILabel.withStyle(statisticLabelStyle)
   lazy private var availableLabel = UILabel.withStyle(
-    f: statisticLabelStyle <>
+    statisticLabelStyle <>
     { $0.font = UIFontMetrics.default.scaledFont(
       for: Fonts.robotoMedium.withSize(32))})
   
   lazy private var usedDescriptionLabel = UILabel.withStyle(
-    f: statisticDescriptionLabelStyle <>
+    statisticDescriptionLabelStyle <>
     { $0.text = "Used"})
   lazy private var totalDescriptionLabel = UILabel.withStyle(
-    f: statisticDescriptionLabelStyle <>
+    statisticDescriptionLabelStyle <>
     { $0.text = "Total"})
   lazy private var availableDescriptionLabel = UILabel.withStyle(
-    f: statisticDescriptionLabelStyle <>
+    statisticDescriptionLabelStyle <>
     { $0.text = "Available"})
   
   private func getValueOf(percent: Double) -> CGFloat {

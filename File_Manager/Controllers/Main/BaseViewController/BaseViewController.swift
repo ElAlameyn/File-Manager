@@ -238,8 +238,11 @@ extension BaseViewController: UICollectionViewDelegate {
       case .recents:
         // Handle tap on image
         let detailVC = DetailImageController()
-        detailVC.title = images[indexPath.row].name
-        guard let item = collectionView.cellForItem(at: indexPath) as? ImageBaseViewCell else { return }
+        detailVC.configure(title: images[indexPath.row].name, indexPath: indexPath)
+        detailVC.handleToolBar = self
+        
+        let item: ImageBaseViewCell = collectionView.getCellFor(indexPath: indexPath)
+        
         if item.isFethed {
           navigationController?.pushViewController(detailVC, animated: true, completion: {
             detailVC.change(image: item.mainImageView.image)
@@ -247,6 +250,30 @@ extension BaseViewController: UICollectionViewDelegate {
         }
       default: break
       }
+    }
+  }
+}
+
+// MARK: - HandlingDetailImageToolBar
+
+extension BaseViewController: HandlingDetailImageToolBar {
+  func didTapShare(at indexPath: IndexPath) {
+  }
+  
+  func didTapDelete(at indexPath: IndexPath) {
+    if let id = images[indexPath.row].id {
+    DropboxAPI.shared.fetchDeleteFile(at: id)?
+        .sink(receiveCompletion: {
+          switch $0 {
+          case .finished: print("[API SUCCESSFUL] - Delete file")
+          case .failure(let error):
+            print("[API FAIL] - Delete file:", error)
+            if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
+          }
+        }, receiveValue: {_ in
+          self.updateImages()
+        })
+        .store(in: &cancellables)
     }
   }
 }

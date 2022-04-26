@@ -30,7 +30,8 @@ class FilesViewController: UIViewController {
   }
   
   private var authorizeAgain = PassthroughSubject<Void, Never>()
-  
+  private var reloadFiles = PassthroughSubject<String, Never>()
+
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .white
@@ -71,6 +72,16 @@ class FilesViewController: UIViewController {
       }
     }
     .store(in: &cancellables)
+    
+    reloadFiles
+      .compactMap { path -> AnyPublisher<ListFoldersResponse?, Error>? in
+        return DropboxAPI.shared.fetchAllFiles(path: path, recursive: false)
+      }
+      .switchToLatest()
+      .sink(receiveCompletion: {_ in}) {
+        self.filesViewModel.subject.send($0)
+      }
+      .store(in: &cancellables)
   }
   
   private func reloadViewWithFiles(at path: String) {
@@ -200,7 +211,7 @@ extension FilesViewController: UICollectionViewDelegate {
     case .main:
       // Handle back arrow tap
       if indexPath.row == 0 && indexPath.section == 1  && !isRootFolder {
-        reloadViewWithFiles(at: self.path.getPrevious ?? "")
+        reloadFiles.send(self.path.getPrevious ?? "")
         
         // Change show path label
         let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
@@ -215,7 +226,7 @@ extension FilesViewController: UICollectionViewDelegate {
         self.path.current = path
         let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
         view.currentPathLabel.text = self.path.current
-        reloadViewWithFiles(at: self.path.current)
+        reloadFiles.send(self.path.current)
       }
     }
   }

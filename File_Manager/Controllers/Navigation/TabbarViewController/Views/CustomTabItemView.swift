@@ -12,7 +12,7 @@ class CustomTabItemView: UIView {
   
   private let item: CustomTabItem
   let index: Int
-
+  
   private let containerView = UIView()
   
   var isSelected = false {
@@ -24,12 +24,16 @@ class CustomTabItemView: UIView {
   private var isChanged = false
   
   lazy private var titleLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <>
-    Style.appearanceLabelStyle(
-      withFont: Fonts.robotoMediumForCategories.withSize(14),
-      color: .white,
-      text: item.name) <> Style.mask)
-
+    Style.concat(
+      Style.baseLabelStyle,
+      Style.appearanceLabelStyle(
+        withFont: Fonts.robotoMediumForCategories.withSize(14),
+        color: .white,
+        text: item.name),
+      Style.mask
+    )
+  )
+  
   private let imageView = UIImageView()
   
   init(with item: CustomTabItem, index: Int) {
@@ -49,7 +53,7 @@ class CustomTabItemView: UIView {
     containerView.addCenterConstraints()
     
     containerView.addSubview(titleLabel)
-
+    
     NSLayoutConstraint.activate([
       titleLabel.leftAnchor.constraint(equalTo: self.leftAnchor),
       titleLabel.rightAnchor.constraint(equalTo: self.rightAnchor),
@@ -57,7 +61,7 @@ class CustomTabItemView: UIView {
     ])
     
     titleLabel.alpha = 0.0
-
+    
     containerView.addSubview(imageView)
     imageView.addHeightWeightConstraints(values: CGPoint(x: 30, y: 30))
     

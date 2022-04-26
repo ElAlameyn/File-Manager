@@ -9,7 +9,7 @@ import UIKit
 
 extension UILabel {
 
-  static func withStyle(f: @escaping (UILabel) -> Void) -> UILabel {
+  static func withStyle(_ f: @escaping (UILabel) -> Void) -> UILabel {
     let label = UILabel()
     f(label)
     return label

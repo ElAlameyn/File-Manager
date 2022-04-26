@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 extension UIButton {
-  static func withStyle(f: @escaping (UIButton) -> Void) -> UIButton {
+  static func withStyle(_ f: @escaping (UIButton) -> Void) -> UIButton {
     let button = UIButton()
     f(button)
     return button

@@ -21,7 +21,7 @@ class FileItemCell: UICollectionViewCell {
   var indexPath: IndexPath?
   
   private let titleLabel = UILabel.withStyle(
-    f: Style.baseLabelStyle <>
+    Style.baseLabelStyle <>
     Style.appearanceLabelStyle(
       withFont: Fonts.robotoRegular.withSize(18),
       color: Colors.labelGrayColor,
