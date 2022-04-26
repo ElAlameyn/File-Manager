@@ -348,6 +348,7 @@
 		B535379827B28A83003A7C6A /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				B549DDC427AAA5E000BC05BA /* TabbarViewController */,
 				B51A715E27AEAD1A0026040E /* Reusable */,
 				B51A716227AEBB250026040E /* FilesViewController */,
 				B51A715F27AEBAD90026040E /* OptionsViewController */,
@@ -355,14 +356,6 @@
 				B5DFB90D27A2C60400196251 /* BaseViewController */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		B535379927B28AA0003A7C6A /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				B549DDC427AAA5E000BC05BA /* TabbarViewController */,
-			);
-			path = Navigation;
 			sourceTree = "<group>";
 		};
 		B535379A27B28B08003A7C6A /* AuthViewController */ = {
@@ -502,7 +495,6 @@
 		B5DFB8DC27A2947A00196251 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B535379927B28AA0003A7C6A /* Navigation */,
 				B535379827B28A83003A7C6A /* Main */,
 				B535379727B28A66003A7C6A /* Autorization */,
 			);

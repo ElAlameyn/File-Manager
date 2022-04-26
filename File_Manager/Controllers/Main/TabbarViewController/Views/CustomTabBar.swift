@@ -17,8 +17,7 @@ class CustomTabBar: UIStackView
   private lazy var customViews: [CustomTabItemView] = [
     CustomTabItemView(with: .home, index: 0),
     CustomTabItemView(with: .statistic, index: 1),
-    CustomTabItemView(with: .storage, index: 2),
-    CustomTabItemView(with: .options, index: 3)
+    CustomTabItemView(with: .storage, index: 2)
   ]
   
   private let itemTappedSubject = PublishSubject<Int>()

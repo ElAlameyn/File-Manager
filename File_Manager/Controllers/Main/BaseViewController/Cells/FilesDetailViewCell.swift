@@ -43,22 +43,24 @@ class FilesDetailViewCell: UICollectionViewCell {
   }()
   
   private func setUpUI() {
-    backgroundColor = .white
-    
+
     Style.withShadow(withRadius: 1, offset: CGSize(width: 0, height: 5), opacity: 0.2)(self)
     
-    layer.shadowColor = UIColor.black.cgColor 
-    layer.cornerRadius = 20
-    clipsToBounds = true
-    
+    addSubview(borderView)
+//
+//    layer.shadowColor = UIColor.black.cgColor
+//    layer.cornerRadius = 20
+//    clipsToBounds = true
+//
+//
 
-    addSubview(mainImageView)
-    mainImageView.addEdgeContstraints(exclude: .bottom, offset: UIEdgeInsets(top: 10, left: 10, bottom: -10, right: -10))
+    borderView.addSubview(mainImageView)
+    mainImageView.addEdgeContstraints(exclude: .bottom, offset: UIEdgeInsets(top: 30, left: 10, bottom: -10, right: -10))
     mainImageView.addHeightWeightConstraints(exclude: .width, values: CGPoint(x: 80, y: 90))
 
-    addSubview(label)
+    borderView.addSubview(label)
     label.addEdgeContstraints(exclude: .top, offset: UIEdgeInsets(top: 40, left: 5, bottom: -5, right: -5))
-    label.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 40).isActive = true
+    label.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 10).isActive = true
   }
   
   required init?(coder: NSCoder) {

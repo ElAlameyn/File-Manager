@@ -8,7 +8,7 @@
 import UIKit
 
 enum CustomTabItem: String, CaseIterable {
-  case home, statistic, storage, options
+  case home, statistic, storage
 }
 
 extension CustomTabItem {
@@ -20,8 +20,6 @@ extension CustomTabItem {
       return UINavigationController(rootViewController: StorageViewController())
     case .storage:
       return UINavigationController(rootViewController: FilesViewController())
-    case .options:
-      return UINavigationController(rootViewController: OptionsViewController())
     }
   }
   
@@ -38,14 +36,8 @@ extension CustomTabItem {
                      withConfiguration:
                       UIImage.SymbolConfiguration(pointSize: 30))?
         .withTintColor(.white, renderingMode: .alwaysOriginal)
-    case .options:
-      return UIImage(systemName: "wrench.fill",
-                     withConfiguration:
-                      UIImage.SymbolConfiguration(pointSize: 30))?
-        .withTintColor(.white, renderingMode: .alwaysOriginal)
     }
   }
-  
   var name: String {
     return self.rawValue.capitalized
   }
