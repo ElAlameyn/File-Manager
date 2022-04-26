@@ -10,7 +10,7 @@ import UIKit
 enum BaseItem: Hashable {
   case title(image: UIImage?, text: String? = "")
   case category(Category?)
-  case recents(ImageIdContainer?)
+  case recents(ItemContainer?)
 }
 
 extension BaseItem {

@@ -8,15 +8,27 @@
 import UIKit
 import Combine
 
-class ImagesCollectionController: UIViewController
+class CategoryCollectionController: UIViewController
 {
   enum Section {
     case main
   }
   
-  typealias DataSource = UICollectionViewDiffableDataSource<Section, ImageIdContainer>
-  typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ImageIdContainer>
-  typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<ImageIdContainer>
+  enum TypeOfCategory {
+    case file
+    case image
+  }
+  
+  var type: TypeOfCategory! = nil
+  
+  convenience init(type: TypeOfCategory) {
+    self.init(nibName: nil, bundle: nil)
+    self.type = type
+  }
+  
+  typealias DataSource = UICollectionViewDiffableDataSource<Section, ItemContainer>
+  typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ItemContainer>
+  typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<ItemContainer>
   
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
@@ -24,7 +36,7 @@ class ImagesCollectionController: UIViewController
   private var cancellables: Set<AnyCancellable> = []
   private let filesViewModel = FilesViewModel()
   
-  private var images: [ImageIdContainer] = [] {
+  private var images: [ItemContainer] = [] {
     didSet {
       updateImages()
     }
@@ -40,6 +52,7 @@ class ImagesCollectionController: UIViewController
     applySnapshot()
   }
   
+#warning("Fix handle on fail")
   private func fetch() {
     DropboxAPI.shared.fetchAllFiles()?
       .sink(receiveCompletion: {
@@ -64,14 +77,25 @@ class ImagesCollectionController: UIViewController
   private func bindViewModels() {
     filesViewModel.subject
       .sink(receiveCompletion: {_ in}) { _ in
-        self.filesViewModel.images.forEach { [weak self] in
-          self?.images.append(ImageIdContainer(
-            imageId: $0.id,
-            imageName: $0.name
-          ))
+        if self.type == .image {
+          self.filesViewModel.images.forEach { [weak self] in
+            self?.images.append(ItemContainer(
+              imageId: $0.id,
+              imageName: $0.name
+            ))
+          }
+        } else {
+          self.filesViewModel.files.forEach { [weak self] in
+            self?.images.append(ItemContainer(
+              imageId: $0.id,
+              imageName: $0.name
+            ))
+          }
         }
+        
       }
       .store(in: &cancellables)
+    
   }
   
   private func applySnapshot() {
@@ -86,12 +110,13 @@ class ImagesCollectionController: UIViewController
     snapshot.append(images)
     dataSource.apply(snapshot, to: .main, animatingDifferences: true)
   }
-
+  
   private func configureUI() {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
     collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
+    collectionView.register(FilesDetailViewCell.self, forCellWithReuseIdentifier: "\(FilesDetailViewCell.self)")
     
     collectionView.register(
       SectionHeaderBaseView.self,
@@ -104,19 +129,27 @@ class ImagesCollectionController: UIViewController
   
   private func configureDataSource() -> DataSource {
     let dataSource =  DataSource(collectionView: collectionView) {
-      (collectionView: UICollectionView, indexPath: IndexPath, item: ImageIdContainer) -> UICollectionViewCell? in
-      let cell: ImageBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
-      if !cell.isFethed {
-        cell.fetch(id: item.imageId ?? "")
+      (collectionView: UICollectionView, indexPath: IndexPath, item: ItemContainer) -> UICollectionViewCell? in
+      
+      if self.type == .image {
+        let cell: ImageBaseViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        if !cell.isFethed {
+          cell.fetch(id: item.imageId ?? "")
+        }
+        return cell
+      } else if self.type == .file {
+        let cell: FilesDetailViewCell = collectionView.dequeueReusableCell(for: indexPath)
+        cell.configure(title: self.filesViewModel.files[indexPath.row].name)
+        return cell
       }
-      return cell
+      return nil
     }
     
     dataSource.supplementaryViewProvider = {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-      view.titleLabel.text = "All Images"
+      view.titleLabel.text = self.type == .image ? "All Images" : "All Files"
       return view
     }
     return dataSource
@@ -128,8 +161,8 @@ class ImagesCollectionController: UIViewController
       -> NSCollectionLayoutSection? in
       
       let item = LayoutManager.createItem(
-        wD: .estimated(155),
-        hD: .estimated(220))
+        wD: .absolute(155),
+        hD: .absolute(220))
       
       let group = LayoutManager.createHorizontalGroup(
         wD: .fractionalWidth(1.0),
@@ -154,7 +187,7 @@ class ImagesCollectionController: UIViewController
   }
 }
 
-extension ImagesCollectionController: UICollectionViewDelegate {
+extension CategoryCollectionController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     let detailVC = DetailImageController()
     detailVC.title = images[indexPath.row].imageName

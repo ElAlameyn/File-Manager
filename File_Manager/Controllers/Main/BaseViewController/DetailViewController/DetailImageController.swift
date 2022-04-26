@@ -9,7 +9,6 @@ import UIKit
 import BLTNBoard
 
 protocol HandlingDetailImageToolBar {
-  func didTapShare(at indexPath: IndexPath)
   func didTapDelete(at indexPath: IndexPath)
 }
 
@@ -118,10 +117,6 @@ class DetailImageController: UIViewController {
       offset: UIEdgeInsets(top: 15, left: 10, bottom: 0, right: -10)
     )
   }
-  
-
-
-
 }
 
 // MARK: - Toolbar handle
@@ -144,11 +139,17 @@ extension DetailImageController {
     
   }
 
-  @objc func didTapShare() {
-    if let indexPath = indexPath {
-      handleToolBar?.didTapShare(at: indexPath)
+  @objc func didTapShare(_ sender: UIButton) {
+    
+    if let image = imageScrollView.getImage {
+      let shareSheetVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+      shareSheetVC.popoverPresentationController?.sourceView = sender
+      shareSheetVC.popoverPresentationController?.sourceRect = sender.frame
+      
+      present(shareSheetVC, animated: true)
     }
   }
+  
   @objc func didTapDelete() {
     if let indexPath = indexPath {
       handleToolBar?.didTapDelete(at: indexPath)

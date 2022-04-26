@@ -32,7 +32,6 @@ class BaseViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = Colors.baseBackground
-    #warning("Fix navigation bar thing")
     navigationController?.navigationBar.isHidden = true
     
     configureCollectionView()
@@ -81,7 +80,7 @@ class BaseViewController: UIViewController {
           files: self.filesViewModel.countFilesAmount()
         )
         self.filesViewModel.images.forEach { [weak self] in
-          self?.images.append(BaseItem.recents(ImageIdContainer(
+          self?.images.append(BaseItem.recents(ItemContainer(
             imageId: $0.id,
             imageName: $0.name
           )))
@@ -227,11 +226,13 @@ extension BaseViewController: UICollectionViewDelegate {
       guard let category = Section.Category(rawValue: indexPath.row) else { return }
       switch category {
       case .images:
-        let imageVC = ImagesCollectionController()
+        let imageVC = CategoryCollectionController(type: .image)
         navigationController?.pushViewController(imageVC, animated: true)
         #warning("Make screens for videous and files")
       case .videos: break
-      case .files: break
+      case .files:
+        let imageVC = CategoryCollectionController(type: .file)
+        navigationController?.pushViewController(imageVC, animated: true)
       }
     case .recentFiles:
       switch images[indexPath.row] {
@@ -257,9 +258,6 @@ extension BaseViewController: UICollectionViewDelegate {
 // MARK: - HandlingDetailImageToolBar
 
 extension BaseViewController: HandlingDetailImageToolBar {
-  func didTapShare(at indexPath: IndexPath) {
-  }
-  
   func didTapDelete(at indexPath: IndexPath) {
     if let id = images[indexPath.row].id {
     DropboxAPI.shared.fetchDeleteFile(at: id)?

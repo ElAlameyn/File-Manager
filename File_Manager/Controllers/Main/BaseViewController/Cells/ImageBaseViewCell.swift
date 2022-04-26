@@ -9,12 +9,15 @@ import UIKit
 import Combine
 
 class ImageBaseViewCell: UICollectionViewCell {
+  
   private var leftUpperImageView = UIImageView(
     image: UIImage(systemName: "heart")
   )
+  
   private var bottomRightView = UIImageView(
     image: UIImage(systemName: "photo.fill")
   )
+  
   private var activityView: UIActivityIndicatorView?
   private var cancellables = Set<AnyCancellable>()
   
