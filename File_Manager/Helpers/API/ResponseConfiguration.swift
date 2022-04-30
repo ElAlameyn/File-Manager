@@ -39,6 +39,8 @@ enum RequestConfigurator {
   case deleteFile(id: String)
   case createFolder(path: String)
   case createPaper(fullPath: String)
+  case upload(fileData: Data, path: String)
+  
 
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
@@ -55,28 +57,33 @@ enum RequestConfigurator {
     case .deleteFile: return baseURL + "/2/files" + "/delete_v2"
     case .createFolder: return baseURL + "/2/files" + "/create_folder_v2"
     case .createPaper: return baseURL + "/2/files" + "/paper/create"
+    case .upload: return contentURL + "/2/files" + "/upload"
     }
   }
   
   private var components: [String: Any]? {
     switch self {
     case .token(let code):
-      print("USED CODE VERIFIER: \(KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? "")")
-      return ["grant_type": "authorization_code",
-              "code": code,
-              "redirect_uri": TokenCredentials.redirectURI,
-              "code_verifier": KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? ""
+      return [
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": TokenCredentials.redirectURI,
+        "code_verifier": KeychainSwift().get(RequestConfigurator.codeVerifierKey) ?? ""
       ]
     case .users: return nil
     case .listFolder(let path, let recursive):
-      return ["path": path,
-              "recursive": recursive,
-              "limit": 10 ]
+      return [
+        "path": path,
+        "recursive": recursive,
+        "limit": 10
+      ]
     case .thumbnail(let path):
-      return [ "path": path,
-               "format": "jpeg",
-               "size": "w64h64",
-               "mode": "strict" ]
+      return [
+        "path": path,
+        "format": "jpeg",
+        "size": "w64h64",
+        "mode": "strict"
+      ]
     case .download(let id):
       return ["path": id]
     case .check:
@@ -86,10 +93,12 @@ enum RequestConfigurator {
     case .deleteFile(id: let id):
       return ["path": id]
     case .createFolder(path: let path):
-      return ["path": path,
-              "autorename": true
+      return [
+        "path": path,
+        "autorename": true
       ]
     case .createPaper: return nil
+    case .upload: return nil
     }
   }
   
@@ -148,6 +157,11 @@ enum RequestConfigurator {
       request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
       request.setValue(fullPath, forHTTPHeaderField: "Dropbox-API-Arg")
       request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+    case .upload(fileData: let fileData, path: let path):
+      request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+      request.setValue(path, forHTTPHeaderField: "Dropbox-API-Arg")
+      request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+      request.httpBody = fileData
     }
     request.timeoutInterval = 60
     return request

@@ -14,7 +14,6 @@
 		B515C22227BFE5D1008EAF28 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B515C22127BFE5D1008EAF28 /* KeychainSwift */; };
 		B515C22427C027E9008EAF28 /* FilesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B515C22327C027E9008EAF28 /* FilesViewModel.swift */; };
 		B515C22627C028CE008EAF28 /* ListFoldersResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */; };
-		B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716027AEBAF50026040E /* OptionsViewController.swift */; };
 		B51A716427AEBB350026040E /* FilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51A716327AEBB350026040E /* FilesViewController.swift */; };
 		B522327A27D3B87C00D69B5F /* CategoryCollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B522327927D3B87C00D69B5F /* CategoryCollectionController.swift */; };
 		B524895227AD45110064C08C /* CustomTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B524895127AD45110064C08C /* CustomTabItem.swift */; };
@@ -106,7 +105,6 @@
 		B515C21E27BFE07A008EAF28 /* Pods_File_Manager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_File_Manager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B515C22327C027E9008EAF28 /* FilesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesViewModel.swift; sourceTree = "<group>"; };
 		B515C22527C028CE008EAF28 /* ListFoldersResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListFoldersResponse.swift; sourceTree = "<group>"; };
-		B51A716027AEBAF50026040E /* OptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsViewController.swift; sourceTree = "<group>"; };
 		B51A716327AEBB350026040E /* FilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesViewController.swift; sourceTree = "<group>"; };
 		B522327927D3B87C00D69B5F /* CategoryCollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionController.swift; sourceTree = "<group>"; };
 		B524895127AD45110064C08C /* CustomTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabItem.swift; sourceTree = "<group>"; };
@@ -293,14 +291,6 @@
 			path = Reusable;
 			sourceTree = "<group>";
 		};
-		B51A715F27AEBAD90026040E /* OptionsViewController */ = {
-			isa = PBXGroup;
-			children = (
-				B51A716027AEBAF50026040E /* OptionsViewController.swift */,
-			);
-			path = OptionsViewController;
-			sourceTree = "<group>";
-		};
 		B51A716227AEBB250026040E /* FilesViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -349,9 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				B549DDC427AAA5E000BC05BA /* TabbarViewController */,
-				B51A715E27AEAD1A0026040E /* Reusable */,
 				B51A716227AEBB250026040E /* FilesViewController */,
-				B51A715F27AEBAD90026040E /* OptionsViewController */,
 				B5FB3F7627A84686007A0495 /* StorageViewController */,
 				B5DFB90D27A2C60400196251 /* BaseViewController */,
 			);
@@ -474,6 +462,7 @@
 				B5FB3F7327A83124007A0495 /* Helpers */,
 				B5DFB8E327A2AD6900196251 /* Extensions */,
 				B5DFB8DD27A2A76200196251 /* Constants */,
+				B51A715E27AEAD1A0026040E /* Reusable */,
 				B5DFB8DC27A2947A00196251 /* Controllers */,
 				B5DFB8D027A286AC00196251 /* Assets.xcassets */,
 				B5DFB8D527A286AC00196251 /* Info.plist */,
@@ -775,7 +764,6 @@
 			files = (
 				B508201C27BBA52800102539 /* UsageSpaceViewModel.swift in Sources */,
 				B5DFB8E527A2AD7200196251 /* UIView+Extension.swift in Sources */,
-				B51A716127AEBAF50026040E /* OptionsViewController.swift in Sources */,
 				B5E76A882818044600A1AEAF /* FilesDetailViewCell.swift in Sources */,
 				B5DFB8CC27A286A900196251 /* MeetViewController.swift in Sources */,
 				B51A716427AEBB350026040E /* FilesViewController.swift in Sources */,

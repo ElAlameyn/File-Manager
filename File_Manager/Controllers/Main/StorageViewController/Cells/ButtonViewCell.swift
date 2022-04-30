@@ -32,7 +32,13 @@ class ButtonViewCell: UICollectionViewCell {
   func setUpUI() {
     contentView.addSubview(submitButton)
     submitButton.addEdgeContstraints(offset: UIEdgeInsets(top: 0, left: 30, bottom: -25, right: -30))
+    
+    submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
   }
+  
+  @objc func submitButtonTapped() {
+  }
+
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")

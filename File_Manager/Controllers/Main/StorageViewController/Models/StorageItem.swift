@@ -11,7 +11,6 @@ enum StorageItem: Hashable {
   case usageSpace(UsageSpaceResponse?)
   case uploadButton
   case recentlyUploaded(ListFoldersResponse.File)
-  
 }
 
 
