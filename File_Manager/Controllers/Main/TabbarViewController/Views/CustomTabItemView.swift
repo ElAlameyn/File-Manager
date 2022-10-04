@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class CustomTabItemView: UIView {
   
   private let item: CustomTabItem

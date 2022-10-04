@@ -16,7 +16,6 @@ protocol HandlingFolderView {
 class FoldersHeaderView: UICollectionReusableView {
   
   var delegate: HandlingFolderView?
-  
 
   private lazy var downArrowButton: UIButton = {
     let button = UIButton()
@@ -52,7 +51,7 @@ class FoldersHeaderView: UICollectionReusableView {
     }
   )
   
-  lazy var fileImageView: UIImageView = {
+  private lazy var fileImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.isUserInteractionEnabled = true
     imageView.image = Images.addFileImage
@@ -60,7 +59,7 @@ class FoldersHeaderView: UICollectionReusableView {
     return imageView
   }()
   
-  lazy var folderImageView: UIImageView = {
+  private lazy var folderImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.isUserInteractionEnabled = true
     imageView.image = Images.addFolderImage
@@ -77,7 +76,7 @@ class FoldersHeaderView: UICollectionReusableView {
     setUpLayout()
   }
   
-  func setUpUI() {
+  private func setUpUI() {
     addSubview(folderImageView)
     addSubview(fileImageView)
     addSubview(titleLabel)
@@ -92,7 +91,7 @@ class FoldersHeaderView: UICollectionReusableView {
     )
   }
   
-  func setUpLayout() {
+  private func setUpLayout() {
     
     // folder image
     NSLayoutConstraint.activate([

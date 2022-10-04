@@ -12,7 +12,6 @@ import UIKit
 final class DropboxAPI {
   static let shared = DropboxAPI()
   static let tokenKey = "token_key"
-  
 
   func fetchUpload(path: String, fileData: Data) -> AnyPublisher<Data?, Error>? {
     guard let request = RequestConfigurator.upload(

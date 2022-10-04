@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 extension UIView {
   // MARK: - Layout
@@ -84,4 +85,13 @@ extension UIView {
       }
   }
 
+}
+
+// MARK: - Combine
+
+extension UIView {
+
+  func publisher<G>(for gestureRecognizer: G) -> UIGestureRecognizer.Publisher<G> where G: UIGestureRecognizer {
+    UIGestureRecognizer.Publisher(gestureRecognizer: gestureRecognizer, view: self)
+  }
 }

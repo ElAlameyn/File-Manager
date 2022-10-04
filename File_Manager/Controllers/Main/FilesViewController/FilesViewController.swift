@@ -66,9 +66,7 @@ class FilesViewController: UIViewController {
       uploadButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30),
       uploadButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100)
     ])
-    
     uploadButton.addTarget(self, action: #selector(didTapUploadButton), for: .touchUpInside)
-
   }
   
   @objc func didTapUploadButton() {
@@ -76,7 +74,6 @@ class FilesViewController: UIViewController {
     self.present(picker, animated: true)
   }
 
-  
   private func configureSearchController() {
     searchController.searchBar.sizeToFit()
     searchController.searchBar.delegate = self
@@ -259,7 +256,7 @@ extension FilesViewController: UICollectionViewDelegate {
       // Handle back arrow tap
       if indexPath.row == 0 && indexPath.section == 1  && !isRootFolder {
         reloadFiles.send(self.path.getPrevious ?? "")
-        
+
         // Change show path label
         let view: FoldersHeaderView = collectionView.getSupplementaryView(at: IndexPath(row: 0, section: 1))
         view.currentPathLabel.text = self.path.wasPrevious

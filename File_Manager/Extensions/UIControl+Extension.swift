@@ -12,7 +12,6 @@ extension UIControl {
   func publisher(for event: Event) -> EventPublisher {
     EventPublisher(control: self, event: event)
   }
-  
 }
 
 

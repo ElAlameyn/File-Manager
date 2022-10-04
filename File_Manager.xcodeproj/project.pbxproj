@@ -33,6 +33,7 @@
 		B5487B9A27B9894F00258B58 /* DropboxAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9927B9894F00258B58 /* DropboxAPI.swift */; };
 		B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift */; };
 		B5487BA027B98AAE00258B58 /* TokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5487B9F27B98AAE00258B58 /* TokenResponse.swift */; };
+		B54894EF28EC5F630067844D /* UIGestrueRecognizer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54894EE28EC5F630067844D /* UIGestrueRecognizer+Extension.swift */; };
 		B549DDC627AAA64200BC05BA /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B549DDC527AAA64200BC05BA /* TabBarViewController.swift */; };
 		B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B1BC627A6A03900AF1D84 /* Category.swift */; };
 		B54B1BC927A6A60F00AF1D84 /* BaseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54B1BC827A6A60F00AF1D84 /* BaseItem.swift */; };
@@ -96,12 +97,9 @@
 		B5FB3F7E27A84D97007A0495 /* UsageSpaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7D27A84D97007A0495 /* UsageSpaceCell.swift */; };
 		B5FB3F8027A84DAF007A0495 /* FileItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7F27A84DAF007A0495 /* FileItemCell.swift */; };
 		B5FB3F8427A855BD007A0495 /* ImageTransformator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */; };
-		FBD378EB87D0D740A191F766 /* Pods_File_Manager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABB72FC5379ACE0BEC08C1AB /* Pods_File_Manager.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5EEA358DFCFF44F03BFC3ABD /* Pods-File_Manager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.debug.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.debug.xcconfig"; sourceTree = "<group>"; };
-		ABB72FC5379ACE0BEC08C1AB /* Pods_File_Manager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_File_Manager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B508201B27BBA52800102539 /* UsageSpaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceViewModel.swift; sourceTree = "<group>"; };
 		B508201E27BBA89B00102539 /* ViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
 		B5109D3427E77D70000F919A /* ReturnFileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnFileCell.swift; sourceTree = "<group>"; };
@@ -126,6 +124,7 @@
 		B5487B9927B9894F00258B58 /* DropboxAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxAPI.swift; sourceTree = "<group>"; };
 		B5487B9C27B989ED00258B58 /* UsageSpaceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceResponse.swift; sourceTree = "<group>"; };
 		B5487B9F27B98AAE00258B58 /* TokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponse.swift; sourceTree = "<group>"; };
+		B54894EE28EC5F630067844D /* UIGestrueRecognizer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGestrueRecognizer+Extension.swift"; sourceTree = "<group>"; };
 		B549DDC527AAA64200BC05BA /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		B54B1BC627A6A03900AF1D84 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		B54B1BC827A6A60F00AF1D84 /* BaseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseItem.swift; sourceTree = "<group>"; };
@@ -191,7 +190,6 @@
 		B5FB3F7D27A84D97007A0495 /* UsageSpaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSpaceCell.swift; sourceTree = "<group>"; };
 		B5FB3F7F27A84DAF007A0495 /* FileItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileItemCell.swift; sourceTree = "<group>"; };
 		B5FB3F8327A855BD007A0495 /* ImageTransformator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTransformator.swift; sourceTree = "<group>"; };
-		CF4BD528CCC63E5B69080EF4 /* Pods-File_Manager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-File_Manager.release.xcconfig"; path = "Target Support Files/Pods-File_Manager/Pods-File_Manager.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,26 +199,15 @@
 			files = (
 				B515C22227BFE5D1008EAF28 /* KeychainSwift in Frameworks */,
 				B5286DA027F9EA40007C5C89 /* BLTNBoard in Frameworks */,
-				FBD378EB87D0D740A191F766 /* Pods_File_Manager.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2639C815035EE3D5C7DE6B0E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				ABB72FC5379ACE0BEC08C1AB /* Pods_File_Manager.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		6950A936424B5937863435C3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5EEA358DFCFF44F03BFC3ABD /* Pods-File_Manager.debug.xcconfig */,
-				CF4BD528CCC63E5B69080EF4 /* Pods-File_Manager.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -439,7 +426,6 @@
 				B5DFB8C627A286A900196251 /* File_Manager */,
 				B5DFB8C527A286A900196251 /* Products */,
 				6950A936424B5937863435C3 /* Pods */,
-				2639C815035EE3D5C7DE6B0E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -524,6 +510,7 @@
 				B562C61927FB301300121835 /* Error+Extension.swift */,
 				B5C26AE5280720D100EE570D /* UIControl+Extension.swift */,
 				B5301206281DAE1F00D953D9 /* SubsciberCompletion+Extension.swift */,
+				B54894EE28EC5F630067844D /* UIGestrueRecognizer+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -633,11 +620,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B5DFB8D827A286AC00196251 /* Build configuration list for PBXNativeTarget "File_Manager" */;
 			buildPhases = (
-				55EF36E4947FE024C7F48E1D /* [CP] Check Pods Manifest.lock */,
 				B5DFB8C027A286A900196251 /* Sources */,
 				B5DFB8C127A286A900196251 /* Frameworks */,
 				B5DFB8C227A286A900196251 /* Resources */,
-				504F72D9653248858A412767 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -677,8 +662,8 @@
 			);
 			mainGroup = B5DFB8BB27A286A900196251;
 			packageReferences = (
-				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */,
-				B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */,
+				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */,
+				B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */,
 			);
 			productRefGroup = B5DFB8C527A286A900196251 /* Products */;
 			projectDirPath = "";
@@ -713,48 +698,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		504F72D9653248858A412767 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-File_Manager/Pods-File_Manager-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-File_Manager/Pods-File_Manager-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-File_Manager/Pods-File_Manager-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		55EF36E4947FE024C7F48E1D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-File_Manager-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B5DFB8C027A286A900196251 /* Sources */ = {
@@ -830,6 +773,7 @@
 				B54B1BC727A6A03900AF1D84 /* Category.swift in Sources */,
 				B522327A27D3B87C00D69B5F /* CategoryCollectionController.swift in Sources */,
 				B55D07B1280034390059C7AA /* ButtonViewCell.swift in Sources */,
+				B54894EF28EC5F630067844D /* UIGestrueRecognizer+Extension.swift in Sources */,
 				B5C26AE6280720D100EE570D /* UIControl+Extension.swift in Sources */,
 				B5301205281D4DED00D953D9 /* DocumentPicker.swift in Sources */,
 				B515C22427C027E9008EAF28 /* FilesViewModel.swift in Sources */,
@@ -968,7 +912,6 @@
 		};
 		B5DFB8D927A286AC00196251 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5EEA358DFCFF44F03BFC3ABD /* Pods-File_Manager.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -996,7 +939,6 @@
 		};
 		B5DFB8DA27A286AC00196251 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CF4BD528CCC63E5B69080EF4 /* Pods-File_Manager.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1046,7 +988,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+		B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
@@ -1054,7 +996,7 @@
 				kind = branch;
 			};
 		};
-		B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */ = {
+		B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alexaubry/BulletinBoard.git";
 			requirement = {
@@ -1067,12 +1009,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		B515C22127BFE5D1008EAF28 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */;
 			productName = KeychainSwift;
 		};
 		B5286D9F27F9EA40007C5C89 /* BLTNBoard */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */;
+			package = B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */;
 			productName = BLTNBoard;
 		};
 /* End XCSwiftPackageProductDependency section */

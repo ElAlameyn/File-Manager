@@ -6,13 +6,12 @@
 //
 
 import UIKit
-import RxSwift
+import Combine
 
-class TabBarViewController: UITabBarController
-{
-  
+class TabBarViewController: UITabBarController {
+
   private let customBar = CustomTabBar()
-  private let disposeBag = DisposeBag()
+  private var cancellables: Set<AnyCancellable> = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -49,7 +48,9 @@ class TabBarViewController: UITabBarController
   
   private func bind() {
     customBar.itemTapped
-      .bind { [weak self] in self?.selectTabWith(index: $0) }
-      .disposed(by: disposeBag)
+      .sink(receiveValue: { [weak self] in
+        self?.selectTabWith(index: $0)
+      }).store(in: &cancellables)
+
   }
 }

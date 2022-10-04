@@ -6,25 +6,21 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
-import RxGesture
+import Combine
 
-class CustomTabBar: UIStackView
-{
-  var itemTapped: Observable<Int> { itemTappedSubject.asObserver() }
-  
+class CustomTabBar: UIStackView {
+  var itemTapped = PassthroughSubject<Int, Never>()
+  private var cancellables: Set<AnyCancellable> = []
+
   private lazy var customViews: [CustomTabItemView] = [
     CustomTabItemView(with: .home, index: 0),
     CustomTabItemView(with: .statistic, index: 1),
     CustomTabItemView(with: .storage, index: 2)
   ]
   
-  private let itemTappedSubject = PublishSubject<Int>()
-  private let disposeBag = DisposeBag()
-  
   init() {
     super.init(frame: CGRect.zero)
+
     bind()
     setUpUI()
     setNeedsLayout()
@@ -41,25 +37,21 @@ class CustomTabBar: UIStackView
     backgroundColor = Colors.tabBarBackground
     layer.cornerRadius = 40
     
-    customViews.forEach({
-      $0.translatesAutoresizingMaskIntoConstraints = false
-//      $0.clipsToBounds = true
+  }
+
+  func bind() {
+    customViews.forEach({ view in
+      view.translatesAutoresizingMaskIntoConstraints = false
+      let gesture = UITapGestureRecognizer(target: self, action: nil)
+      view.publisher(for: gesture).sink { [weak self] _ in
+        self?.selectItem(at: view.index)
+      }.store(in: &cancellables)
     })
   }
-  
-  private func bind() {
-    customViews.forEach({
-      let index = $0.index
-      $0.rx.tapGesture().when(.recognized).bind { [weak self] _ in
-        self?.selectItem(at: index)
-      }
-      .disposed(by: disposeBag)
-    })
-  }
-  
+
   private func selectItem(at index: Int) {
     customViews.forEach { $0.isSelected = $0.index == index }
-    itemTappedSubject.onNext(index)
+    itemTapped.send(index)
   }
   
   required init(coder: NSCoder) {
