@@ -9,6 +9,9 @@ import Foundation
 
 extension String {
 
+  static let post = "POST"
+  static let get = "GET"
+
   func fromBase64() -> String? {
       guard let data = Data(base64Encoded: self) else {
           return nil
@@ -28,7 +31,4 @@ extension String {
      let date: Date? = dateFormatter.date(from: self)
      return date
   }
-  
-  
-
 }

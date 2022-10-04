@@ -40,9 +40,7 @@ enum RequestConfigurator {
   case createFolder(path: String)
   case createPaper(fullPath: String)
   case upload(fileData: Data, path: String)
-  
   case fileRequestList(limit: Int)
-  
 
   var baseURL: String { "https://api.dropboxapi.com" }
   var contentURL: String { "https://content.dropboxapi.com" }
@@ -110,8 +108,7 @@ enum RequestConfigurator {
   private var requestComponents: URLComponents {
     var components = URLComponents()
     components.queryItems = self.components?.compactMap({ (key, value) in
-      guard let string = value as? String else { return nil }
-      return URLQueryItem(name: key, value: string)
+      (value as? String).map { URLQueryItem(name: key, value: $0)}
     })
     return components
   }
@@ -123,54 +120,46 @@ enum RequestConfigurator {
   func setRequest() -> URLRequest? {
     guard let url = URL(string: configuredURL) else { return nil }
     var request = URLRequest(url: url)
-    request.httpMethod = "POST"
+    request.httpMethod = .post
     
-    var token = ""
-    
-    if let tokenResponse = KeychainSwift()
-      .getData(DropboxAPI.tokenKey),
-       let get = try? JSONDecoder()
-      .decode(AuthViewController.TokenResponse.self,
-              from: tokenResponse) {
-      token = get.accessToken
+    let token = KeychainSwift().getData(DropboxAPI.tokenKey)
+      .flatMap { try? JSONDecoder().decode(TokenResponse.self, from: $0) }
+      .map(\.accessToken) ?? ""
+
+    switch self {
+      case .token: break
+      default: request.set(token: token)
     }
 
     switch self {
-      case .token:
-        request.setValue("Basic \("\(TokenCredentials.clientID):\(TokenCredentials.clientSecret)".toBase64())",
-                         forHTTPHeaderField: "Authorization")
-        request.setValue("application/x-www-form-urlencoded",
-                         forHTTPHeaderField: "Content-Type")
+      case .token: request.set(contentType: .application_x_www_form_urlencoded)
+      case .listFolder, .search, .deleteFile, .createFolder, .check:
+        request.set(contentType: .application_json)
+      case .createPaper, .upload: request.set(contentType: .application_octet_stream)
 
+      default: break
+    }
+    
+    switch self {
+      case .token:
+        request.setValue(
+          "Basic \("\(TokenCredentials.clientID):\(TokenCredentials.clientSecret)".toBase64())",
+          forHTTPHeaderField: "Authorization"
+        )
         request.httpBody = requestComponents.query?.data(using: .utf8)
-      case .users:
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+      case .users: break
       case .thumbnail(let path):
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue(path, forHTTPHeaderField: "Dropbox-API-Arg")
+        request.setDropboxAPIArg(path)
       case .download(let id):
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue(id, forHTTPHeaderField: "Dropbox-API-Arg")
-      case .check:
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      case .listFolder, .search, .deleteFile, .createFolder:
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setDropboxAPIArg(id)
+      case .check: break
+      case .listFolder, .search, .deleteFile, .createFolder, .fileRequestList:
         request.httpBody = jsonData
       case .createPaper(fullPath: let fullPath):
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue(fullPath, forHTTPHeaderField: "Dropbox-API-Arg")
-        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        request.setDropboxAPIArg(fullPath)
       case .upload(fileData: let fileData, path: let path):
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue(path, forHTTPHeaderField: "Dropbox-API-Arg")
-        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        request.setDropboxAPIArg(path)
         request.httpBody = fileData
-      case .fileRequestList:
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = jsonData
     }
     request.timeoutInterval = 60
     return request
@@ -193,7 +182,6 @@ extension RequestConfigurator {
     data.withUnsafeBytes {
       _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
     }
-    //    data.withUnsafeBytes { _ = CC_SHA256($0, CC_LONG(data.count), &buffer) }
     return Data(hash).replaceHash()
   }
   

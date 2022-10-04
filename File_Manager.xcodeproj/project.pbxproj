@@ -284,6 +284,7 @@
 				B526843927E9F0DC00A864C8 /* CurrentAccountResponse.swift */,
 				B562C61727FB1FC900121835 /* PaperResponse.swift */,
 				B52D07982827A69900CD2292 /* ListRequestResponse.swift */,
+				B5487B9F27B98AAE00258B58 /* TokenResponse.swift */,
 			);
 			path = APIResponses;
 			sourceTree = "<group>";
@@ -355,7 +356,6 @@
 		B535379A27B28B08003A7C6A /* AuthViewController */ = {
 			isa = PBXGroup;
 			children = (
-				B5487B9E27B98A6E00258B58 /* Models */,
 				B535379B27B28B1A003A7C6A /* AuthViewController.swift */,
 			);
 			path = AuthViewController;
@@ -366,14 +366,6 @@
 			children = (
 				B50C31F727BF98B6008716F4 /* APIResponses */,
 				B508201D27BBA88F00102539 /* Protocols */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		B5487B9E27B98A6E00258B58 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B5487B9F27B98AAE00258B58 /* TokenResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -685,8 +677,8 @@
 			);
 			mainGroup = B5DFB8BB27A286A900196251;
 			packageReferences = (
-				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */,
-				B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */,
+				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */,
 			);
 			productRefGroup = B5DFB8C527A286A900196251 /* Products */;
 			projectDirPath = "";
@@ -1054,7 +1046,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */ = {
+		B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
@@ -1062,7 +1054,7 @@
 				kind = branch;
 			};
 		};
-		B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */ = {
+		B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alexaubry/BulletinBoard.git";
 			requirement = {
@@ -1075,12 +1067,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		B515C22127BFE5D1008EAF28 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */;
+			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
 		B5286D9F27F9EA40007C5C89 /* BLTNBoard */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */;
+			package = B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */;
 			productName = BLTNBoard;
 		};
 /* End XCSwiftPackageProductDependency section */
