@@ -9,12 +9,14 @@ import UIKit
 import Combine
 
 class BaseViewController: UIViewController {
-  
+
+  // MARK: - Typealiases
   typealias Section = LayoutManager.BaseSections
   typealias DataSource = UICollectionViewDiffableDataSource<Section, BaseItem>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, BaseItem>
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<BaseItem>
-  
+
+  // MARK: - Private
   private let sections = Section.allCases
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
