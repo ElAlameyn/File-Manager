@@ -16,6 +16,7 @@ extension FileItem: Hashable {
   static func ==(lhs: FileItem, rhs: FileItem) -> Bool {
     lhs.id == rhs.id
   }
+  
   func hash(into hasher: inout Hasher) {
     hasher.combine(id)
   }

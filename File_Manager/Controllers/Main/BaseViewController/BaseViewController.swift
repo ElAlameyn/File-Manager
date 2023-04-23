@@ -37,11 +37,15 @@ class BaseViewController: UIViewController {
     navigationController?.navigationBar.isHidden = true
     
     configureCollectionView()
-    fetch()
     bindViewModels()
     applyInitSnapshot()
   }
-  
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    fetch()
+  }
+
   // MARK: - Fetch & Update
   
   private func fetch() {
@@ -180,24 +184,26 @@ class BaseViewController: UIViewController {
         return cell
       }
     }
-    
+
     dataSource.supplementaryViewProvider = {
       collectionView, kind, indexPath in
       guard kind == UICollectionView.elementKindSectionHeader else { return nil }
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
-      
-      switch Section(rawValue: indexPath.section) {
-      case .category:
-        view.titleLabel.text = "Category"
-      case .recentFiles:
-        view.titleLabel.text = "Recent Images"
-      default: break
-      }
+
+      view.titleLabel.text = Section.allCases[indexPath.section].rawValue
+
+//      switch Section(rawValue: indexPath.section) {
+//      case .category:
+//        view.titleLabel.text = "Category"
+//      case .recentFiles:
+//        view.titleLabel.text = "Recent Images"
+//      default: break
+//      }
       return view
     }
     return dataSource
   }
-  
+
   private func applyInitSnapshot() {
     var snapshot = Snapshot()
     snapshot.appendSections([.title, .category, .recentFiles])
@@ -263,17 +269,11 @@ extension BaseViewController: HandlingDetailImageToolBar {
   func didTapDelete(at indexPath: IndexPath) {
     if let id = images[indexPath.row].id {
     DropboxAPI.shared.fetchDeleteFile(at: id)?
-        .sink(receiveCompletion: {
-          switch $0 {
-          case .finished: print("[API SUCCESSFUL] - Delete file")
-          case .failure(let error):
-            print("[API FAIL] - Delete file:", error)
-            if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
-          }
-        }, receiveValue: {_ in
-          self.updateImages()
+        .sink(logInfo: "Delete File", receiveValue: {
+          _ in self.updateImages()
         })
         .store(in: &cancellables)
     }
   }
 }
+

@@ -14,7 +14,7 @@ class TextFieldBulletinPage: BLTNPageItem {
     textField.borderStyle = .roundedRect
     return [textField]
   }
-
+  
   override public func tearDown() {
     super.tearDown()
     textField?.delegate = nil
@@ -25,56 +25,48 @@ class TextFieldBulletinPage: BLTNPageItem {
     super.actionButtonTapped(sender: sender)
   }
   
-
+  
   override func alternativeButtonTapped(sender: UIButton) {
     textField.resignFirstResponder()
     super.alternativeButtonTapped(sender: sender)
   }
   
-//  func textPublisher() -> AnyPublisher<String, Never> {
-//    NotificationCenter.default
-//      .publisher(for: UITextField.textDidEndEditingNotification, object: textField)
-//      .map { $0.object as? UITextField }
-//      .map { $0?.text ?? "" }
-//      .eraseToAnyPublisher()
-//  }
 }
+  // MARK: - UITextFieldDelegate
 
-// MARK: - UITextFieldDelegate
+  extension TextFieldBulletinPage: UITextFieldDelegate {
 
-extension TextFieldBulletinPage: UITextFieldDelegate {
+    private func isInputValid(text: String?) -> Bool {
+      text == nil || text!.isEmpty ? false : true
+    }
 
-  private func isInputValid(text: String?) -> Bool {
-    text == nil || text!.isEmpty ? false : true
+    internal func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+      true
+    }
+
+    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+      textField.resignFirstResponder()
+      return true
+    }
+
+    internal func textFieldDidEndEditing(_ textField: UITextField) {
+      if isInputValid(text: textField.text) {
+        textInputHandler?(self, textField.text)
+      } else {
+        textField.backgroundColor = UIColor.red.withAlphaComponent(0.3)
+        textField.placeholder = "Bad Input!"
+      }
+    }
+
   }
-  
-  internal func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-    true
-  }
-  
-  internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    textField.resignFirstResponder()
-    return true
-  }
-  
-  internal func textFieldDidEndEditing(_ textField: UITextField) {
-    if isInputValid(text: textField.text) {
-      textInputHandler?(self, textField.text)
-    } else {
-      textField.backgroundColor = UIColor.red.withAlphaComponent(0.3)
-      textField.placeholder = "Bad Input!"
+
+  extension TextFieldBulletinPage {
+    static func cretateTextFieldBulletin(title: String = "Add") -> TextFieldBulletinPage {
+      let paper = TextFieldBulletinPage(title: title)
+      paper.appearance.titleFontSize = 24
+      paper.isDismissable = true
+      paper.descriptionText = nil
+      paper.actionButtonTitle = Texts.bulletinTextFieldTitle
+      return paper
     }
   }
-  
-}
-
-extension TextFieldBulletinPage {
-  static func cretateTextFieldBulletin(title: String = "Add") -> TextFieldBulletinPage {
-    let paper = TextFieldBulletinPage(title: title)
-    paper.appearance.titleFontSize = 24
-    paper.isDismissable = true
-    paper.descriptionText = nil
-    paper.actionButtonTitle = Texts.bulletinTextFieldTitle
-    return paper
-  }
-}

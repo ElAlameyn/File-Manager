@@ -51,6 +51,7 @@
 		B56D268327E257D500853B95 /* SearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56D268227E257D500853B95 /* SearchResponse.swift */; };
 		B57A971827C52AC900DDA6D8 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57A971727C52AC900DDA6D8 /* Data+Extension.swift */; };
 		B57A971A27C6197500DDA6D8 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */; };
+		B59A7E1629F59EBD008C2AD4 /* Publisher+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59A7E1529F59EBD008C2AD4 /* Publisher+Extension.swift */; };
 		B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */; };
 		B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */; };
 		B59D310E27C9434A00C521D7 /* ImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59D310D27C9434A00C521D7 /* ImageViewModel.swift */; };
@@ -142,6 +143,7 @@
 		B56D268227E257D500853B95 /* SearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResponse.swift; sourceTree = "<group>"; };
 		B57A971727C52AC900DDA6D8 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		B59A7E1529F59EBD008C2AD4 /* Publisher+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extension.swift"; sourceTree = "<group>"; };
 		B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBaseViewCell.swift; sourceTree = "<group>"; };
 		B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBaseViewCell.swift; sourceTree = "<group>"; };
 		B59D310D27C9434A00C521D7 /* ImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewModel.swift; sourceTree = "<group>"; };
@@ -205,13 +207,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6950A936424B5937863435C3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		B508201727BB9CA100102539 /* API */ = {
 			isa = PBXGroup;
 			children = (
@@ -403,6 +398,22 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		B591E7EE293293A600F63560 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B5DFB8E427A2AD7200196251 /* UIView+Extension.swift */,
+				B5DFB90727A2B8BC00196251 /* UILabel+Extension.swift */,
+				B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */,
+				B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */,
+				B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */,
+				B5BEA7C127E4799E00EE9587 /* UIImage+Extension.swift */,
+				B526843727E9C00F00A864C8 /* UINavigationController+Extension.swift */,
+				B5C26AE5280720D100EE570D /* UIControl+Extension.swift */,
+				B54894EE28EC5F630067844D /* UIGestrueRecognizer+Extension.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		B5BEA7C527E4D17300EE9587 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -425,7 +436,6 @@
 			children = (
 				B5DFB8C627A286A900196251 /* File_Manager */,
 				B5DFB8C527A286A900196251 /* Products */,
-				6950A936424B5937863435C3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -497,20 +507,13 @@
 		B5DFB8E327A2AD6900196251 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				B5DFB8E427A2AD7200196251 /* UIView+Extension.swift */,
-				B5DFB90727A2B8BC00196251 /* UILabel+Extension.swift */,
-				B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */,
-				B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */,
+				B591E7EE293293A600F63560 /* UI */,
 				B539670827B3CA2B009125E5 /* String+Extension.swift */,
 				B57A971727C52AC900DDA6D8 /* Data+Extension.swift */,
-				B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */,
 				B5DBAE6427DE6C1F00BE2485 /* URlRequest+Extension.swift */,
-				B5BEA7C127E4799E00EE9587 /* UIImage+Extension.swift */,
-				B526843727E9C00F00A864C8 /* UINavigationController+Extension.swift */,
 				B562C61927FB301300121835 /* Error+Extension.swift */,
-				B5C26AE5280720D100EE570D /* UIControl+Extension.swift */,
 				B5301206281DAE1F00D953D9 /* SubsciberCompletion+Extension.swift */,
-				B54894EE28EC5F630067844D /* UIGestrueRecognizer+Extension.swift */,
+				B59A7E1529F59EBD008C2AD4 /* Publisher+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -662,8 +665,8 @@
 			);
 			mainGroup = B5DFB8BB27A286A900196251;
 			packageReferences = (
-				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */,
-				B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */,
+				B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */,
 			);
 			productRefGroup = B5DFB8C527A286A900196251 /* Products */;
 			projectDirPath = "";
@@ -774,6 +777,7 @@
 				B522327A27D3B87C00D69B5F /* CategoryCollectionController.swift in Sources */,
 				B55D07B1280034390059C7AA /* ButtonViewCell.swift in Sources */,
 				B54894EF28EC5F630067844D /* UIGestrueRecognizer+Extension.swift in Sources */,
+				B59A7E1629F59EBD008C2AD4 /* Publisher+Extension.swift in Sources */,
 				B5C26AE6280720D100EE570D /* UIControl+Extension.swift in Sources */,
 				B5301205281D4DED00D953D9 /* DocumentPicker.swift in Sources */,
 				B515C22427C027E9008EAF28 /* FilesViewModel.swift in Sources */,
@@ -988,7 +992,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */ = {
+		B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
 			requirement = {
@@ -996,7 +1000,7 @@
 				kind = branch;
 			};
 		};
-		B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */ = {
+		B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/alexaubry/BulletinBoard.git";
 			requirement = {
@@ -1009,12 +1013,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		B515C22127BFE5D1008EAF28 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift.git" */;
+			package = B515C22027BFE5D1008EAF28 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
 		B5286D9F27F9EA40007C5C89 /* BLTNBoard */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard.git" */;
+			package = B5286D9E27F9EA40007C5C89 /* XCRemoteSwiftPackageReference "BulletinBoard" */;
 			productName = BLTNBoard;
 		};
 /* End XCSwiftPackageProductDependency section */

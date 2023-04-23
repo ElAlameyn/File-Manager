@@ -11,8 +11,10 @@ final class LayoutManager {
   
   static let shared = LayoutManager()
   
-  enum BaseSections: Int, CaseIterable {
-    case title, category, recentFiles
+  enum BaseSections: String, CaseIterable {
+    case title,
+         category = "Category",
+         recentFiles = "Recent Images"
     
     enum Category: Int {
       case images, videos, files
@@ -28,7 +30,8 @@ final class LayoutManager {
   }
   
   // MARK: - [StorageViewController]: Layout
-  
+
+
   static func createStorageViewControllerLayout() -> UICollectionViewLayout {
     let sectionProvider = {
       (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
