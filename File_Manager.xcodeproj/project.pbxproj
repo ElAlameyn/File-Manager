@@ -54,6 +54,7 @@
 		B59A7E1629F59EBD008C2AD4 /* Publisher+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59A7E1529F59EBD008C2AD4 /* Publisher+Extension.swift */; };
 		B59A7E1829F5A15B008C2AD4 /* BaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59A7E1729F5A15B008C2AD4 /* BaseViewModel.swift */; };
 		B59A7E1A29F5AEFB008C2AD4 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59A7E1929F5AEFB008C2AD4 /* UIViewController+Extension.swift */; };
+		B59A7E1C29F5BB1D008C2AD4 /* DataSourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59A7E1B29F5BB1D008C2AD4 /* DataSourceManager.swift */; };
 		B59C45D927A54B6600C39A02 /* TitleBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */; };
 		B59C45DB27A591CE00C39A02 /* CategoryBaseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */; };
 		B59D310E27C9434A00C521D7 /* ImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59D310D27C9434A00C521D7 /* ImageViewModel.swift */; };
@@ -148,6 +149,7 @@
 		B59A7E1529F59EBD008C2AD4 /* Publisher+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extension.swift"; sourceTree = "<group>"; };
 		B59A7E1729F5A15B008C2AD4 /* BaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewModel.swift; sourceTree = "<group>"; };
 		B59A7E1929F5AEFB008C2AD4 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		B59A7E1B29F5BB1D008C2AD4 /* DataSourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceManager.swift; sourceTree = "<group>"; };
 		B59C45D827A54B6600C39A02 /* TitleBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBaseViewCell.swift; sourceTree = "<group>"; };
 		B59C45DA27A591CE00C39A02 /* CategoryBaseViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryBaseViewCell.swift; sourceTree = "<group>"; };
 		B59D310D27C9434A00C521D7 /* ImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewModel.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				B5286DA127F9EA6A007C5C89 /* BulletinManager.swift */,
 				B5286DA327F9EAC8007C5C89 /* TextFieldBulletinPage.swift */,
 				B5301204281D4DED00D953D9 /* DocumentPicker.swift */,
+				B59A7E1B29F5BB1D008C2AD4 /* DataSourceManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -731,6 +734,7 @@
 				B5DFB8DF27A2A76E00196251 /* Colors.swift in Sources */,
 				B5FB3F7027A819EA007A0495 /* SectionHeaderBaseView.swift in Sources */,
 				B5487BA027B98AAE00258B58 /* TokenResponse.swift in Sources */,
+				B59A7E1C29F5BB1D008C2AD4 /* DataSourceManager.swift in Sources */,
 				B5FB3F8027A84DAF007A0495 /* FileItemCell.swift in Sources */,
 				B5DBAE6327DCDD0900BE2485 /* ImageScrollView.swift in Sources */,
 				B56D267E27E1FE6F00853B95 /* FileItem.swift in Sources */,

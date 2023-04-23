@@ -18,7 +18,10 @@ class BaseViewController: UIViewController {
 
   // MARK: - Private
   private let sections = Section.allCases
-  private lazy var dataSource = configureDataSource()
+
+  private lazy var dataSourceManager = DataSourceManager(dataSource: configureDataSource())
+
+//  private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
   private var cancellables: Set<AnyCancellable> = []
   private var baseViewModel = BaseViewModel()
@@ -26,7 +29,7 @@ class BaseViewController: UIViewController {
   private var authorizeAgain = PassthroughSubject<Void, Never>()
 
   @Limited<BaseItem>(limit: 4) private var images {
-    didSet { updateImages() }
+    didSet { dataSourceManager.updateImages(images: images) }
   }
   
   override func viewDidLoad() {
@@ -36,7 +39,7 @@ class BaseViewController: UIViewController {
     
     configureCollectionView()
     bindViewModels()
-    applyInitSnapshot()
+    dataSourceManager.applyInitSnapshot()
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -45,58 +48,23 @@ class BaseViewController: UIViewController {
   }
 
   private func bindViewModels() {
-
     baseViewModel.filesSubject
       .sink { [weak self, weak baseViewModel] _ in
         guard let self else { return }
-        self.updateFilesAmount(files: self.baseViewModel.countFilesAmount())
-        self.images = baseViewModel?.images
-          .compactMap {
-            BaseItem.recents(
-              ItemContainer(imageId: $0.id, imageName: $0.name)
-            )
-          } ?? []
+        dataSourceManager.updateFilesAmount(files: self.baseViewModel.countFilesAmount())
+        self.images = baseViewModel?.baseVCImages ?? []
       }.store(in: &cancellables)
 
     baseViewModel.currentAccountSubject
-      .sink { [weak self] in
-        guard let value = $0, let url = URL(string: value.profilePhotoURL ?? "") else { return }
-        if let data = try? Data(contentsOf: url) {
-          if let image = UIImage(data: data) {
-            self?.updateAccount(
-              image: image,
-              title:"Welcome, " + ($0?.name.displayName ?? "User")
-            )
-          }
-        }
-      }.store(in: &cancellables)
+      .sink(receiveValue: dataSourceManager.updateAccount(value:))
+      .store(in: &cancellables)
 
-    handleAuth(comletion: baseViewModel.authFailHandler.send)
+    baseViewModel.authFailHandler
+      .sink { [weak baseViewModel, weak self] in
+        self?.handleAuth(comletion: baseViewModel?.fetch)
+      }.store(in: &cancellables)
   }
-  
-  private func updateAccount(image: UIImage? = nil, title: String? = nil) {
-    var snapshot = SectionSnapshot()
-    snapshot.append([.title(image: image, text: title)])
-    dataSource.apply(snapshot, to: .title, animatingDifferences: true)
-  }
-  
-  private func updateFilesAmount(files: (images: Int, videos: Int, files: Int)) {
-    var snapshot = SectionSnapshot()
-    snapshot.append([
-      .category(Category(title: "Images", amount: files.images)),
-      .category(Category(title: "Videos", amount: files.videos)),
-      .category(Category(title: "Files", amount: files.files))
-    ])
-    dataSource.apply(snapshot, to: .category, animatingDifferences: true)
-  }
-  
-  private func updateImages() {
-    var snapshot = SectionSnapshot()
-    snapshot.append(images)
-    dataSource.apply(snapshot, to: .recentFiles, animatingDifferences: true)
-  }
-  
-  
+
   // MARK: - Collection View Setup
   
   private func configureCollectionView() {
@@ -150,24 +118,6 @@ class BaseViewController: UIViewController {
     }
     return dataSource
   }
-
-  private func applyInitSnapshot() {
-    var snapshot = Snapshot()
-    snapshot.appendSections([.title, .category, .recentFiles])
-    snapshot.appendItems( [.title(image: nil, text: nil)] , toSection: .title)
-    snapshot.appendItems([
-      .category(Category(title: "Images", amount: 0)),
-      .category(Category(title: "Videos", amount: 0)),
-      .category(Category(title: "Files", amount: 0))
-    ], toSection: .category)
-    self.dataSource.apply(snapshot, animatingDifferences: false)
-    
-    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-      snapshot.appendItems([], toSection: .recentFiles)
-      self?.dataSource.apply(snapshot, animatingDifferences: false)
-    }
-  }
-
 }
 
 // MARK: - UICollectionViewDelegate
@@ -204,7 +154,7 @@ extension BaseViewController: UICollectionViewDelegate {
             detailVC.change(image: item.mainImageView.image)
           })
         }
-      default: break
+        default: break
       }
     }
   }
@@ -216,8 +166,8 @@ extension BaseViewController: HandlingDetailImageToolBar {
   func didTapDelete(at indexPath: IndexPath) {
     if let id = images[indexPath.row].id {
     DropboxAPI.shared.fetchDeleteFile(at: id)?
-        .sink(logInfo: "Delete File", receiveValue: {
-          _ in self.updateImages()
+        .sink(logInfo: "Delete File", receiveValue: {_ in
+          self.dataSourceManager.updateImages(images: self.baseViewModel.baseVCImages)
         })
         .store(in: &cancellables)
     }

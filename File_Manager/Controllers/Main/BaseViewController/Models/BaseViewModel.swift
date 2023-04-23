@@ -5,7 +5,7 @@
 //  Created by Артем Калинкин on 23.04.2023.
 //
 
-import Foundation
+import UIKit
 import Combine
 
 
@@ -21,21 +21,21 @@ class ViewModel: AuthHandlerProtocol {
   var apiClient = DropboxAPI()
   var authFailHandler = PassthroughSubject<Void, Never>()
   var cancellables = Set<AnyCancellable>()
-
-  init() {
-    authFailHandler.sink { [weak self] in
-      self?.fetch()
-    }.store(in: &cancellables)
-  }
-
-  func fetch() {}
 }
 
 final class BaseViewModel: FilesModel {
 
   var currentAccountSubject = CurrentValueSubject<CurrentAccountResponse?, APIError>(nil)
 
-  override func fetch()  {
+  var baseVCImages: [BaseItem] {
+    images.compactMap {
+        BaseItem.recents(
+          ItemContainer(imageId: $0.id, imageName: $0.name)
+        )
+      }
+  }
+
+  func fetch()  {
 
     apiClient.fetchAllFiles()?
       .sink(
@@ -54,5 +54,8 @@ final class BaseViewModel: FilesModel {
       .store(in: &cancellables)
   }
 
-
 }
+
+
+
+

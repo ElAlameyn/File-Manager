@@ -8,13 +8,13 @@
 import UIKit
 
 extension UIViewController {
-  func handleAuth(comletion: @escaping () -> Void) {
+  func handleAuth(comletion: (() -> Void)?) {
     let authVC = AuthViewController()
     authVC.modalPresentationStyle = .fullScreen
     self.present(authVC, animated: true)
     authVC.dismissed = {
       authVC.dismiss(animated: true)
-      comletion()
+      comletion?()
     }
   }
 }
