@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import UIKit
 
-final class DropboxAPI {
+struct DropboxAPI {
   static let shared = DropboxAPI()
   static let tokenKey = "token_key"
 

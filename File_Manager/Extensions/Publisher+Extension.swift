@@ -9,7 +9,7 @@ import Combine
 
 extension Publisher {
   public func sink(
-    logInfo: String,
+    logInfo: String? = "",
     receiveValue: @escaping ((Self.Output) -> Void),
     errorHandlingSubject: PassthroughSubject<Void, Never>? = nil
   ) -> AnyCancellable {

@@ -17,7 +17,7 @@ class FilesViewController: UIViewController {
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<FileItem>
   
 
-  private let filesViewModel = FilesViewModel()
+  private let filesViewModel = FilesModel()
   private var collectionView: UICollectionView! = nil
   private lazy var dataSource = configureDataSource()
   private var cancellables: Set<AnyCancellable> = []
@@ -88,7 +88,7 @@ class FilesViewController: UIViewController {
   
   private func bindViewModels() {
     // Observe files changes and call update
-    filesViewModel.subject
+    filesViewModel.filesSubject
       .sink(receiveCompletion: {
         $0.debugCompletion(descr: "Reload Files", subject: self.authorizeAgain)
       }) { files in
@@ -116,7 +116,7 @@ class FilesViewController: UIViewController {
       .sink(receiveCompletion: {
         $0.debugCompletion(descr: "Reload files", subject: self.authorizeAgain)
       }) {
-        self.filesViewModel.subject.send($0)
+        self.filesViewModel.filesSubject.send($0)
       }
       .store(in: &cancellables)
     

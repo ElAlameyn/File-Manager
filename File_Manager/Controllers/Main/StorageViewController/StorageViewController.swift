@@ -16,7 +16,7 @@ class StorageViewController: UIViewController {
   typealias SectionSnapshot = NSDiffableDataSourceSectionSnapshot<StorageItem>
 
   private let usageSpaceViewModel = UsageSpaceViewModel()
-  private let filesViewModel = FilesViewModel()
+  private let filesViewModel = FilesModel()
   
   private var authorizeAgain = PassthroughSubject<Void, Never>()
   private var reloadFiles = PassthroughSubject<String, Never>()

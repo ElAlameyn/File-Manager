@@ -32,9 +32,9 @@ class CategoryCollectionController: UIViewController
   
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
-  private let listFoldersViewModel = FilesViewModel()
+  private let listFoldersViewModel = FilesModel()
   private var cancellables: Set<AnyCancellable> = []
-  private let filesViewModel = FilesViewModel()
+  private let filesViewModel = FilesModel()
   
   private var images: [ItemContainer] = [] {
     didSet {
@@ -63,19 +63,19 @@ class CategoryCollectionController: UIViewController
           self.filesViewModel.handleFail(on: self) {
             DropboxAPI.shared.fetchAllFiles()?
               .sink(receiveCompletion: {_ in}, receiveValue: {
-                self.filesViewModel.subject.send($0)
+                self.filesViewModel.filesSubject.send($0)
               }).store(in: &self.cancellables)
           }
         }
       }, receiveValue: { value in
-        self.filesViewModel.subject.send(value)
+        self.filesViewModel.filesSubject.send(value)
       })
       .store(in: &cancellables)
   }
   
   
   private func bindViewModels() {
-    filesViewModel.subject
+    filesViewModel.filesSubject
       .sink(receiveCompletion: {_ in}) { _ in
         if self.type == .image {
           self.filesViewModel.images.forEach { [weak self] in

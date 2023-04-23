@@ -21,12 +21,10 @@ class BaseViewController: UIViewController {
   private lazy var dataSource = configureDataSource()
   private var collectionView: UICollectionView! = nil
   private var cancellables: Set<AnyCancellable> = []
-  
-  private let filesViewModel = FilesViewModel()
-  private let accountViewModel = CurrentAccountViewModel()
+  private var baseViewModel = BaseViewModel()
   
   private var authorizeAgain = PassthroughSubject<Void, Never>()
-  
+
   @Limited<BaseItem>(limit: 4) private var images {
     didSet { updateImages() }
   }
@@ -43,80 +41,37 @@ class BaseViewController: UIViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    fetch()
+    baseViewModel.fetch()
   }
 
-  // MARK: - Fetch & Update
-  
-  private func fetch() {
-    // Fetch and store dropbox files
-    DropboxAPI.shared.fetchAllFiles()?
-      .sink(receiveCompletion: {
-        switch $0 {
-        case .finished: print("Successfully finished fetch")
-        case .failure(let error):
-          print("Failed fetch due to \(error)")
-          if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
-        }
-      }, receiveValue: { value in
-        self.filesViewModel.subject.send(value)
-      })
-      .store(in: &cancellables)
-    
-    // Fetch and store account info
-    DropboxAPI.shared.fetchCurrentAccount()?
-      .sink(receiveCompletion: {
-        switch $0 {
-        case .finished: print("SUCCESS ACCOUNT FETCH")
-        case .failure(let error):
-          print("FAIL ACCOUNT FETCH ", error)
-          if error.getExpiredTokenStatus() { self.authorizeAgain.send() }
-        }
-      }, receiveValue: {
-        self.accountViewModel.subject.send($0)
-      })
-      .store(in: &cancellables)
-  }
-  
   private func bindViewModels() {
-    // Update files
-    filesViewModel.subject
-      .sink(receiveCompletion: {_ in}) { _ in
-        self.updateFilesAmount(
-          files: self.filesViewModel.countFilesAmount()
-        )
-        self.filesViewModel.images.forEach { [weak self] in
-          self?.images.append(BaseItem.recents(ItemContainer(
-            imageId: $0.id,
-            imageName: $0.name
-          )))
-        }
-      }
-      .store(in: &cancellables)
-    
-    // Update user account
-    accountViewModel.subject.sink(receiveCompletion: {_ in}) {
-      guard let value = $0, let url = URL(string: value.profilePhotoURL ?? "") else { return }
-      if let data = try? Data(contentsOf: url) {
-        if let image = UIImage(data: data) {
-          self.updateAccount(
-            image: image,
-            title:"Welcome, " + ($0?.name.displayName ?? "User")
-          )
-        }
-      }
-    }.store(in: &cancellables)
-    
-    authorizeAgain.sink { _ in
-      let authVC = AuthViewController()
-      authVC.modalPresentationStyle = .fullScreen
-      self.present(authVC, animated: true)
-      authVC.dismissed = {
-        authVC.dismiss(animated: true)
-        self.fetch()
-      }
-    }.store(in: &cancellables)
 
+    baseViewModel.filesSubject
+      .sink { [weak self, weak baseViewModel] _ in
+        guard let self else { return }
+        self.updateFilesAmount(files: self.baseViewModel.countFilesAmount())
+        self.images = baseViewModel?.images
+          .compactMap {
+            BaseItem.recents(
+              ItemContainer(imageId: $0.id, imageName: $0.name)
+            )
+          } ?? []
+      }.store(in: &cancellables)
+
+    baseViewModel.currentAccountSubject
+      .sink { [weak self] in
+        guard let value = $0, let url = URL(string: value.profilePhotoURL ?? "") else { return }
+        if let data = try? Data(contentsOf: url) {
+          if let image = UIImage(data: data) {
+            self?.updateAccount(
+              image: image,
+              title:"Welcome, " + ($0?.name.displayName ?? "User")
+            )
+          }
+        }
+      }.store(in: &cancellables)
+
+    handleAuth(comletion: baseViewModel.authFailHandler.send)
   }
   
   private func updateAccount(image: UIImage? = nil, title: String? = nil) {
@@ -191,14 +146,6 @@ class BaseViewController: UIViewController {
       let view: SectionHeaderBaseView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, for: indexPath)
 
       view.titleLabel.text = Section.allCases[indexPath.section].rawValue
-
-//      switch Section(rawValue: indexPath.section) {
-//      case .category:
-//        view.titleLabel.text = "Category"
-//      case .recentFiles:
-//        view.titleLabel.text = "Recent Images"
-//      default: break
-//      }
       return view
     }
     return dataSource

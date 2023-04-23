@@ -9,15 +9,14 @@ import Foundation
 import Combine
 import UniformTypeIdentifiers
 
-final class FilesViewModel: ObservableObject, ViewModelProtocol {
+class FilesModel: ViewModel, ObservableObject, ViewModelProtocol {
 
-  var cancellables = Set<AnyCancellable>()
   var update: (() -> Void)?
-  
-  var subject = CurrentValueSubject<ListFoldersResponse?, APIError>(nil)
+
+  var filesSubject = CurrentValueSubject<ListFoldersResponse?, APIError>(nil)
   
   var value: ListFoldersResponse? {
-    subject.value
+    filesSubject.value
   }
   
   var files: [ListFoldersResponse.File] {
@@ -80,5 +79,6 @@ final class FilesViewModel: ObservableObject, ViewModelProtocol {
     }
     return filtered
   }
+
 }
 
