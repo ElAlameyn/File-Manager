@@ -5,9 +5,8 @@
 //  Created by Артем Калинкин on 23.04.2023.
 //
 
-import UIKit
 import Combine
-
+import UIKit
 
 protocol AuthHandlerProtocol {
   func fetch()
@@ -24,7 +23,6 @@ class ViewModel: AuthHandlerProtocol {
 }
 
 final class BaseViewModel: FilesModel {
-
   var currentAccountSubject = CurrentValueSubject<CurrentAccountResponse?, APIError>(nil)
 
   var baseVCImages: [BaseItem] {
@@ -53,9 +51,4 @@ final class BaseViewModel: FilesModel {
       )
       .store(in: &cancellables)
   }
-
 }
-
-
-
-

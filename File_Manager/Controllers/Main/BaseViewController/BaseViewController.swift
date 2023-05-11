@@ -10,7 +10,6 @@ import UIKit
 
 class BaseViewController: UIViewController {
   // MARK: Internal
-  
 
   // MARK: - Typealiases
 
@@ -70,15 +69,14 @@ class BaseViewController: UIViewController {
     collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: LayoutManager.createBaseViewControllerLayout())
     collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     collectionView.backgroundColor = Colors.baseBackground
-    collectionView.register(TitleBaseViewCell.self, forCellWithReuseIdentifier: "\(TitleBaseViewCell.self)")
-    collectionView.register(CategoryBaseViewCell.self, forCellWithReuseIdentifier: "\(CategoryBaseViewCell.self)")
-    collectionView.register(ImageBaseViewCell.self, forCellWithReuseIdentifier: "\(ImageBaseViewCell.self)")
 
     collectionView.register(
-      SectionHeaderBaseView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: "\(SectionHeaderBaseView.self)"
+      TitleBaseViewCell.self,
+      CategoryBaseViewCell.self,
+      ImageBaseViewCell.self
     )
+
+    collectionView.registerHeaderSupplementaryView(SectionHeaderBaseView.self)
 
     collectionView.delegate = self
     view.addSubview(collectionView)

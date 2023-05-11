@@ -10,4 +10,5 @@ import Foundation
 enum APIError: Error {
   case invalidResponse
   case statusCode(Int)
+  case undefined
 }

@@ -94,7 +94,7 @@
 		B5DFB90F27A2C61B00196251 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5DFB90E27A2C61B00196251 /* BaseViewController.swift */; };
 		B5E76A882818044600A1AEAF /* FilesDetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E76A872818044600A1AEAF /* FilesDetailViewCell.swift */; };
 		B5FB3F7027A819EA007A0495 /* SectionHeaderBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseView.swift */; };
-		B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */; };
+		B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift */; };
 		B5FB3F7527A8313E007A0495 /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7427A8313E007A0495 /* LayoutManager.swift */; };
 		B5FB3F7827A84699007A0495 /* StorageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7727A84699007A0495 /* StorageViewController.swift */; };
 		B5FB3F7B27A84729007A0495 /* StorageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5FB3F7A27A84729007A0495 /* StorageItem.swift */; };
@@ -191,7 +191,7 @@
 		B5DFB90E27A2C61B00196251 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		B5E76A872818044600A1AEAF /* FilesDetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesDetailViewCell.swift; sourceTree = "<group>"; };
 		B5FB3F6F27A819EA007A0495 /* SectionHeaderBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderBaseView.swift; sourceTree = "<group>"; };
-		B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift.swift"; sourceTree = "<group>"; };
+		B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
 		B5FB3F7427A8313E007A0495 /* LayoutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 		B5FB3F7727A84699007A0495 /* StorageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageViewController.swift; sourceTree = "<group>"; };
 		B5FB3F7A27A84729007A0495 /* StorageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageItem.swift; sourceTree = "<group>"; };
@@ -411,7 +411,7 @@
 			children = (
 				B5DFB8E427A2AD7200196251 /* UIView+Extension.swift */,
 				B5DFB90727A2B8BC00196251 /* UILabel+Extension.swift */,
-				B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift.swift */,
+				B5FB3F7127A82C16007A0495 /* UICollectionView+Extension.swift */,
 				B54FAEFF27AFDEEB000E81BB /* UIButton+Extension.swift */,
 				B57A971927C6197500DDA6D8 /* UIImageView+Extension.swift */,
 				B5BEA7C127E4799E00EE9587 /* UIImage+Extension.swift */,
@@ -723,7 +723,7 @@
 				B51A716427AEBB350026040E /* FilesViewController.swift in Sources */,
 				B5487B9D27B989ED00258B58 /* UsageSpaceResponse.swift in Sources */,
 				B5B19B0527BA87B4009B65E7 /* ResponseConfiguration.swift in Sources */,
-				B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift.swift in Sources */,
+				B5FB3F7227A82C16007A0495 /* UICollectionView+Extension.swift in Sources */,
 				B59A7E1A29F5AEFB008C2AD4 /* UIViewController+Extension.swift in Sources */,
 				B526843A27E9F0DC00A864C8 /* CurrentAccountResponse.swift in Sources */,
 				B5301207281DAE2000D953D9 /* SubsciberCompletion+Extension.swift in Sources */,

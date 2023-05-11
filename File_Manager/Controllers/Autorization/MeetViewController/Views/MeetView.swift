@@ -39,11 +39,7 @@ class MeetView: UIView {
     submitButton.addEdgeContstraints(exclude: .top, offset: UIEdgeInsets(top: 0, left: 30, bottom: -25, right: -30))
     submitButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
     
-    submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
-  }
-  
-  @objc func submitButtonTapped() {
-    buttonHandler?()
+    submitButton.addTarget(nil, action: #selector(MeetViewController.submitButtonTapped), for: .touchUpInside)
   }
   
   required init?(coder: NSCoder) {

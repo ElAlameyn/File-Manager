@@ -7,8 +7,8 @@
 
 import Combine
 
-extension Publisher {
-  public func sink(
+public extension Publisher {
+  func sink(
     logInfo: String? = "",
     receiveValue: @escaping ((Self.Output) -> Void),
     errorHandlingSubject: PassthroughSubject<Void, Never>? = nil
@@ -17,10 +17,14 @@ extension Publisher {
       switch $0 {
         case .finished:
           _ = print("[API SUCCESSFUL] - \(logInfo)")
-        case .failure(let error):
+        case let .failure(error):
           _ = print("[API FAIL] - \(logInfo): \(error.localizedDescription)")
           if error.getExpiredTokenStatus() { errorHandlingSubject?.send() }
       }
     }, receiveValue: receiveValue)
+  }
+
+  func sink(for subject: CurrentValueSubject<Self.Output, Self.Failure>) -> AnyCancellable {
+    self.sink(receiveCompletion: subject.send(completion:), receiveValue: subject.send(_:))
   }
 }

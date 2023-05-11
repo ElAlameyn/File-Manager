@@ -39,5 +39,17 @@ extension UICollectionView {
     }
     return cell
   }
+
+  func register(_ types: UICollectionViewCell.Type...) {
+    types.forEach { self.register($0, forCellWithReuseIdentifier: "\($0)") }
+  }
+
+  func registerHeaderSupplementaryView(_ view: UICollectionReusableView.Type)  {
+    self.register(
+      view,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      withReuseIdentifier: "\(view)"
+    )
+  }
   
 }
